@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.Distance;
 
 import static edu.wpi.first.units.Units.Degrees;
 
@@ -16,9 +17,9 @@ public class SwerveModule {
     public SparkMax pivmotor;
     public PIDController pivotcontroller;
     public CANcoder compass;
-    public double xpos;
-    public double ypos;
-    public double heading;
+    public Distance xpos;
+    public Distance ypos;
+    public Angle heading;
 
     public static class Inputs {
         public double getangle;
@@ -31,10 +32,9 @@ public class SwerveModule {
             SparkMax drivemotor,
             SparkMax pivmotor,
             CANcoder compass,
-            double xpos,
-            double ypos,
-            double heading
-
+            Distance xpos,
+            Distance ypos,
+            Angle heading
     ) {
         this.compass = compass;
         this.pivmotor = pivmotor;
@@ -51,6 +51,7 @@ public class SwerveModule {
     }
 
     public void pivot(Angle targetHeading) {
+        targetHeading = targetHeading.plus(heading);
         Angle currentHeading = compass.getAbsolutePosition().getValue();
         Angle error = currentHeading.minus(targetHeading);
         double pivpower = pivotcontroller.calculate(error.in(Degrees));
@@ -58,7 +59,7 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getmodulestate() {
-        SwerveModuleState moduleState = new SwerveModuleState(
+        return new SwerveModuleState(
                 drivemotor.getEncoder().getVelocity(),
                 new Rotation2d(compass.getAbsolutePosition().getValue())
         );
