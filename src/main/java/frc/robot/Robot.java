@@ -11,12 +11,10 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -30,6 +28,7 @@ public class Robot extends LoggedRobot {
 
     Joystick driverJoystick = new Joystick(0);
     CommandScheduler scheduler;
+
 
     // RobotContainer robot;
 
@@ -111,8 +110,12 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
-        Joystick asdf = new Joystick(0);
-        drive.Drive(asdf.getX(),asdf.getY(),asdf.getZ());
+
+        drive.drive(
+                 -driverJoystick.getRawAxis(1),
+                 -driverJoystick.getRawAxis(0),
+                  driverJoystick.getRawAxis(2)
+        );
     }
 
     @Override
