@@ -9,66 +9,72 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import org.littletonrobotics.junction.AutoLog;
 
 import static edu.wpi.first.units.Units.Degrees;
 
 public class SwerveModule {
-    public SparkMax drivemotor;
-    public SparkMax pivmotor;
-    public PIDController pivotcontroller;
+    public SparkMax driveMotor;
+    public SparkMax pivotMotor;
+    public PIDController pivotController;
     public CANcoder compass;
-    public Distance xpos;
-    public Distance ypos;
+    public Distance xPos;
+    public Distance yPos;
     public Angle heading;
-
-    public static class Inputs {
-        public double getangle;
-        public double pivpower;
-        public double drivepower;
+@AutoLog
+    public static class SwerveModuleInputs {
+        public double currentRotationDegrees;
+        public double pivotPower;
+        public double drivePower;
 
     }
 
     public SwerveModule(
-            SparkMax drivemotor,
-            SparkMax pivmotor,
+            SparkMax driveMotor,
+            SparkMax pivotMotor,
             CANcoder compass,
-            double xpos,
-            double ypos,
-            double heading
+            Distance xPos,
+            Distance yPos,
+            Angle heading
 
     ) {
         this.compass = compass;
-        this.pivmotor = pivmotor;
-        this.drivemotor = drivemotor;
-        this.pivotcontroller = new PIDController(0.001, 0.001, 0);
-        Distance xpos;
-        Distance ypos;
-        Angle heading;
+        this.pivotMotor = pivotMotor;
+        this.driveMotor = driveMotor;
+        this.pivotController = new PIDController(0.001, 0.001, 0);
 
     }
 
+    public void readSensors(SwerveModuleInputsAutoLogged inputs) {
+        inputs.currentRotationDegrees = this.compass.getAbsolutePosition().getValue().in(Degrees);
+        inputs.pivotPower = pivotMotor.get();
+        inputs.drivePower = driveMotor.get();
+
+    }
     public void drive(double power) {
-        drivemotor.set(power);
+        driveMotor.set(power);
+
     }
 
     public void pivot(Angle targetHeading) {
-        targetHeading = targetHeading.plus(Degrees.of(Angle));
+        targetHeading = targetHeading.plus(heading);
         Angle currentHeading = compass.getAbsolutePosition().getValue();
         Angle error = currentHeading.minus(targetHeading);
-        double pivpower = pivotcontroller.calculate(error.in(Degrees));
-        pivmotor.set(pivpower);
+        double pivotPower = pivotController.calculate(error.in(Degrees));
+        pivotMotor.set(pivotPower);
     }
 
-    public SwerveModuleState getmodulestate() {
+    public SwerveModuleState getModuleState() {
         SwerveModuleState moduleState = new SwerveModuleState(
-                drivemotor.getEncoder().getVelocity(),
+                driveMotor.getEncoder().getVelocity(),
                 new Rotation2d(compass.getAbsolutePosition().getValue())
         );
+        return moduleState;
     }
 
     public SwerveModulePosition getModulePosition() {
         SwerveModulePosition position = new SwerveModulePosition(
-                Units.Inches.of(drivemotor.getEncoder().getPosition()).in(Units.Meters),
+                Units.Inches.of(driveMotor.getEncoder().getPosition()).in(Units.Meters),
                 new Rotation2d(compass.getAbsolutePosition().getValue())
         );
         return position;

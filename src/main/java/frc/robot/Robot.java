@@ -29,6 +29,8 @@ public class Robot extends LoggedRobot {
 
     //RobotCOntainter robot;
 
+    Joystick driverJoystick = new Joystick(0);
+    CommandScheduler scheduler;
     SwerveDrive drive = new SwerveDrive(
             new SwerveModule(
                     new SparkMax(17, SparkLowLevel.MotorType.kBrushless),
@@ -36,40 +38,37 @@ public class Robot extends LoggedRobot {
                     new CANcoder(34),
                     Inches.of(14),
                     Inches.of(14),
-                    Degrees.of(-45),
-
-
-            SwerveDrive drive = new SwerveDrive(
+                    Degrees.of(-45)
+                    ),
             new SwerveModule(
                     new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
                     new SparkMax(2, SparkLowLevel.MotorType.kBrushless),
                     new CANcoder(33),
-                    Units.Meters.convertFrom(14, Inches),
-                    Units.Meters.convertFrom(14, Inches),
                     Inches.of(-14),
                     Inches.of(14),
-                    Degrees.of(-45),
-
+                    Degrees.of(-45)
+                    ),
             new SwerveModule(
                     new SparkMax(1, SparkLowLevel.MotorType.kBrushless),
                     new SparkMax(20, SparkLowLevel.MotorType.kBrushless),
                     new CANcoder(32),
                     Inches.of(14),
                     Inches.of(-14),
-                    Degrees.of(-135),
+                    Degrees.of(-135)
+            ),
             new SwerveModule(
                     new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
                     new SparkMax(18, SparkLowLevel.MotorType.kBrushless),
                     new CANcoder(31),
                     Inches.of(-14),
                     Inches.of(14),
-                    Degrees.of(135),
-            new Pigeon2(0);
+                    Degrees.of(135)
+                    ),
+            new Pigeon2(0)
+            );
 
 
 
-    Joystick driverJoystick = new Joystick(0);
-    CommandScheduler scheduler;
 
     RobotContainer robot;
 
@@ -83,12 +82,18 @@ public class Robot extends LoggedRobot {
         MOELogger.setupLogging(this);
 
         scheduler = CommandScheduler.getInstance();
-        robot.getDrive().setDefaultCommand(Commands.none());
+        //robot.getDrive().setDefaultCommand(Commands.none());
     }
 
     @Override
     public void robotPeriodic() {
         scheduler.run();
+        drive.drive(
+                -driverJoystick.getRawAxis(1),
+                -driverJoystick.getRawAxis(0),
+                driverJoystick.getRawAxis(2));
+
+
     }
 
     @Override
@@ -111,7 +116,9 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
-        Joystick controller;
+        drive.drive(driverJoystick.getRawAxis(1),
+                driverJoystick.getRawAxis(0),
+                driverJoystick.getRawAxis(2));
 
     }
 
