@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.container.FortissiMOEContainer;
 import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
@@ -31,46 +32,11 @@ public class Robot extends LoggedRobot {
 
     Joystick driverJoystick = new Joystick(0);
     CommandScheduler scheduler;
-    SwerveDrive drive = new SwerveDrive(
-            new SwerveModule(
-                    new SparkMax(17, SparkLowLevel.MotorType.kBrushless),
-                    new SparkMax(16, SparkLowLevel.MotorType.kBrushless),
-                    new CANcoder(34),
-                    Inches.of(14),
-                    Inches.of(14),
-                    Degrees.of(-45)
-                    ),
-            new SwerveModule(
-                    new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
-                    new SparkMax(2, SparkLowLevel.MotorType.kBrushless),
-                    new CANcoder(33),
-                    Inches.of(-14),
-                    Inches.of(14),
-                    Degrees.of(-45)
-                    ),
-            new SwerveModule(
-                    new SparkMax(1, SparkLowLevel.MotorType.kBrushless),
-                    new SparkMax(20, SparkLowLevel.MotorType.kBrushless),
-                    new CANcoder(32),
-                    Inches.of(14),
-                    Inches.of(-14),
-                    Degrees.of(-135)
-            ),
-            new SwerveModule(
-                    new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
-                    new SparkMax(18, SparkLowLevel.MotorType.kBrushless),
-                    new CANcoder(31),
-                    Inches.of(-14),
-                    Inches.of(14),
-                    Degrees.of(135)
-                    ),
-            new Pigeon2(0)
-            );
 
 
 
 
-    RobotContainer robot;
+    RobotContainer robot = new FortissiMOEContainer();
 
     Command autoCommand = Commands.none();
 
@@ -88,11 +54,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         scheduler.run();
-        drive.drive(
-                -driverJoystick.getRawAxis(1),
-                -driverJoystick.getRawAxis(0),
-                driverJoystick.getRawAxis(2));
-
 
     }
 
@@ -116,14 +77,15 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
-        drive.drive(driverJoystick.getRawAxis(1),
-                driverJoystick.getRawAxis(0),
-                driverJoystick.getRawAxis(2));
 
     }
 
     @Override
     public void teleopPeriodic() {
+        robot.getSwerveDrive().drive(
+                driverJoystick.getRawAxis(1),
+                driverJoystick.getRawAxis(0),
+                driverJoystick.getRawAxis(2));
     }
 
     @Override
