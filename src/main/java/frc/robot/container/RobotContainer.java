@@ -5,11 +5,12 @@
 package frc.robot.container;
 
 import frc.robot.subsystem.DriveSubsystem;
+import frc.robot.subsystem.SwerveDrive;
 import lombok.Data;
 
 
 public abstract @Data class RobotContainer {
-	private DriveSubsystem drive;
+	private SwerveDrive swerveDrive;
 
 	public RobotContainer() {
 		System.out.println("Constructed RobotContainer type: " + getClass());
