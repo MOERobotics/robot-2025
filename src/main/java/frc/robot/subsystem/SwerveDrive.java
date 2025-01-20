@@ -18,8 +18,16 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> {
 
     @AutoLog
     public static class SwerveDriveInputs {
-        double currentRotationDegrees;
+        double currentRotationRadians;
         Pose2d pose;
+        SwerveModuleState[] moduleStates;
+        SwerveModuleState[] driveDesiredStates;
+        SwerveModulePosition[] modulePositions;
+        SwerveModuleInputsAutoLogged swerverModuleFL;
+        SwerveModuleInputsAutoLogged swerverModuleFR;
+        SwerveModuleInputsAutoLogged swerverModuleBR;
+        SwerveModuleInputsAutoLogged swerverModuleBL;
+        ChassisSpeeds robotRelativeSpeeds;
     }
     
 
@@ -30,6 +38,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> {
         SwerveModule SwerveModuleBL,
         Pigeon2 pigeon
     ) {
+        this.setSensors(new SwerveDriveInputsAutoLogged());
         this.swerveModuleBR = SwerveModuleBR;
         this.swerveModuleBL = SwerveModuleBL;
         this.swerveModuleFR = SwerveModuleFR;
@@ -51,11 +60,18 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> {
                 this.swerveModuleBL.getModulePosition(),
             }
         );
+        getSensors().moduleStates = new SwerveModuleState[4];
+        getSensors().modulePositions = new SwerveModulePosition[4];
+
+        getSensors().swerverModuleFL = swerveModuleFL.inputs;
+        getSensors().swerverModuleFR = swerveModuleFR.inputs;
+        getSensors().swerverModuleBR = swerveModuleBR.inputs;
+        getSensors().swerverModuleBL = swerveModuleBL.inputs;
     }
 
     @Override
     public void readSensors(SwerveDriveInputsAutoLogged inputs) {
-        inputs.currentRotationDegrees = this.pigeon.getRotation2d().getDegrees();
+        inputs.currentRotationRadians = this.pigeon.getRotation2d().getRadians();
         inputs.pose = this.odometry.update(
             this.pigeon.getRotation2d(),
             new SwerveModulePosition[]{
@@ -65,6 +81,24 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> {
                 this.swerveModuleBL.getModulePosition()
             }
         );
+
+        inputs.moduleStates[0] = swerveModuleFL.getModuleState();
+        inputs.moduleStates[1] = swerveModuleFR.getModuleState();
+        inputs.moduleStates[2] = swerveModuleBR.getModuleState();
+        inputs.moduleStates[3] = swerveModuleBL.getModuleState();
+
+        inputs.modulePositions[0] = swerveModuleFL.getModulePosition();
+        inputs.modulePositions[1] = swerveModuleFR.getModulePosition();
+        inputs.modulePositions[2] = swerveModuleBR.getModulePosition();
+        inputs.modulePositions[3] = swerveModuleBL.getModulePosition();
+
+        swerveModuleFL.readSensors();
+        swerveModuleFR.readSensors();
+        swerveModuleBR.readSensors();
+        swerveModuleBL.readSensors();
+        inputs.robotRelativeSpeeds = this.getRobotRelativeSpeeds();
+
+
     }
 
     public Pose2d getPose() {
@@ -77,6 +111,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> {
 
     public void drive(ChassisSpeeds speeds) {
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
+        this.getSensors().driveDesiredStates = moduleStates;
         swerveModuleFL.drive(moduleStates[0].speedMetersPerSecond);
         swerveModuleFL.pivot(moduleStates[0].angle.getMeasure());
         
@@ -88,6 +123,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> {
         
         swerveModuleBL.drive(moduleStates[3].speedMetersPerSecond);
         swerveModuleBL.pivot(moduleStates[3].angle.getMeasure());
+
     }
 
     public void drive(double xSpeed, double ySpeed, double rotation) {

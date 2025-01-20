@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
@@ -36,7 +35,6 @@ public class Robot extends LoggedRobot {
 
     RobotContainer robot = new FortissiMOEContainer();
 
-    TalonSRX talon = new TalonSRX(2);
 
 
     Command autoCommand = Commands.none();
@@ -86,7 +84,7 @@ public class Robot extends LoggedRobot {
         robot.getSwerveDrive().drive(
                  -driverJoystick.getRawAxis(1),
                  -driverJoystick.getRawAxis(0),
-                  driverJoystick.getRawAxis(2)
+                  driverJoystick.getRawAxis(4 /*TODO: REVERT*/)
         );
     }
 
