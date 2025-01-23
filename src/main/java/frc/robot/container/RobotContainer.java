@@ -14,7 +14,7 @@ import lombok.Data;
 public abstract @Data class RobotContainer {
 	private SwerveDrive swerveDrive;
 
-    private FakeCoralCollector coralCollector;
+    private CoralCollectorIO coralCollector;
 
 
     public RobotContainer() {
