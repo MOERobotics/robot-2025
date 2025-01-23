@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import frc.robot.subsystem.FakeCoralCollector;
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
 
@@ -52,6 +53,9 @@ public class FortissiMOEContainer extends RobotContainer {
                 )
 
         );
+
+
+        this.setCoralCollector(new FakeCoralCollector());
     }
 
 }
