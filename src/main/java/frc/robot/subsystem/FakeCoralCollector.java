@@ -1,18 +1,21 @@
 package frc.robot.subsystem;
 
+import edu.wpi.first.units.LinearVelocityUnit;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.VoltageUnit;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.LinearAcceleration;
-import edu.wpi.first.units.measure.Velocity;
-import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.units.measure.*;
+import frc.robot.MOESubsystem;
 
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.*;
 
-public class FakeCoralCollector implements CoralCollectorIO  {
+public class FakeCoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged> implements CoralCollectorIO  {
+
+    public FakeCoralCollector(){
+        this.setSensors(new CoralCollectorInputsAutoLogged());
+    }
     @Override
     public boolean hasCoral() {
+
         return false;
     }
 
@@ -27,13 +30,13 @@ public class FakeCoralCollector implements CoralCollectorIO  {
     }
 
     @Override
-    public AngularVelocity getLeftPower() {
+    public AngularVelocity getLeftVelocity() {
         return null;
 
     }
 
     @Override
-    public AngularVelocity getRightPower() {
+    public AngularVelocity getRightVelocity() {
         return null;
     }
 }
