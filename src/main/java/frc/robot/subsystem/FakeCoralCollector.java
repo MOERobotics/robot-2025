@@ -9,6 +9,10 @@ import frc.robot.MOESubsystem;
 import static edu.wpi.first.units.Units.*;
 
 public class FakeCoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged> implements CoralCollectorIO  {
+
+    public FakeCoralCollector(){
+        this.setSensors(new CoralCollectorInputsAutoLogged());
+    }
     @Override
     public boolean hasCoral() {
 
