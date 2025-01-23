@@ -4,16 +4,13 @@
 
 package frc.robot.container;
 
-import frc.robot.subsystem.CoralCollectorIO;
-import frc.robot.subsystem.DriveSubsystem;
-import frc.robot.subsystem.FakeCoralCollector;
-import frc.robot.subsystem.SwerveDrive;
+import frc.robot.subsystem.*;
 import lombok.Data;
 
 
 public abstract @Data class RobotContainer {
 	private SwerveDrive swerveDrive;
-
+	private AlgaeCollector algaeCollector;
     private CoralCollectorIO coralCollector;
 
 
