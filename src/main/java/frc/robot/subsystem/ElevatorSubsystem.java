@@ -3,9 +3,11 @@ package frc.robot.subsystem;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.*;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface ElevatorSubsystem {
-    public class ElevatorInputs{
+    @AutoLog
+    class ElevatorInputs{
         public Distance height;
         public Angle angle;
         public AngularVelocity horizontalSpeed;

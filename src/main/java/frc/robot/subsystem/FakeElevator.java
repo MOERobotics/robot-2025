@@ -1,12 +1,16 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.units.measure.*;
+import frc.robot.MOESubsystem;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 
-public class FakeElevator implements ElevatorSubsystem {
+public class FakeElevator extends MOESubsystem<ElevatorInputsAutoLogged> implements ElevatorSubsystem {
 
+    public FakeElevator(){
+        this.setSensors(new ElevatorInputsAutoLogged());
+    }
     @Override
     public void moveVertically(LinearVelocity power) {
 
