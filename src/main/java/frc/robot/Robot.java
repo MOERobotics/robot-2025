@@ -86,6 +86,8 @@ public class Robot extends LoggedRobot {
                  -driverJoystick.getRawAxis(0),
                   driverJoystick.getRawAxis(4 /*TODO: REVERT*/)
         );
+        robot.getElevator().moveVertically(InchesPerSecond.of(driverJoystick.getRawAxis(2)*4));
+        robot.getElevator().moveHorizontally(DegreesPerSecond.of(driverJoystick.getRawAxis(3)*5));
     }
 
     @Override
