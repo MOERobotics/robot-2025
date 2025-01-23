@@ -13,6 +13,7 @@ public class FakeCoralCollector extends MOESubsystem<CoralCollectorInputsAutoLog
     public FakeCoralCollector(){
         this.setSensors(new CoralCollectorInputsAutoLogged());
     }
+
     @Override
     public boolean hasCoral() {
 

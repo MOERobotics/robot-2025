@@ -56,7 +56,6 @@ public class FortissiMOEContainer extends RobotContainer {
         );
         this.setElevator(new FakeElevator());
 
-
         this.setCoralCollector(new FakeCoralCollector());
     }
 

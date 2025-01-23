@@ -11,6 +11,14 @@ public class FakeElevator extends MOESubsystem<ElevatorInputsAutoLogged> impleme
     public FakeElevator(){
         this.setSensors(new ElevatorInputsAutoLogged());
     }
+
+    @Override
+    public void readSensors(ElevatorInputsAutoLogged sensors) {
+        sensors.angle = this.getAngle();
+        sensors.height = this.getHeight();
+
+    }
+
     @Override
     public void moveVertically(LinearVelocity power) {
 
