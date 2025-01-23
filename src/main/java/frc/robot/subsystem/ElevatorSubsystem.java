@@ -5,6 +5,13 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.*;
 
 public interface ElevatorSubsystem {
+    public class ElevatorInputs{
+        public Distance height;
+        public Angle angle;
+        public AngularVelocity horizontalSpeed;
+        public LinearVelocity verticalSpeed;
+
+    }
     public void moveVertically(LinearVelocity speed);
 
     public void moveHorizontally(AngularVelocity speed);
