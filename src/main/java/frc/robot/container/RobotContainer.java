@@ -4,18 +4,20 @@
 
 package frc.robot.container;
 
+import frc.robot.subsystem.CoralCollectorIO;
 import frc.robot.subsystem.DriveSubsystem;
 import frc.robot.subsystem.ElevatorSubsystem;
 import frc.robot.subsystem.SwerveDrive;
 import lombok.Data;
 
-import javax.swing.text.Element;
-
 
 public abstract @Data class RobotContainer {
 	private SwerveDrive swerveDrive;
 	private ElevatorSubsystem elevator;
-	public RobotContainer() {
+    private CoralCollectorIO coralCollector;
+
+
+    public RobotContainer() {
 		System.out.println("Constructed RobotContainer type: " + getClass());
 	}
 }

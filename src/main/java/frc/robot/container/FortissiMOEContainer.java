@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.subsystem.FakeElevator;
+import frc.robot.subsystem.FakeCoralCollector;
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
 
@@ -54,6 +55,9 @@ public class FortissiMOEContainer extends RobotContainer {
 
         );
         this.setElevator(new FakeElevator());
+
+
+        this.setCoralCollector(new FakeCoralCollector());
     }
 
 }
