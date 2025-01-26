@@ -12,13 +12,18 @@ public interface ElevatorSubsystem {
         public Angle angle;
         public AngularVelocity horizontalSpeed;
         public LinearVelocity verticalSpeed;
-
     }
+
+    public ElevatorInputsAutoLogged getSensors();
     public void moveVertically(LinearVelocity speed);
 
     public void moveHorizontally(AngularVelocity speed);
 
-    public Distance getHeight();
+    default Distance getHeight() {
+        return this.getSensors().height;
+    }
 
-    public Angle getAngle();
+    default Angle getAngle() {
+        return this.getSensors().angle;
+    }
 }

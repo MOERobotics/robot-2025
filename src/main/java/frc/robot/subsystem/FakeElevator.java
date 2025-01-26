@@ -3,9 +3,6 @@ package frc.robot.subsystem;
 import edu.wpi.first.units.measure.*;
 import frc.robot.MOESubsystem;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Inches;
-
 public class FakeElevator extends MOESubsystem<ElevatorInputsAutoLogged> implements ElevatorSubsystem {
 
     public FakeElevator(){
@@ -29,13 +26,4 @@ public class FakeElevator extends MOESubsystem<ElevatorInputsAutoLogged> impleme
 
     }
 
-    @Override
-    public Distance getHeight() {
-        return Inches.of(0);
-    }
-
-    @Override
-    public Angle getAngle() {
-        return Degrees.of(0);
-    }
 }

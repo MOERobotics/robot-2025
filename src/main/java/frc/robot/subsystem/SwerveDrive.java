@@ -1,35 +1,20 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import frc.robot.MOESubsystem;
-import org.littletonrobotics.junction.AutoLog;
+import lombok.Getter;
 
-public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> {
+public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> implements SwerveDriveIO {
     public SwerveModule swerveModuleFL;
     public SwerveModule swerveModuleFR;
     public SwerveModule swerveModuleBL;
     public SwerveModule swerveModuleBR;
-    public SwerveDriveKinematics kinematics;
-    public SwerveDriveOdometry odometry;
+    public @Getter SwerveDriveKinematics kinematics;
+    public @Getter SwerveDriveOdometry odometry;
     public Pigeon2 pigeon;
 
-    @AutoLog
-    public static class SwerveDriveInputs {
-        double currentRotationRadians;
-        Pose2d pose;
-        SwerveModuleState[] moduleStates;
-        SwerveModuleState[] driveDesiredStates;
-        SwerveModulePosition[] modulePositions;
-        SwerveModuleInputsAutoLogged swerverModuleFL;
-        SwerveModuleInputsAutoLogged swerverModuleFR;
-        SwerveModuleInputsAutoLogged swerverModuleBR;
-        SwerveModuleInputsAutoLogged swerverModuleBL;
-        ChassisSpeeds robotRelativeSpeeds;
-    }
-    
 
     public SwerveDrive(
         SwerveModule SwerveModuleFL,
@@ -63,10 +48,10 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> {
         getSensors().moduleStates = new SwerveModuleState[4];
         getSensors().modulePositions = new SwerveModulePosition[4];
 
-        getSensors().swerverModuleFL = swerveModuleFL.inputs;
-        getSensors().swerverModuleFR = swerveModuleFR.inputs;
-        getSensors().swerverModuleBR = swerveModuleBR.inputs;
-        getSensors().swerverModuleBL = swerveModuleBL.inputs;
+        getSensors().swerveModuleFL = swerveModuleFL.inputs;
+        getSensors().swerveModuleFR = swerveModuleFR.inputs;
+        getSensors().swerveModuleBR = swerveModuleBR.inputs;
+        getSensors().swerveModuleBL = swerveModuleBL.inputs;
     }
 
     @Override
@@ -96,48 +81,32 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> {
         swerveModuleFR.readSensors();
         swerveModuleBR.readSensors();
         swerveModuleBL.readSensors();
-        inputs.robotRelativeSpeeds = this.getRobotRelativeSpeeds();
+        inputs.robotRelativeSpeeds = kinematics.toChassisSpeeds(
+                swerveModuleFL.getModuleState(),
+                swerveModuleFR.getModuleState(),
+                swerveModuleBR.getModuleState(),
+                swerveModuleBL.getModuleState()
+        );
 
 
     }
 
-    public Pose2d getPose() {
-        return this.odometry.getPoseMeters();
-    }
-
-    public void resetPose(Pose2d newPose) {
-        this.odometry.resetPose(newPose);
-    }
-
+    @Override
     public void drive(ChassisSpeeds speeds) {
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
         this.getSensors().driveDesiredStates = moduleStates;
         swerveModuleFL.drive(moduleStates[0].speedMetersPerSecond);
         swerveModuleFL.pivot(moduleStates[0].angle.getMeasure());
-        
+
         swerveModuleFR.drive(moduleStates[1].speedMetersPerSecond);
         swerveModuleFR.pivot(moduleStates[1].angle.getMeasure());
-        
+
         swerveModuleBR.drive(moduleStates[2].speedMetersPerSecond);
         swerveModuleBR.pivot(moduleStates[2].angle.getMeasure());
-        
+
         swerveModuleBL.drive(moduleStates[3].speedMetersPerSecond);
         swerveModuleBL.pivot(moduleStates[3].angle.getMeasure());
 
-    }
-
-    public void drive(double xSpeed, double ySpeed, double rotation) {
-        drive(new ChassisSpeeds(xSpeed, ySpeed, rotation));
-    }
-
-    public ChassisSpeeds getRobotRelativeSpeeds() {
-        ChassisSpeeds speeds = kinematics.toChassisSpeeds(
-            swerveModuleFL.getModuleState(),
-            swerveModuleFR.getModuleState(),
-            swerveModuleBR.getModuleState(),
-            swerveModuleBL.getModuleState()
-        );
-        return speeds;
     }
 
 }
