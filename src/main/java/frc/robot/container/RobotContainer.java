@@ -11,6 +11,7 @@ import lombok.Data;
 public abstract @Data class RobotContainer {
 	private SwerveDriveIO swerveDrive;
 	private ElevatorSubsystem elevator;
+	private AlgaeCollector algaeCollector;
     private CoralCollectorIO coralCollector;
 
 
