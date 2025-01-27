@@ -61,11 +61,11 @@ public class CoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged>
 
     @Override
     public AngularVelocity getLeftVelocity() {
-        return RotationsPerSecond.of(leftMotor.getVelocity()*60);
+        return leftMotor.getVelocity();
     }
 
     @Override
     public AngularVelocity getRightVelocity() {
-        return RotationsPerSecond.of(rightMotor.getVelocity()*60);
+        return rightMotor.getVelocity();
     }
 }

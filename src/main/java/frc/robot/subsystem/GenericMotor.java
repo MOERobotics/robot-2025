@@ -30,9 +30,9 @@ public interface GenericMotor {
 
     void setVelocity(AngularVelocity angularVelocity);
 
-    double getVelocity();
+    AngularVelocity getVelocity();
 
-    double getPosition();
+    Angle getPosition();
 
     void stopMotor();
 

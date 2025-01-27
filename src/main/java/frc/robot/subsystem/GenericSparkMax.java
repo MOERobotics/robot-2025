@@ -8,6 +8,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.LimitSwitchConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 
 import static edu.wpi.first.units.Units.*;
@@ -30,8 +31,8 @@ public class GenericSparkMax implements GenericMotor{
     @Override
     public void processInputs(GenericMotorInputs inputs) {
         inputs.appliedVolts = Volts.of(motor.getAppliedOutput()*motor.getBusVoltage());
-        inputs.motorVelocity = RPM.of(getVelocity());
-        inputs.motorPosition = Revolutions.of(getPosition());
+        inputs.motorVelocity = getVelocity();
+        inputs.motorPosition = getPosition();
         inputs.motorInvert = getInvert();
         inputs.kP = getPID().kP;
         inputs.kI = getPID().kI;
@@ -63,13 +64,13 @@ public class GenericSparkMax implements GenericMotor{
     }
 
     @Override
-    public double getVelocity() {
-        return motor.getEncoder().getVelocity();
+    public AngularVelocity getVelocity() {
+        return RPM.of(motor.getEncoder().getVelocity());
     }
 
     @Override
-    public double getPosition() {
-        return motor.getEncoder().getPosition();
+    public Angle getPosition() {
+        return Revolutions.of(motor.getEncoder().getPosition());
     }
 
     @Override
