@@ -1,10 +1,9 @@
 package frc.robot.subsystem;
 
-import edu.wpi.first.units.AngularVelocityUnit;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface AlgaeCollectorIO {
+public interface AlgaeCollectorControl {
     @AutoLog
     public class AlgaeCollectorInputs{
          Voltage wheelAppliedVolts;

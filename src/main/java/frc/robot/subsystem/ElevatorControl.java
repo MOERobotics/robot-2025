@@ -1,26 +1,25 @@
 package frc.robot.subsystem;
 
-import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.units.measure.*;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ElevatorSubsystem {
+public interface ElevatorControl {
     @AutoLog
     class ElevatorInputs{
-        public Distance height;
+        public Distance extension;
         public Angle angle;
         public AngularVelocity horizontalSpeed;
-        public LinearVelocity verticalSpeed;
+        public LinearVelocity extensionSpeed;
     }
 
     public ElevatorInputsAutoLogged getSensors();
+
     public void moveVertically(LinearVelocity speed);
 
     public void moveHorizontally(AngularVelocity speed);
 
-    default Distance getHeight() {
-        return this.getSensors().height;
+    default Distance getExtension() {
+        return this.getSensors().extension;
     }
 
     default Angle getAngle() {

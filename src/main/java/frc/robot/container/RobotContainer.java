@@ -9,10 +9,10 @@ import lombok.Data;
 
 
 public abstract @Data class RobotContainer {
-	private SwerveDriveIO swerveDrive;
-	private ElevatorSubsystem elevator;
+	private SwerveDriveController swerveDrive;
+	private ElevatorControl elevator;
 	private AlgaeCollector algaeCollector;
-    private CoralCollectorIO coralCollector;
+    private CoralCollectorControl coralCollector;
 
 
     public RobotContainer() {

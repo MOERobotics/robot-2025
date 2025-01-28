@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.controller.PIDController;
 import frc.robot.subsystem.FakeElevator;
 import frc.robot.subsystem.FakeCoralCollector;
 import frc.robot.subsystem.SwerveDrive;
@@ -16,6 +17,20 @@ import static edu.wpi.first.units.Units.Inches;
 public class FortissiMOEContainer extends RobotContainer {
 
     public FortissiMOEContainer (){
+        double pivotkP = 0.01;
+        double pivotkI = 0.3;
+        double pivotkD = 0;
+        double pivotIMax = 0.01;
+
+        PIDController pivotControllerFL = new PIDController(pivotkP,pivotkI,pivotkD);
+        pivotControllerFL.setIntegratorRange(-pivotIMax,pivotIMax);
+        PIDController pivotControllerFR = new PIDController(pivotkP,pivotkI,pivotkD);
+        pivotControllerFL.setIntegratorRange(-pivotIMax,pivotIMax);
+        PIDController pivotControllerBL = new PIDController(pivotkP,pivotkI,pivotkD);
+        pivotControllerFL.setIntegratorRange(-pivotIMax,pivotIMax);
+
+        PIDController pivotControllerBR = new PIDController(pivotkP,pivotkI,pivotkD);
+        pivotControllerFL.setIntegratorRange(-pivotIMax,pivotIMax);
         this.setSwerveDrive(
                 new SwerveDrive(
                         new SwerveModule(//FL
@@ -24,7 +39,8 @@ public class FortissiMOEContainer extends RobotContainer {
                                 new CANcoder(34),
                                 Inches.of(14),
                                 Inches.of(14),
-                                Degrees.of(45)
+                                Degrees.of(45),
+                                pivotControllerFL
                         ),
                         new SwerveModule(//FR
                                 new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
@@ -32,7 +48,8 @@ public class FortissiMOEContainer extends RobotContainer {
                                 new CANcoder(33),
                                 Inches.of(14),
                                 Inches.of(-14),
-                                Degrees.of(-45)
+                                Degrees.of(-45),
+                                pivotControllerFR
                         ),
                         new SwerveModule(//BR
                                 new SparkMax( 1, SparkLowLevel.MotorType.kBrushless),
@@ -40,7 +57,9 @@ public class FortissiMOEContainer extends RobotContainer {
                                 new CANcoder(32),
                                 Inches.of(-14),
                                 Inches.of(-14),
-                                Degrees.of(-135)
+                                Degrees.of(-135),
+                                pivotControllerBL
+
                         ),
                         new SwerveModule(//BL
                                 new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
@@ -48,12 +67,13 @@ public class FortissiMOEContainer extends RobotContainer {
                                 new CANcoder(31),
                                 Inches.of(-14),
                                 Inches.of(14),
-                                Degrees.of(135)
+                                Degrees.of(135),
+                                pivotControllerBR
+
                         ),
                         new Pigeon2(0)
-                )
 
-        );
+        ));
         this.setElevator(new FakeElevator());
 
         this.setCoralCollector(new FakeCoralCollector());

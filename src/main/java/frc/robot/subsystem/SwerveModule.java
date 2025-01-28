@@ -38,14 +38,13 @@ public class SwerveModule {
             CANcoder compass,
             Distance xPos,
             Distance yPos,
-            Angle heading
+            Angle heading,
+            PIDController pivotController
     ) {
         this.compass = compass;
         this.pivotMotor = pivotMotor;
         this.driveMotor = driveMotor;
-        this.pivotController = new PIDController(0.01, 0.3, 0);
-        this.pivotController.enableContinuousInput(-Math.PI, Math.PI);
-        this.pivotController.setIZone(2);
+        this.pivotController = pivotController;
         this.xPos = xPos;
         this.yPos = yPos;
         this.heading = heading;

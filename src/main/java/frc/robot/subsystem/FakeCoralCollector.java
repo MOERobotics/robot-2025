@@ -1,14 +1,9 @@
 package frc.robot.subsystem;
 
-import edu.wpi.first.units.LinearVelocityUnit;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.VoltageUnit;
 import edu.wpi.first.units.measure.*;
 import frc.robot.MOESubsystem;
 
-import static edu.wpi.first.units.Units.*;
-
-public class FakeCoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged> implements CoralCollectorIO  {
+public class FakeCoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged> implements CoralCollectorControl {
 
     public FakeCoralCollector(){
         this.setSensors(new CoralCollectorInputsAutoLogged());

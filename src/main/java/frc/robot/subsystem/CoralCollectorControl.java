@@ -3,7 +3,7 @@ package frc.robot.subsystem;
 import edu.wpi.first.units.measure.AngularVelocity;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface CoralCollectorIO {
+public interface CoralCollectorControl {
 
     @AutoLog
     public class CoralCollectorInputs{

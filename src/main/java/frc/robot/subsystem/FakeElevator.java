@@ -3,7 +3,7 @@ package frc.robot.subsystem;
 import edu.wpi.first.units.measure.*;
 import frc.robot.MOESubsystem;
 
-public class FakeElevator extends MOESubsystem<ElevatorInputsAutoLogged> implements ElevatorSubsystem {
+public class FakeElevator extends MOESubsystem<ElevatorInputsAutoLogged> implements ElevatorControl {
 
     public FakeElevator(){
         this.setSensors(new ElevatorInputsAutoLogged());
@@ -12,7 +12,7 @@ public class FakeElevator extends MOESubsystem<ElevatorInputsAutoLogged> impleme
     @Override
     public void readSensors(ElevatorInputsAutoLogged sensors) {
         sensors.angle = this.getAngle();
-        sensors.height = this.getHeight();
+        sensors.extension = this.getExtension();
 
     }
 
