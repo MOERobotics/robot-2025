@@ -20,17 +20,16 @@ public class FortissiMOEContainer extends RobotContainer {
         double pivotkP = 0.01;
         double pivotkI = 0.3;
         double pivotkD = 0;
-        double pivotIMax = 0.01;
+        double pivotkIMax = 2;
+        PIDController pivotControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
+        pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        PIDController pivotControllerFR = new PIDController(pivotkP, pivotkI, pivotkD);
+        pivotControllerFR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        PIDController pivotControllerBR = new PIDController(pivotkP, pivotkI, pivotkD);
+        pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        PIDController pivotControllerBL = new PIDController(pivotkP, pivotkI, pivotkD);
+        pivotControllerBL.setIntegratorRange(-pivotkIMax, pivotkIMax);
 
-        PIDController pivotControllerFL = new PIDController(pivotkP,pivotkI,pivotkD);
-        pivotControllerFL.setIntegratorRange(-pivotIMax,pivotIMax);
-        PIDController pivotControllerFR = new PIDController(pivotkP,pivotkI,pivotkD);
-        pivotControllerFL.setIntegratorRange(-pivotIMax,pivotIMax);
-        PIDController pivotControllerBL = new PIDController(pivotkP,pivotkI,pivotkD);
-        pivotControllerFL.setIntegratorRange(-pivotIMax,pivotIMax);
-
-        PIDController pivotControllerBR = new PIDController(pivotkP,pivotkI,pivotkD);
-        pivotControllerFL.setIntegratorRange(-pivotIMax,pivotIMax);
         this.setSwerveDrive(
                 new SwerveDrive(
                         new SwerveModule(//FL
@@ -58,8 +57,7 @@ public class FortissiMOEContainer extends RobotContainer {
                                 Inches.of(-14),
                                 Inches.of(-14),
                                 Degrees.of(-135),
-                                pivotControllerBL
-
+                                pivotControllerBR
                         ),
                         new SwerveModule(//BL
                                 new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
@@ -68,8 +66,7 @@ public class FortissiMOEContainer extends RobotContainer {
                                 Inches.of(-14),
                                 Inches.of(14),
                                 Degrees.of(135),
-                                pivotControllerBR
-
+                                pivotControllerBL
                         ),
                         new Pigeon2(0)
 

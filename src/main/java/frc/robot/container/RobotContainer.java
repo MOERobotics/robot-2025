@@ -9,7 +9,7 @@ import lombok.Data;
 
 
 public abstract @Data class RobotContainer {
-	private SwerveDriveController swerveDrive;
+	private SwerveDriveControl swerveDrive;
 	private ElevatorControl elevator;
 	private AlgaeCollector algaeCollector;
     private CoralCollectorControl coralCollector;

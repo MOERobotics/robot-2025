@@ -6,7 +6,7 @@ import edu.wpi.first.math.kinematics.*;
 import frc.robot.MOESubsystem;
 import lombok.Getter;
 
-public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> implements SwerveDriveController {
+public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> implements SwerveDriveControl {
     public SwerveModule swerveModuleFL;
     public SwerveModule swerveModuleFR;
     public SwerveModule swerveModuleBL;

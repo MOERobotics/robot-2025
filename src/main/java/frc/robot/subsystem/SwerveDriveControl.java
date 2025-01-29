@@ -7,7 +7,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface SwerveDriveController extends Subsystem {
+public interface SwerveDriveControl extends Subsystem {
     default Pose2d getPose() {
         return this.getSensors().pose;
     }
