@@ -32,6 +32,8 @@ public class Robot extends LoggedRobot {
 
     Command autoCommand = Commands.none();
 
+
+
     @Override
     public void robotInit() {
 

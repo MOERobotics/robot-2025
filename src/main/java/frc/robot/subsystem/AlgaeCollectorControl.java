@@ -1,6 +1,7 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.units.measure.*;
+import frc.robot.MOESubsystem;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface AlgaeCollectorControl {
