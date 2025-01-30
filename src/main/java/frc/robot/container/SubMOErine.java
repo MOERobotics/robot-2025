@@ -5,6 +5,8 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.commands.ElevatorTeleopCommand;
 import frc.robot.subsystem.SubMOErineElevator;
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
@@ -13,6 +15,7 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 
 public class SubMOErine extends RobotContainer{
+    ElevatorTeleopCommand elevatorTeleopCommand;
     public SubMOErine(){
         double pivotkP = 0.01;
         double pivotkI = 0.3;
@@ -81,6 +84,8 @@ public class SubMOErine extends RobotContainer{
                 pivot,
                 tilt
         ));
+        elevatorTeleopCommand = new ElevatorTeleopCommand(this.getElevator(),new Joystick(0));
+        this.getElevator().setDefaultCommand(elevatorTeleopCommand);
     }
 }
 

@@ -10,20 +10,20 @@ import static edu.wpi.first.units.Units.*;
 
 public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> implements ElevatorControl {
 
-SparkMax elevatorHeightMotor;
-SparkMax elevatorPivotMotor;
-CANcoder tiltEncoder;
+    SparkMax elevatorHeightMotor;
+    SparkMax elevatorPivotMotor;
+    CANcoder tiltEncoder;
 
     public SubMOErineElevator(
-            SparkMax elevatorHeightMotor,
-            SparkMax elevatorPivotMotor,
-            CANcoder tiltEncoder
-    ){
+        SparkMax elevatorHeightMotor,
+        SparkMax elevatorPivotMotor,
+        CANcoder tiltEncoder
+    ) {
         this.setSensors(new ElevatorInputsAutoLogged());
-this.elevatorHeightMotor = elevatorHeightMotor;
-this.elevatorPivotMotor = elevatorPivotMotor;
-this.tiltEncoder = tiltEncoder;
-}
+        this.elevatorHeightMotor = elevatorHeightMotor;
+        this.elevatorPivotMotor = elevatorPivotMotor;
+        this.tiltEncoder = tiltEncoder;
+    }
 
     @Override
     public void readSensors(ElevatorInputsAutoLogged sensors) {
@@ -34,11 +34,11 @@ this.tiltEncoder = tiltEncoder;
 
     @Override
     public void moveVertically(LinearVelocity speed) {
-elevatorHeightMotor.set(speed.in(InchesPerSecond));
+        elevatorHeightMotor.set(speed.in(InchesPerSecond));
     }
 
     @Override
     public void moveHorizontally(AngularVelocity speed) {
-elevatorPivotMotor.set(speed.in(DegreesPerSecond));
+        elevatorPivotMotor.set(speed.in(DegreesPerSecond));
     }
 }

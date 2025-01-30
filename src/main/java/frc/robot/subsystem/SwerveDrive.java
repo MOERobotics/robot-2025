@@ -55,9 +55,9 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     }
 
     @Override
-    public void readSensors(SwerveDriveInputsAutoLogged inputs) {
-        inputs.currentRotationRadians = this.pigeon.getRotation2d().getRadians();
-        inputs.pose = this.odometry.update(
+    public void readSensors(SwerveDriveInputsAutoLogged sensors) {
+        sensors.currentRotationRadians = this.pigeon.getRotation2d().getRadians();
+        sensors.pose = this.odometry.update(
             this.pigeon.getRotation2d(),
             new SwerveModulePosition[]{
                 this.swerveModuleFL.getModulePosition(),
@@ -67,21 +67,21 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
             }
         );
 
-        inputs.moduleStates[0] = swerveModuleFL.getModuleState();
-        inputs.moduleStates[1] = swerveModuleFR.getModuleState();
-        inputs.moduleStates[2] = swerveModuleBR.getModuleState();
-        inputs.moduleStates[3] = swerveModuleBL.getModuleState();
+        sensors.moduleStates[0] = swerveModuleFL.getModuleState();
+        sensors.moduleStates[1] = swerveModuleFR.getModuleState();
+        sensors.moduleStates[2] = swerveModuleBR.getModuleState();
+        sensors.moduleStates[3] = swerveModuleBL.getModuleState();
 
-        inputs.modulePositions[0] = swerveModuleFL.getModulePosition();
-        inputs.modulePositions[1] = swerveModuleFR.getModulePosition();
-        inputs.modulePositions[2] = swerveModuleBR.getModulePosition();
-        inputs.modulePositions[3] = swerveModuleBL.getModulePosition();
+        sensors.modulePositions[0] = swerveModuleFL.getModulePosition();
+        sensors.modulePositions[1] = swerveModuleFR.getModulePosition();
+        sensors.modulePositions[2] = swerveModuleBR.getModulePosition();
+        sensors.modulePositions[3] = swerveModuleBL.getModulePosition();
 
         swerveModuleFL.readSensors();
         swerveModuleFR.readSensors();
         swerveModuleBR.readSensors();
         swerveModuleBL.readSensors();
-        inputs.robotRelativeSpeeds = kinematics.toChassisSpeeds(
+        sensors.robotRelativeSpeeds = kinematics.toChassisSpeeds(
                 swerveModuleFL.getModuleState(),
                 swerveModuleFR.getModuleState(),
                 swerveModuleBR.getModuleState(),

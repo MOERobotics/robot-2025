@@ -1,9 +1,10 @@
 package frc.robot.subsystem;
 
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.littletonrobotics.junction.AutoLog;
 
-public interface ElevatorControl {
+public interface ElevatorControl extends Subsystem {
     @AutoLog
     class ElevatorInputs{
         public Distance extension;
