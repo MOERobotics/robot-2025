@@ -78,8 +78,8 @@ public class SwerveModule {
 
     public void pivot(Angle targetHeading) {
         Angle currentHeading =  getHeading();
-        Angle error = currentHeading.minus(targetHeading).plus(Degrees.of(180));
-        double power = pivotController.calculate(inputs.error = -error.in(Radians));
+        Angle error = currentHeading.minus(targetHeading);
+        double power = pivotController.calculate(inputs.error = error.in(Radians));
         inputs.integral = pivotController.getAccumulatedError();
         pivotMotor.set(power);
     }
