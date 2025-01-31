@@ -1,9 +1,7 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -23,14 +21,20 @@ public class SwerveModule {
     public Distance xPos;
     public Distance yPos;
     public Angle heading;
+
+    public Angle targetHeading;
     SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
 
     @AutoLog
     public static class SwerveModuleInputs {
-        public double currentRotationDegrees;
+        public Angle currentRotationDegrees;
         public double pivotPower;
         public double drivePower;
         public double error, integral;
+
+        public Angle targetHeading;
+
+
 
     }
 
@@ -66,9 +70,10 @@ public class SwerveModule {
     }
 
     public SwerveModuleInputsAutoLogged readSensors() {
-        inputs.currentRotationDegrees =  getHeading().in(Degrees);
+        inputs.currentRotationDegrees =  getHeading();
         inputs.pivotPower = pivotMotor.get();
         inputs.drivePower = driveMotor.get();
+        inputs.targetHeading = targetHeading;
         return inputs;
     }
 
@@ -77,9 +82,10 @@ public class SwerveModule {
     }
 
     public void pivot(Angle targetHeading) {
+        this.targetHeading =targetHeading;
         Angle currentHeading =  getHeading();
-        Angle error = currentHeading.minus(targetHeading).plus(Degrees.of(180));
-        double power = pivotController.calculate(inputs.error = -error.in(Radians));
+        Angle error = currentHeading.minus(targetHeading);
+        double power = pivotController.calculate(inputs.error = error.in(Radians));
         inputs.integral = pivotController.getAccumulatedError();
         pivotMotor.set(power);
     }

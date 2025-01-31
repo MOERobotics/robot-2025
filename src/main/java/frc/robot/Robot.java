@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.container.FortissiMOEContainer;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -26,7 +27,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler scheduler;
 
 
-    RobotContainer robot = new SubMOErine();
+    RobotContainer robot = new FortissiMOEContainer();
 
 
 
@@ -79,7 +80,7 @@ public class Robot extends LoggedRobot {
         robot.getSwerveDrive().drive(
                  -driverJoystick.getRawAxis(1),
                  -driverJoystick.getRawAxis(0),
-                  driverJoystick.getRawAxis(4 /*TODO: REVERT*/)
+                  driverJoystick.getRawAxis(2 /*TODO: REVERT*/)
         );
         robot.getElevator().moveVertically(InchesPerSecond.of(driverJoystick.getRawAxis(2)));
         robot.getElevator().moveHorizontally(DegreesPerSecond.of(driverJoystick.getRawAxis(3)));
