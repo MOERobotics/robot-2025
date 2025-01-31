@@ -5,32 +5,16 @@ import edu.wpi.first.units.measure.AngularVelocity;
 public class AlgaeCollectorControlFake implements AlgaeCollectorControl {
 
     @Override
-    public void processInputs(AlgaeCollectorInputs inputs) {
-        AlgaeCollectorControl.super.processInputs(inputs);
-    }
-
-    @Override
-    public void setCollectorVelocity(AngularVelocity collectorVelocity) {
-        AlgaeCollectorControl.super.setCollectorVelocity(collectorVelocity);
+    public AlgaeCollectorInputsAutoLogged getSensors() {
+        return null;
     }
 
     @Override
     public void setWheelVelocity(AngularVelocity wheelVelocity) {
-        AlgaeCollectorControl.super.setWheelVelocity(wheelVelocity);
     }
 
     @Override
-    public boolean inStartPosition() {
-        return false;
-    }
+    public void setWheelState(WheelState wheelState) {
 
-    @Override
-    public boolean inCollectPosition() {
-        return false;
-    }
-
-    @Override
-    public boolean hasAlgae() {
-        return false;
     }
 }
