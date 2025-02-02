@@ -167,6 +167,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public void driveSingleModule(int index, double xSpeed, double ySpeed, double rotation) {
         ChassisSpeeds speeds = new ChassisSpeeds(xSpeed,ySpeed,rotation);
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
+        this.getSensors().driveDesiredStates = moduleStates;
         swerveModules[index].drive(moduleStates[index].speedMetersPerSecond);
         swerveModules[index].pivot(moduleStates[index].angle.getMeasure());
     }

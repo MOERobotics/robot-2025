@@ -17,6 +17,7 @@ public class ElevatorTeleopCommand extends Command {
     public ElevatorTeleopCommand(ElevatorControl elevatorControl, Joystick joystick) {
         this.elevatorControl = elevatorControl;
         this.joystick = joystick;
+        addRequirements(elevatorControl);
     }
 
     @Override

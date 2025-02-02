@@ -15,6 +15,7 @@ public class AlgaeCollectorTeleopCommand extends Command {
     public AlgaeCollectorTeleopCommand(AlgaeCollectorControl algaeCollectorControl, Joystick joystick) {
         this.algaeCollectorControl = algaeCollectorControl;
         this.joystick = joystick;
+        addRequirements(algaeCollectorControl);
     }
 
     @Override

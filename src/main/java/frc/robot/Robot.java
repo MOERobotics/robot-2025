@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.SwerveModuleCommand;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -102,15 +103,14 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testInit() {
+        CommandScheduler.getInstance().cancelAll();
+        robot.getSwerveDrive().setDefaultCommand(new SwerveModuleCommand(robot.getSwerveDrive(), driverJoystick));
+
     }
 
     @Override
     public void testPeriodic() {
-        robot.getSwerveDrive().driveSingleModule(0,
-                -driverJoystick.getRawAxis(1),
-                -driverJoystick.getRawAxis(0),
-                driverJoystick.getRawAxis(4 /*TODO: REVERT*/)
-        );
+
     }
 
     @Override
