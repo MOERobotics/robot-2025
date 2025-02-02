@@ -7,7 +7,9 @@
 
 package frc.robot;
 
+import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -32,6 +34,10 @@ public class Robot extends LoggedRobot {
 
     Command autoCommand = Commands.none();
 
+    TimeOfFlight tof_sensor_center = new TimeOfFlight(41);
+    TimeOfFlight tof_sensor_right = new TimeOfFlight(42);
+    TimeOfFlight tof_sensor_left = new TimeOfFlight(40);
+
     @Override
     public void robotInit() {
 
@@ -42,11 +48,33 @@ public class Robot extends LoggedRobot {
 
         scheduler = CommandScheduler.getInstance();
         //robot.getDrive().setDefaultCommand(Commands.none());
+        tof_sensor_center.setRangingMode(TimeOfFlight.RangingMode.Short, 24);
+        tof_sensor_left.setRangingMode(TimeOfFlight.RangingMode.Short, 24);
+        tof_sensor_right.setRangingMode(TimeOfFlight.RangingMode.Short, 24);
     }
 
     @Override
     public void robotPeriodic() {
         scheduler.run();
+        SmartDashboard.putNumber("TOF Sensor CENTER", tof_sensor_center.getRange());
+        SmartDashboard.putNumber("TOF Sensor RIGHT", tof_sensor_right.getRange());
+        SmartDashboard.putNumber("TOF Sensor LEFT", tof_sensor_left.getRange());
+
+
+//        if (tof_sensor_center.getRange() < 500 && tof_sensor_left.getRange() > 40 &&){
+//            SmartDashboard.putString("Direction", "GOOD");
+//            else if (tof_sensor_center > 500 &&)
+            // }
+            //  else if (lidar1distance < 40 && lidar3distance < 40){
+            //   Serial.println("YES");
+            // }
+            //  else if (lidar2distance < 40 && lidar3distance < 40){
+            //   Serial.println("YES");
+            // }
+            // else {
+            //     Serial.println("NONONONO");
+            // }
+
     }
 
     @Override

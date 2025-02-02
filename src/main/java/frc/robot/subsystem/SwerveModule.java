@@ -5,6 +5,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -19,6 +20,10 @@ public class SwerveModule {
     public SparkMax driveMotor;
     public SparkMax pivotMotor;
     public PIDController pivotController;
+
+    public SimpleMotorFeedforward driveFF;
+
+    public PIDController drivePID;
     public CANcoder compass;
     public Distance xPos;
     public Distance yPos;
@@ -33,7 +38,6 @@ public class SwerveModule {
         public double error, integral;
 
     }
-
     public SwerveModule(
             SparkMax driveMotor,
             SparkMax pivotMotor,
@@ -43,6 +47,28 @@ public class SwerveModule {
             Angle heading,
             PIDController pivotController
     ) {
+        this(
+                driveMotor,
+                pivotMotor,
+                compass,
+                xPos,
+                yPos,
+                heading,
+                pivotController,
+                new PIDController(0,0,0)
+        );
+    }
+
+    public SwerveModule(
+            SparkMax driveMotor,
+            SparkMax pivotMotor,
+            CANcoder compass,
+            Distance xPos,
+            Distance yPos,
+            Angle heading,
+            PIDController pivotController,
+            PIDController drivePID
+    ) {
         this.compass = compass;
         this.pivotMotor = pivotMotor;
         this.driveMotor = driveMotor;
@@ -50,7 +76,6 @@ public class SwerveModule {
         this.xPos = xPos;
         this.yPos = yPos;
         this.heading = heading;
-
 
     }
 
