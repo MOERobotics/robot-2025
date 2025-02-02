@@ -24,6 +24,8 @@ public interface SwerveDriveControl extends Subsystem {
         drive(new ChassisSpeeds(xSpeed, ySpeed, rotation));
     }
 
+    void driveSingleModule (int index, double xSpeed, double ySpeed, double rotation);
+
     default ChassisSpeeds getRobotRelativeSpeeds() {
         return this.getSensors().robotRelativeSpeeds;
     }

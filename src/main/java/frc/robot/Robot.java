@@ -20,15 +20,11 @@ import static edu.wpi.first.units.Units.*;
 
 public class Robot extends LoggedRobot {
 
-
-
     Joystick driverJoystick = new Joystick(0);
+    Joystick functionJoystick = new Joystick(1);
     CommandScheduler scheduler;
 
-
     RobotContainer robot = new SubMOErine();
-
-
 
     Command autoCommand = Commands.none();
 
@@ -79,8 +75,29 @@ public class Robot extends LoggedRobot {
                  -driverJoystick.getRawAxis(0),
                   driverJoystick.getRawAxis(4 /*TODO: REVERT*/)
         );
-        robot.getElevator().moveVertically(InchesPerSecond.of(driverJoystick.getRawAxis(2)));
-        robot.getElevator().moveHorizontally(DegreesPerSecond.of(driverJoystick.getRawAxis(3)));
+        // Elevator control
+        robot.getElevator().moveVertically(InchesPerSecond.of(functionJoystick.getRawAxis(2)));
+        robot.getElevator().moveHorizontally(DegreesPerSecond.of(functionJoystick.getRawAxis(3)));
+
+        // Algae collector
+        if (functionJoystick.getRawButton(5)) {
+            robot.getAlgaeCollector().setWheelVelocity(RadiansPerSecond.of(-1));
+        }
+        else if (functionJoystick.getRawButton(6)){
+            robot.getAlgaeCollector().setWheelVelocity(RadiansPerSecond.of(1));
+        }
+        else {
+            robot.getAlgaeCollector().setWheelVelocity(RadiansPerSecond.of(0));
+        }
+        robot.getAlgaeCollector().setArmVelocity(RadiansPerSecond.of(functionJoystick.getRawAxis(1)));
+
+        // Coral collector
+        if (functionJoystick.getRawButton(12))  {
+            robot.getCoralCollector().setCoralVelocity(RPM.of(1), RPM.of(1));
+        }
+        else {
+            robot.getCoralCollector().setCoralVelocity(RPM.of(0), RPM.of(0));
+        }
     }
 
     @Override
@@ -89,6 +106,11 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testPeriodic() {
+        robot.getSwerveDrive().driveSingleModule(0,
+                -driverJoystick.getRawAxis(1),
+                -driverJoystick.getRawAxis(0),
+                driverJoystick.getRawAxis(4 /*TODO: REVERT*/)
+        );
     }
 
     @Override
