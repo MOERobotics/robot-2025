@@ -25,8 +25,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public SwerveDrivePoseEstimator poseEstimator;
     public Pigeon2 pigeon;
 
-
-
     public SwerveDrive(
         SwerveModule SwerveModuleFL,
         SwerveModule SwerveModuleFR,
