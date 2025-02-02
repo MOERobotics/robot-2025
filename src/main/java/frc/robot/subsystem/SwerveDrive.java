@@ -1,6 +1,8 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import frc.robot.MOESubsystem;
@@ -14,7 +16,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public @Getter SwerveDriveKinematics kinematics;
     public @Getter SwerveDriveOdometry odometry;
     public Pigeon2 pigeon;
-
+    public SwerveDrivePoseEstimator swerveDrivePoseEstimator;
 
     public SwerveDrive(
         SwerveModule SwerveModuleFL,
@@ -53,9 +55,16 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         getSensors().swerveModuleBR = swerveModuleBR.inputs;
         getSensors().swerveModuleBL = swerveModuleBL.inputs;
     }
+    public Pose2d visionMeasurement(){
+        Pose2d robotVisionPosition = swerveDrivePoseEstimator.addVisionMeasurement(null);
+        Pose2d calcPosition = swerveDrivePoseEstimator.getEstimatedPosition();
+        return calcPosition;
+    }
 
     @Override
     public void readSensors(SwerveDriveInputsAutoLogged inputs) {
+
+
         inputs.currentRotationRadians = this.pigeon.getRotation2d().getRadians();
         inputs.pose = this.odometry.update(
             this.pigeon.getRotation2d(),
@@ -85,9 +94,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
                 swerveModuleFL.getModuleState(),
                 swerveModuleFR.getModuleState(),
                 swerveModuleBR.getModuleState(),
-                swerveModuleBL.getModuleState()
-        );
-
+                swerveModuleBL.getModuleState());
 
     }
 
