@@ -20,15 +20,14 @@ public class FortissiMOEContainer extends RobotContainer {
         double pivotkP = 0.01;
         double pivotkI = 0.1;
         double pivotkD = 0;
-       // double pivotkIMax = 0.02;
+        double pivotkIMax = 2;
         PIDController pivotControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
-       // pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
         PIDController pivotControllerFR = new PIDController(pivotkP, pivotkI, pivotkD);
-       // pivotControllerFR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerFR.setIntegratorRange(-pivotkIMax, pivotkIMax);
         PIDController pivotControllerBR = new PIDController(pivotkP, pivotkI, pivotkD);
-     //   pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
         PIDController pivotControllerBL = new PIDController(pivotkP, pivotkI, pivotkD);
-     //   pivotControllerBL.setIntegratorRange(-pivotkIMax, pivotkIMax);
 
         pivotControllerFL.enableContinuousInput(-Math.PI, Math.PI);
         pivotControllerFR.enableContinuousInput(-Math.PI, Math.PI);

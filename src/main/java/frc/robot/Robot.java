@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -63,7 +65,14 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
-        autoCommand.schedule();
+        try {
+            // Load the path you want to follow using its name in the GUI
+            PathPlannerAutoBuilder.configure(robot.getSwerveDrive());
+            PathPlannerPath path = PathPlannerPath.fromPathFile("testPath");
+            AutoBuilder.followPath(path).schedule();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
