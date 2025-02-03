@@ -5,9 +5,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
-import frc.robot.subsystem.SubMOErineElevator;
-import frc.robot.subsystem.SwerveDrive;
-import frc.robot.subsystem.SwerveModule;
+import frc.robot.subsystem.*;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
@@ -81,6 +79,10 @@ public class SubMOErine extends RobotContainer{
                 pivot,
                 tilt
         ));
+
+        this.setCoralCollector(new CoralCollector(new SparkMax(13, SparkLowLevel.MotorType.kBrushless), new SparkMax(12,  SparkLowLevel.MotorType.kBrushless)));
+        this.setAlgaeCollector(new AlgaeCollectorControlFake());
+
     }
 }
 

@@ -29,7 +29,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler scheduler;
 
 
-    RobotContainer robot = new FortissiMOEContainer();
+    RobotContainer robot = new SubMOErine();
 
 
 
@@ -89,10 +89,78 @@ public class Robot extends LoggedRobot {
         robot.getSwerveDrive().drive(
                  -driverJoystick.getRawAxis(1),
                  -driverJoystick.getRawAxis(0),
-                  driverJoystick.getRawAxis(2 /*TODO: REVERT*/)
+                  driverJoystick.getRawAxis(4 /*TODO: REVERT*/)
         );
-        robot.getElevator().moveVertically(InchesPerSecond.of(driverJoystick.getRawAxis(2)));
-        robot.getElevator().moveHorizontally(DegreesPerSecond.of(driverJoystick.getRawAxis(3)));
+        double elevatorVertPower=0;
+
+        if(driverJoystick.getRawButton(1)){
+            elevatorVertPower=0.5;
+        }
+
+        if(driverJoystick.getRawButton(2)){
+            elevatorVertPower=-0.5;
+        }
+
+        robot.getElevator().moveVertically(InchesPerSecond.of(elevatorVertPower));
+
+        double elevatorHorizontalPower=0;
+
+        if(driverJoystick.getRawButton(3)){
+            elevatorHorizontalPower=0.5;
+        }
+
+        if(driverJoystick.getRawButton(4)){
+            elevatorHorizontalPower=-0.5;
+        }
+
+        robot.getElevator().moveHorizontally(DegreesPerSecond.of(elevatorHorizontalPower));
+
+
+        double coralCollectorPowerRight=0;
+        double coralCollectorPowerLeft=0;
+
+
+        if(driverJoystick.getRawButton(5)){
+            coralCollectorPowerRight=0.5;
+            coralCollectorPowerLeft=0.5;
+
+        }
+
+        if(driverJoystick.getRawButton(6)){
+            coralCollectorPowerRight=-0.5;
+            coralCollectorPowerLeft=-0.5;
+        }
+
+        robot.getCoralCollector().setCoralVelocity(RPM.of(coralCollectorPowerLeft), RPM.of(coralCollectorPowerRight));
+
+
+        double algaeCollectorPower=0;
+
+
+        if(driverJoystick.getRawButton(7)){
+            algaeCollectorPower=0.5;
+        }
+
+        if(driverJoystick.getRawButton(8)){
+            algaeCollectorPower=-0.5;
+        }
+
+        robot.getAlgaeCollector().setCollectorVelocity(RPM.of(algaeCollectorPower));
+
+
+        double algaeWheelPower=0;
+
+
+        if(driverJoystick.getRawButton(9)){
+            algaeWheelPower=0.5;
+        }
+
+        if(driverJoystick.getRawButton(10)){
+            algaeWheelPower=-0.5;
+        }
+
+        robot.getAlgaeCollector().setCollectorVelocity(RPM.of(algaeWheelPower));
+
     }
 
     @Override
