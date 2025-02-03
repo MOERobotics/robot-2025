@@ -26,23 +26,46 @@ public class standardDeviation extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        double sum = 0;
-        double deviationSum = 0;
+        double sumX = 0;
+        double sumY = 0;
+        double sumR = 0;
+
+        double deviationSumX = 0;
+        double deviationSumY = 0;
+        double deviationSumR = 0;
 
         for (int i = 0; i < poses.size(); i++) {
-            sum += poses.get(i).getX();
+            sumX += poses.get(i).getX();
+            sumY += poses.get(i).getY();
+            sumR += poses.get(i).getRotation();
         }
 
-        double mean = sum / poses.size();
+        double meanX = sumX / poses.size();
+        double meanY = sumY / poses.size();
+        double meanR = sumR / poses.size();
 
         for (int i = 0; i < poses.size(); i++) {
-            double deviation = poses.get(i).getX() - mean;
-            deviation = Math.pow(deviation, 2);
-            deviationSum += deviation;
+            double deviationX = poses.get(i).getX() - meanX;
+            deviationX = Math.pow(deviationX, 2);
+            deviationSumX += deviationX;
+
+            double deviationY = poses.get(i).getY() - meanY;
+            deviationY = Math.pow(deviationY, 2);
+            deviationSumY += deviationY;
+
+            double deviationR = poses.get(i).getRotation() - meanR;
+            deviationR = Math.pow(deviationR, 2);
+            deviationSumR += deviationR;
         }
 
-        double variance = deviationSum / poses.size();
-        double standardDev = Math.pow(variance, 0.5);
+        double varianceX = deviationSumX / poses.size();
+        double standardDevX = Math.pow(varianceX, 0.5);
+
+        double varianceY = deviationSumY / poses.size();
+        double standardDevY = Math.pow(varianceY, 0.5);
+
+        double varianceR = deviationSumR / poses.size();
+        double standardDevR = Math.pow(varianceR, 0.5);
 
         // return standardDev;
     }
