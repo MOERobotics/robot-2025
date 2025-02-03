@@ -8,8 +8,8 @@ public class SwerveControllerCommand extends Command {
 
 
     public SwerveControllerCommand(SwerveDrive swerveDrive){
-
         this.swerveDrive =swerveDrive;
+        addRequirements(swerveDrive);
     }
 
     @Override

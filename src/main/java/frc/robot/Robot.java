@@ -17,6 +17,7 @@ import frc.robot.container.FortissiMOEContainer;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import org.littletonrobotics.junction.LoggedRobot;
+import frc.robot.commands.SwerveModuleCommand;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -26,12 +27,10 @@ public class Robot extends LoggedRobot {
 
 
     Joystick driverJoystick = new Joystick(0);
+    Joystick functionJoystick = new Joystick(1);
     CommandScheduler scheduler;
 
-
     RobotContainer robot = new SubMOErine();
-
-
 
     Command autoCommand = Commands.none();
 
@@ -145,7 +144,7 @@ public class Robot extends LoggedRobot {
             algaeCollectorPower=-0.5;
         }
 
-        robot.getAlgaeCollector().setCollectorVelocity(RPM.of(algaeCollectorPower));
+        robot.getAlgaeCollector().setArmVelocity(RPM.of(algaeCollectorPower));
 
 
         double algaeWheelPower=0;
@@ -159,16 +158,20 @@ public class Robot extends LoggedRobot {
             algaeWheelPower=-0.5;
         }
 
-        robot.getAlgaeCollector().setCollectorVelocity(RPM.of(algaeWheelPower));
+        robot.getAlgaeCollector().setWheelVelocity(RPM.of(algaeWheelPower));
 
     }
 
     @Override
     public void testInit() {
+        CommandScheduler.getInstance().cancelAll();
+        robot.getSwerveDrive().setDefaultCommand(new SwerveModuleCommand(robot.getSwerveDrive(), driverJoystick));
+
     }
 
     @Override
     public void testPeriodic() {
+
     }
 
     @Override

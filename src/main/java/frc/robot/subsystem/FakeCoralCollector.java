@@ -3,36 +3,25 @@ package frc.robot.subsystem;
 import edu.wpi.first.units.measure.*;
 import frc.robot.MOESubsystem;
 
+import static edu.wpi.first.units.Units.*;
+
 public class FakeCoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged> implements CoralCollectorControl {
 
-    public FakeCoralCollector(){
+    public FakeCoralCollector() {
         this.setSensors(new CoralCollectorInputsAutoLogged());
+        this.getSensors().inFrontReef = false;
+        this.getSensors().hasCoral = false;
+        this.getSensors().velocityLeft = RPM.zero();
+        this.getSensors().velocityRight = RPM.zero();
     }
 
     @Override
-    public boolean hasCoral() {
-
-        return false;
-    }
-
-    @Override
-    public boolean inFrontReef() {
-        return false;
+    public void readSensors(CoralCollectorInputsAutoLogged sensors) {
+        super.readSensors(sensors);
     }
 
     @Override
     public void setCoralVelocity(AngularVelocity leftPower, AngularVelocity rightPower) {
 
-    }
-
-    @Override
-    public AngularVelocity getLeftVelocity() {
-        return null;
-
-    }
-
-    @Override
-    public AngularVelocity getRightVelocity() {
-        return null;
     }
 }
