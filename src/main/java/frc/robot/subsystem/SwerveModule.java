@@ -31,7 +31,8 @@ public class SwerveModule {
         public double pivotPower;
         public double drivePower;
         public double error, integral;
-
+        public double pivotVolts;
+        public double pivotVelocity;
     }
 
     public SwerveModule(
@@ -69,6 +70,9 @@ public class SwerveModule {
         inputs.currentRotationDegrees =  getHeading().in(Degrees);
         inputs.pivotPower = pivotMotor.get();
         inputs.drivePower = driveMotor.get();
+        inputs.pivotVelocity = pivotMotor.getEncoder().getVelocity();
+        inputs.pivotVolts = pivotMotor.getAppliedOutput() * pivotMotor.getBusVoltage();
+
         return inputs;
     }
 
@@ -82,6 +86,10 @@ public class SwerveModule {
         double power = pivotController.calculate(inputs.error = error.in(Radians));
         inputs.integral = pivotController.getAccumulatedError();
         pivotMotor.set(power);
+    }
+    public void pivotVolts(double volts){
+        pivotMotor.setVoltage(volts);
+
     }
 
     public SwerveModuleState getModuleState() {
@@ -97,6 +105,6 @@ public class SwerveModule {
                 new Rotation2d( getHeading())
         );
         return position;
-
     }
+
 }

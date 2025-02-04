@@ -4,7 +4,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface SwerveDriveControl extends Subsystem {
@@ -22,6 +25,17 @@ public interface SwerveDriveControl extends Subsystem {
 
     default void drive(double xSpeed, double ySpeed, double rotation) {
         drive(new ChassisSpeeds(xSpeed, ySpeed, rotation));
+    }
+
+    public static enum CommandType {
+        QuasistaticForward, QuasistaticReverse, DynamicForward, DynamicReverse
+    }
+    public static enum CommandType {
+        QuasistaticForward, QuasistaticReverse, DynamicForward, DynamicReverse
+    }
+
+    default public Command sysIDCommands(CommandType commandType){
+       return Commands.none();
     }
 
     default ChassisSpeeds getRobotRelativeSpeeds() {

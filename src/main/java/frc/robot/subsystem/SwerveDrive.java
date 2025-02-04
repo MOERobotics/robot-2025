@@ -5,18 +5,64 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.MOESubsystem;
 import lombok.Getter;
+import org.littletonrobotics.junction.Logger;
+
+import static edu.wpi.first.units.Units.Volts;
 
 public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> implements SwerveDriveControl {
     public SwerveModule swerveModuleFL;
     public SwerveModule swerveModuleFR;
     public SwerveModule swerveModuleBL;
     public SwerveModule swerveModuleBR;
+    public SwerveModule[] swerveModules;
     public @Getter SwerveDriveKinematics kinematics;
     public @Getter SwerveDriveOdometry odometry;
     public Pigeon2 pigeon;
     public SwerveDrivePoseEstimator swerveDrivePoseEstimator;
+    public SysIdRoutine[] pivotSysIdRoutines;
+
+    public SysIdRoutine sysIdRoutinePivotFL = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    null,null,null, (state) -> Logger.recordOutput("SysIDTestStateFL", state.toString())
+            ),
+            new SysIdRoutine.Mechanism((voltage) -> {
+                double power = voltage.in(Volts);
+                swerveModuleFL.pivotVolts(power);
+            }, null, this));
+
+    public SysIdRoutine sysIdRoutinePivotFR = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    null,null,null, (state) -> Logger.recordOutput("SysIDTestStateFR", state.toString())
+            ),
+            new SysIdRoutine.Mechanism((voltage) -> {
+                double power = voltage.in(Volts);
+                swerveModuleFR.pivotVolts(power);
+            }, null, this));
+
+    public SysIdRoutine sysIdRoutinePivotBL = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    null,null,null, (state) -> Logger.recordOutput("SysIDTestStateBL", state.toString())
+            ),
+            new SysIdRoutine.Mechanism((voltage) -> {
+                double power = voltage.in(Volts);
+                swerveModuleBL.pivotVolts(power);
+            }, null, this));
+
+    public SysIdRoutine sysIdRoutinePivotBR = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    null,null,null, (state) -> Logger.recordOutput("SysIDTestStateBR", state.toString())
+            ),
+            new SysIdRoutine.Mechanism((voltage) -> {
+                double power = voltage.in(Volts);
+                swerveModuleBR.pivotVolts(power);
+            }, null, this));
+
+
 
     public SwerveDrive(
         SwerveModule SwerveModuleFL,
@@ -55,11 +101,13 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         getSensors().swerveModuleBR = swerveModuleBR.inputs;
         getSensors().swerveModuleBL = swerveModuleBL.inputs;
     }
-    public Pose2d visionMeasurement(){
-        Pose2d robotVisionPosition = swerveDrivePoseEstimator.addVisionMeasurement(null);
-        Pose2d calcPosition = swerveDrivePoseEstimator.getEstimatedPosition();
-        return calcPosition;
-    }
+    // public Pose2d visionMeasurement(){
+       // Pose2d robotVisionPosition = swerveDrivePoseEstimator.addVisionMeasurement(null);
+    // }
+//    public Pose2d calculatePosition(){
+//        Pose2d calcPosition = swerveDrivePoseEstimator.getEstimatedPosition();
+//        return calcPosition;
+//    }
 
     @Override
     public void readSensors(SwerveDriveInputsAutoLogged inputs) {
@@ -75,6 +123,15 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
                 this.swerveModuleBL.getModulePosition()
             }
         );
+//        this.swerveDrivePoseEstimator.update(
+//                this.pigeon.getRotation2d(),
+//                new SwerveModulePosition[]{
+//                        this.swerveModuleFL.getModulePosition(),
+//                        this.swerveModuleFR.getModulePosition(),
+//                        this.swerveModuleBR.getModulePosition(),
+//                        this.swerveModuleBL.getModulePosition()
+//                }
+//        );
 
         inputs.moduleStates[0] = swerveModuleFL.getModuleState();
         inputs.moduleStates[1] = swerveModuleFR.getModuleState();
@@ -116,4 +173,23 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
     }
 
+    @Override
+    public Command sysIDCommands(CommandType commandType) {
+
+       switch(commandType){
+           case QuasistaticForward -> {
+               return sysIdRoutinePivotFL.quasistatic(SysIdRoutine.Direction.kForward);
+           }
+           case QuasistaticReverse -> {
+               return sysIdRoutinePivotFL.quasistatic(SysIdRoutine.Direction.kReverse);
+           }
+           case DynamicForward -> {
+               return sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kForward);
+           }
+           case DynamicReverse -> {
+               return sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kReverse);
+           }
+        }
+        return Commands.none();
+    }
 }

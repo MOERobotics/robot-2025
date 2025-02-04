@@ -6,16 +6,23 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
-import frc.robot.subsystem.FakeElevator;
-import frc.robot.subsystem.FakeCoralCollector;
-import frc.robot.subsystem.SwerveDrive;
-import frc.robot.subsystem.SwerveModule;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.subsystem.*;
+
+import java.util.Set;
+import java.util.function.Supplier;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 
 public class FortissiMOEContainer extends RobotContainer {
 
+    SendableChooser<SwerveDriveControl.CommandType> chooser = new SendableChooser<>();
     public FortissiMOEContainer (){
         double pivotkP = 0.01;
         double pivotkI = 0.1;
@@ -34,6 +41,15 @@ public class FortissiMOEContainer extends RobotContainer {
         pivotControllerFR.enableContinuousInput(-Math.PI, Math.PI);
         pivotControllerFL.enableContinuousInput(-Math.PI, Math.PI);
 
+        chooser.addOption("SysTDStatic_Forward",SwerveDriveControl.CommandType.QuasistaticForward);
+        chooser.addOption("SysTDStatic_Reverse", SwerveDriveControl.CommandType.QuasistaticReverse);
+        chooser.addOption("SysTDDynamic_Forward", SwerveDriveControl.CommandType.DynamicForward);
+        chooser.setDefaultOption("SysTDDynamic_Reverse", SwerveDriveControl.CommandType.DynamicReverse);
+        SmartDashboard.putData("Command Chooser",chooser);
+
+
+
+        // drive.setDefaultCommand(Commands.run(() -> drive.drive(operatorInterface.getTeleopAxisX().getAsDouble(), operatorInterface.getTeleopAxisY().getAsDouble()), drive).withName("Joystick Control"));
         this.setSwerveDrive(
                 new SwerveDrive(
                         new SwerveModule(//FL
@@ -78,6 +94,10 @@ public class FortissiMOEContainer extends RobotContainer {
         this.setElevator(new FakeElevator());
 
         this.setCoralCollector(new FakeCoralCollector());
+        var sysidCommand = Commands.defer(() -> {
+            return getSwerveDrive().sysIDCommands(chooser.getSelected());
+        }, Set.of(getSwerveDrive()));
+        SmartDashboard.putData("SysIDCommand", sysidCommand);
     }
 
 }

@@ -86,11 +86,11 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopPeriodic() {
 
-        robot.getSwerveDrive().drive(
+        /*robot.getSwerveDrive().drive(
                  -driverJoystick.getRawAxis(1),
                  -driverJoystick.getRawAxis(0),
-                  driverJoystick.getRawAxis(2 /*TODO: REVERT*/)
-        );
+                  driverJoystick.getRawAxis(2 /*TODO: REVERT)
+        );*/
         double elevatorPowerVert = 0;
         if (driverJoystick.getRawButton(1)){
             elevatorPowerVert = 0.5;
