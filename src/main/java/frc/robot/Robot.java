@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
+import frc.robot.subsystem.SwerveDrive;
+import frc.robot.subsystem.SwerveModuleSim;
 import org.littletonrobotics.junction.LoggedRobot;
 
 import static edu.wpi.first.units.Units.*;
@@ -31,6 +33,8 @@ public class Robot extends LoggedRobot {
 
 
     Command autoCommand = Commands.none();
+
+    SwerveModuleSim swerveModuleSimFL,swerveModuleSimFR,swerveModuleSimBR,swerveModuleSimBL;
 
     @Override
     public void robotInit() {
@@ -93,9 +97,58 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationInit() {
+        if(!(robot.getSwerveDrive() instanceof  SwerveDrive))return;
+        SwerveDrive swerveDrive = (SwerveDrive) robot.getSwerveDrive();
+        swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.heading,swerveDrive.swerveModuleFL.driveMotor,swerveDrive.swerveModuleFL.pivotMotor,swerveDrive.swerveModuleFL.compass);
+        swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.heading,swerveDrive.swerveModuleFR.driveMotor,swerveDrive.swerveModuleFR.pivotMotor,swerveDrive.swerveModuleFR.compass);
+        swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.heading,swerveDrive.swerveModuleBR.driveMotor,swerveDrive.swerveModuleBR.pivotMotor,swerveDrive.swerveModuleBR.compass);
+        swerveModuleSimBL = new SwerveModuleSim(swerveDrive.swerveModuleBL.heading,swerveDrive.swerveModuleBL.driveMotor,swerveDrive.swerveModuleBL.pivotMotor,swerveDrive.swerveModuleBL.compass);
     }
 
     @Override
     public void simulationPeriodic() {
+        swerveModuleSimFL.updateSimState();
+        swerveModuleSimFR.updateSimState();
+        swerveModuleSimBR.updateSimState();
+        swerveModuleSimBL.updateSimState();
+        /*
+        SwerveDrive swerveDrive;
+        if (!(robot.getSwerveDrive() instanceof SwerveDrive)) return;
+        swerveDrive = (SwerveDrive) robot.getSwerveDrive();
+        SparkMax flpivot = swerveDrive.swerveModuleFL.pivotMotor;
+
+        SparkMaxSim pivotSim = new SparkMaxSim(swerveDrive.swerveModuleFL.pivotMotor, DCMotor.getNEO(1));
+        SparkRelativeEncoderSim flPivotEncoder = new SparkRelativeEncoderSim(flpivot);
+        CANcoder flPivotCancoder = swerveDrive.swerveModuleFL.compass;
+        CANcoderSimState flPivotCancoderSim = flPivotCancoder.getSimState();
+
+        var pivotModel = LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1),0.025,6.12244897959);
+        var pivotSystem = new DCMotorSim(pivotModel, DCMotor.getNEO(1));
+        pivotSystem.setInput(flpivot.get());
+        double pivotMass = 1.0;
+        double pivotCOF = 1.0;
+        var deceleration = RadiansPerSecondPerSecond.of(10000000000.0);
+        if (pivotSystem.getAngularVelocity().abs(RotationsPerSecond) < deceleration.times(Seconds.of(0.02)).in(RotationsPerSecond)) {
+            pivotSystem.setAngularVelocity(0);
+        } else {
+            pivotSystem.setAngularVelocity(
+                pivotSystem.getAngularVelocity().minus(
+                    deceleration.times(Math.signum(pivotSystem.getAngularVelocityRPM())).times(Seconds.of(.02))
+                ).in(RadiansPerSecond)
+            );
+        }
+
+        pivotSystem.update(.02);
+
+
+
+
+
+
+
+        pivotSim.setVelocity(pivotSystem.getAngularVelocity().in(RPM));
+        flPivotEncoder.setVelocity(pivotSystem.getAngularVelocityRPM());
+        flPivotCancoderSim.setVelocity(pivotSystem.getAngularVelocity());
+        flPivotCancoderSim.setRawPosition(flPivotCancoder.getPosition().getValue().plus(pivotSystem.getAngularVelocity().times(Seconds.of(.02))));*/
     }
 }

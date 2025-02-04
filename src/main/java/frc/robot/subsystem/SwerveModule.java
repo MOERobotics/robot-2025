@@ -1,9 +1,7 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -11,11 +9,11 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
-import org.littletonrobotics.junction.AutoLog;
+import frc.robot.MOESubsystem;
 
 import static edu.wpi.first.units.Units.*;
 
-public class SwerveModule {
+public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> implements SwerveModuleControl{
     public SparkMax driveMotor;
     public SparkMax pivotMotor;
     public PIDController pivotController;
@@ -23,16 +21,6 @@ public class SwerveModule {
     public Distance xPos;
     public Distance yPos;
     public Angle heading;
-    SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
-
-    @AutoLog
-    public static class SwerveModuleInputs {
-        public double currentRotationDegrees;
-        public double pivotPower;
-        public double drivePower;
-        public double error, integral;
-
-    }
 
     public SwerveModule(
             SparkMax driveMotor,
@@ -43,10 +31,12 @@ public class SwerveModule {
             Angle heading,
             PIDController pivotController
     ) {
+        this.setSensors(new SwerveModuleInputsAutoLogged());
         this.compass = compass;
         this.pivotMotor = pivotMotor;
         this.driveMotor = driveMotor;
         this.pivotController = pivotController;
+        pivotController.setTolerance(Math.PI/180);
         this.xPos = xPos;
         this.yPos = yPos;
         this.heading = heading;
@@ -65,22 +55,24 @@ public class SwerveModule {
         return _heading;
     }
 
-    public SwerveModuleInputsAutoLogged readSensors() {
-        inputs.currentRotationDegrees =  getHeading().in(Degrees);
-        inputs.pivotPower = pivotMotor.get();
-        inputs.drivePower = driveMotor.get();
-        return inputs;
+    @Override
+    public void readSensors(SwerveModuleInputsAutoLogged sensors) {
+        sensors.currentRotationDegrees =  getHeading();
+        sensors.pivotPower = pivotMotor.get();
+        sensors.drivePower = driveMotor.get();
     }
 
+    @Override
     public void drive(double power) {
         driveMotor.set(power/4);
     }
 
+    @Override
     public void pivot(Angle targetHeading) {
-        Angle currentHeading =  getHeading();
-        Angle error = currentHeading.minus(targetHeading).plus(Degrees.of(180));
-        double power = pivotController.calculate(inputs.error = -error.in(Radians));
-        inputs.integral = pivotController.getAccumulatedError();
+        Angle currentHeading = getHeading();
+        Angle error = currentHeading.minus(targetHeading);
+        double power = pivotController.calculate(this.getSensors().error = error.in(Radians));
+        this.getSensors().integral = pivotController.getAccumulatedError();
         pivotMotor.set(power);
     }
 

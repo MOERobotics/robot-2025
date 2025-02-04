@@ -17,12 +17,13 @@ import static edu.wpi.first.units.Units.Inches;
 public class SubMOErine extends RobotContainer{
     ElevatorTeleopCommand elevatorTeleopCommand;
     public SubMOErine(){
-        double pivotkP = 0.01;
-        double pivotkI = 0.3;
-        double pivotkD = 0;
-        double pivotkIMax = 2;
+        double pivotkP = 1.0e1;
+        double pivotkI = 1.0e-4;
+        double pivotkD = 1.0e0;
+        double pivotkIMax = 1;
         PIDController pivotControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerFL.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleFL = new SwerveModule(
                 new SparkMax(1, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(20, SparkLowLevel.MotorType.kBrushless),
@@ -34,6 +35,7 @@ public class SubMOErine extends RobotContainer{
         );
         PIDController pivotControllerFR = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerFR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerFR.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleFR = new SwerveModule(
                 new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(2, SparkLowLevel.MotorType.kBrushless),
@@ -45,6 +47,7 @@ public class SubMOErine extends RobotContainer{
         );
         PIDController pivotControllerBR = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerBR.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleBR = new SwerveModule(
                 new SparkMax(17, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(16, SparkLowLevel.MotorType.kBrushless),
@@ -56,6 +59,7 @@ public class SubMOErine extends RobotContainer{
         );
         PIDController pivotControllerBL= new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerBL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerBL.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleBL = new SwerveModule(
                 new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(18, SparkLowLevel.MotorType.kBrushless),
