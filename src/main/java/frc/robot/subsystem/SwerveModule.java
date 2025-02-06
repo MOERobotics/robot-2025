@@ -1,7 +1,10 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -50,10 +53,17 @@ public class SwerveModule {
         this.compass = compass;
         this.pivotMotor = pivotMotor;
         this.driveMotor = driveMotor;
+        SparkMaxConfig driveConfig = new SparkMaxConfig();
+        SparkMaxConfig pivotConfig = new SparkMaxConfig();
+        driveConfig.inverted(false).idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
+        pivotConfig.inverted(true).idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(30);
         this.pivotController = pivotController;
+        pivotController.enableContinuousInput(-Math.PI,Math.PI);
         this.xPos = xPos;
         this.yPos = yPos;
         this.heading = heading;
+        driveMotor.configure(driveConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        pivotMotor.configure(pivotConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
 
     }
@@ -78,7 +88,7 @@ public class SwerveModule {
     }
 
     public void drive(double power) {
-        driveMotor.set(power/4);
+        driveMotor.set(power);
     }
 
     public void pivot(Angle targetHeading) {
@@ -104,5 +114,11 @@ public class SwerveModule {
         );
         return position;
 
+    }
+
+    public void setModuleState(SwerveModuleState moduleState) {
+        moduleState.optimize(Rotation2d.fromDegrees(getHeading().in(Degrees)));
+        drive(moduleState.speedMetersPerSecond);
+        pivot( moduleState.angle.getMeasure());
     }
 }

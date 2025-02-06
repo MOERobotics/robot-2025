@@ -17,10 +17,10 @@ import static edu.wpi.first.units.Units.Inches;
 
 public class SubMOErine extends RobotContainer{
     public SubMOErine(){
-        double pivotkP = 0.01;
-        double pivotkI = 0.3;
-        double pivotkD = 0;
-        double pivotkIMax = 2;
+        double pivotkP = 1.6e-1;
+        double pivotkI = 1e-3;
+        double pivotkD =3e-5;;
+        double pivotkIMax = 1e0;
         PIDController pivotControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
         SwerveModule swerveModuleFL = new SwerveModule(
@@ -62,10 +62,11 @@ public class SubMOErine extends RobotContainer{
                 new CANcoder(34),
                 Inches.of(-14.5),
                 Inches.of(-14.5),
-                Degrees.of(-135),
+                Degrees.of(135),
                 pivotControllerBL
         );
         Pigeon2 pigeon2 = new Pigeon2(0);
+
         SwerveDrive swerveDrive = new SwerveDrive(
                 swerveModuleFL,
                 swerveModuleFR,

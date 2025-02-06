@@ -80,6 +80,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
+        CommandScheduler.getInstance().cancelAll();
     }
 
     @Override
@@ -88,7 +89,7 @@ public class Robot extends LoggedRobot {
         robot.getSwerveDrive().drive(
                  -driverJoystick.getRawAxis(1),
                  -driverJoystick.getRawAxis(0),
-                  driverJoystick.getRawAxis(4 /*TODO: REVERT*/)
+                  driverJoystick.getRawAxis(2)
         );
         double elevatorVertPower=0;
 
