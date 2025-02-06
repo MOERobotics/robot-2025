@@ -9,10 +9,12 @@ package frc.robot;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.container.RobotContainer;
+import frc.robot.subsystem.LimeLights;
 import org.littletonrobotics.junction.LoggedRobot;
 
 
@@ -34,7 +36,8 @@ public class Robot extends LoggedRobot {
         MOELogger.setupLogging(this);
 
         scheduler = CommandScheduler.getInstance();
-        robot.getDrive().setDefaultCommand(Commands.none());
+//        robot.getDrive().setDefaultCommand(Commands.none());
+        SmartDashboard.putData("limelight", new LimeLights());
     }
 
     @Override
