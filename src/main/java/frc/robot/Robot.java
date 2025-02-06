@@ -8,10 +8,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.SwerveModuleCommand;
+import frc.robot.commands.standardDeviation;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -115,6 +117,9 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationInit() {
+        Command commandSD = new standardDeviation();
+        SmartDashboard.putData("Standard Deviation", commandSD);
+        commandSD.schedule();
     }
 
     @Override

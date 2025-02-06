@@ -2,6 +2,7 @@ package frc.robot.container;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.events.EventScheduler;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -74,6 +75,7 @@ public class FortissiMOEContainer extends RobotContainer {
         this.setElevator(new FakeElevator());
 
         this.setCoralCollector(new FakeCoralCollector());
+
     }
 
 }
