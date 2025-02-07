@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -68,6 +69,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
+
     }
 
     @Override
