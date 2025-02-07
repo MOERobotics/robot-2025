@@ -1,47 +1,62 @@
 package frc.robot.subsystem;
 
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.hardware.ParentDevice;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.MOESubsystem;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ClimberControl extends Subsystem {
 
     @AutoLog
-    public class ClimberInputs{
-        boolean canGoUp;
-        boolean canGoDown;
-        AngularVelocity velocity;
-        Angle position;
+     class ClimberInputs{
+        boolean canGoUpTop;
+        boolean canGoDownTop;
 
+        boolean canGoUpBottom;
+        boolean canGoDownBottom;
+        AngularVelocity topMotorVelocity;
+        AngularVelocity bottomMotorVelocity;
+
+        Angle topPosition;
+        Angle bottomPosition;
     }
 
 
     ClimberInputsAutoLogged getSensors();
 
-    default boolean canGoUp(){
-        return this.getSensors().canGoUp;
+    default boolean canGoUpTop(){
+        return this.getSensors().canGoUpTop;
     }
 
-    default boolean canGoDown(){
-        return this.getSensors().canGoDown;
+    default boolean canGoDownTop(){
+        return this.getSensors().canGoDownTop;
     }
 
-    public void setClimberVelocity(AngularVelocity power);
+    default boolean canGoUpBottom(){
+        return this.getSensors().canGoUpBottom;
+    }
 
-    public default Angle getPosition(){ return this.getSensors().position; }
-
-
-    default AngularVelocity getClimberVelocity(){
-        return this.getSensors().velocity;
+    default boolean canGoDownBottom(){
+        return this.getSensors().canGoDownBottom;
     }
 
 
+    public void setClimberTopVelocity(AngularVelocity power);
+
+    public void setClimberBottomVelocity(AngularVelocity power);
+
+
+    public default Angle getTopPosition(){ return this.getSensors().topPosition; }
+
+    public default Angle getBottomPosition(){ return this.getSensors().bottomPosition; }
+
+    default AngularVelocity getTopMotorVelocity(){
+        return this.getSensors().topMotorVelocity;
+    }
+
+    default AngularVelocity getBottomMotorVelocity(){
+        return this.getSensors().bottomMotorVelocity;
+    }
 
 
 }

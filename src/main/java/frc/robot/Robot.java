@@ -104,7 +104,10 @@ public class Robot extends LoggedRobot {
             climberPower=-0.5;
         }
 
-        robot.getClimber().setClimberVelocity(RPM.of(climberPower));
+        robot.getClimber().setClimberTopVelocity(RPM.of(climberPower));
+
+        robot.getClimber().setClimberBottomVelocity(RPM.of(climberPower));
+
 
 
 

@@ -8,78 +8,128 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.LinearVelocity;
 import frc.robot.MOESubsystem;
 
 import static edu.wpi.first.units.Units.*;
 
 public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> implements ClimberControl {
 
-    SparkMax climberMotor;
-    CANcoder climbEncoder;
+    SparkMax climbTopMotor;
 
-    public final double maxEncoderValue = 0;
-    public final double minEncoderValue = 0;
+    SparkMax climbBottomMotor;
 
+    CANcoder climbTopEncoder;
+
+    CANcoder climbBottomEncoder;
+
+
+    public final double maxTopEncoderValue = 0;
+    public final double minTopEncoderValue = 0;
+
+    public final double maxBottomEncoderValue = 0;
+    public final double minBottomEncoderValue = 0;
     public double tolerance =5;
 
 
 
     public SubMOErineClimber(
-            SparkMax climberMotor,
-            CANcoder climbEncoder
+            SparkMax climbTopMotor,
+            SparkMax climbBottomMotor,
+            CANcoder climbTopEncoder,
+            CANcoder climbBottomEncoder
     ) {
         this.setSensors(new ClimberInputsAutoLogged());
-        this.climberMotor = climberMotor;
-        this.climbEncoder = climbEncoder;
-        SparkMaxConfig climberConfig = new SparkMaxConfig();
-        climberConfig.inverted(false).idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
-        climberMotor.configure(climberConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        this.climbTopMotor = climbTopMotor;
+        this.climbTopEncoder = climbTopEncoder;
+        this.climbBottomMotor = climbBottomMotor;
+        this.climbBottomEncoder = climbBottomEncoder;
+        SparkMaxConfig climberTopConfig = new SparkMaxConfig();
+        climberTopConfig.inverted(false).idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
+        climbTopMotor.configure(climberTopConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+
+        SparkMaxConfig climberBottomConfig = new SparkMaxConfig();
+        climberBottomConfig.inverted(false).idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
+        climbBottomMotor.configure(climberTopConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
 
     }
 
     @Override
     public void readSensors(ClimberInputsAutoLogged sensors) {
-        sensors.canGoDown = canGoDown();
-        sensors.canGoUp = canGoUp();
-        sensors.position = getPosition();
-        sensors.velocity = getClimberVelocity();
+        sensors.canGoDownTop = canGoDownTop();
+        sensors.canGoUpTop = canGoUpTop();
+        sensors.topPosition = getTopPosition();
+        sensors.topMotorVelocity = getTopMotorVelocity();
+
+        sensors.canGoDownBottom = canGoDownBottom();
+        sensors.canGoUpBottom = canGoUpBottom();
+        sensors.bottomPosition = getBottomPosition();
+        sensors.bottomMotorVelocity = getBottomMotorVelocity();
 
     }
     @Override
-    public boolean canGoUp () {
-        return !(getPosition().in(Degree) + tolerance> maxEncoderValue);
+    public boolean canGoUpTop () {
+        return !(getTopPosition().in(Degree) + tolerance> maxTopEncoderValue);
     }
 
     @Override
-    public boolean canGoDown () {
-        return !(getPosition().in(Degree) + tolerance < minEncoderValue);
+    public boolean canGoDownTop () {
+        return !(getTopPosition().in(Degree) + tolerance < minTopEncoderValue);
+    }
 
+    @Override
+    public boolean canGoUpBottom () {
+        return !(getBottomPosition().in(Degree) + tolerance> maxBottomEncoderValue);
+    }
+
+    @Override
+    public boolean canGoDownBottom () {
+        return !(getBottomPosition().in(Degree) + tolerance < minBottomEncoderValue);
     }
 
 
     @Override
-    public Angle getPosition(){ return climbEncoder.getAbsolutePosition().getValue(); }
+    public Angle getTopPosition(){ return climbTopEncoder.getAbsolutePosition().getValue(); }
+    @Override
+    public Angle getBottomPosition(){ return climbBottomEncoder.getAbsolutePosition().getValue(); }
+
 
     @Override
-    public AngularVelocity getClimberVelocity() {
-        return RPM.of(climberMotor.getEncoder().getVelocity());
+    public AngularVelocity getTopMotorVelocity() {
+        return RPM.of(climbTopMotor.getEncoder().getVelocity());
     }
 
     @Override
-    public void setClimberVelocity(AngularVelocity power) {
-       if (power.in(RPM)> 0 && canGoUp()) {
-           climberMotor.set(power.in(RPM));
+    public AngularVelocity getBottomMotorVelocity() {
+        return RPM.of(climbBottomMotor.getEncoder().getVelocity());
+    }
 
-       } else if(power.in(RPM) < 0 && canGoDown()){
-           climberMotor.set(power.in(RPM));
+    @Override
+    public void setClimberTopVelocity(AngularVelocity power) {
+       if (power.in(RPM)> 0 && canGoUpTop()) {
+           climbTopMotor.set(power.in(RPM));
+
+       } else if(power.in(RPM) < 0 && canGoDownTop()){
+           climbTopMotor.set(power.in(RPM));
        }
 
 
 
 }
+
+    @Override
+    public void setClimberBottomVelocity(AngularVelocity power) {
+        if (power.in(RPM)> 0 && canGoUpBottom()) {
+            climbBottomMotor.set(power.in(RPM));
+
+        } else if(power.in(RPM) < 0 && canGoDownBottom()){
+            climbBottomMotor.set(power.in(RPM));
+        }
+
+
+
+    }
 
 
 
