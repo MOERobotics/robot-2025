@@ -33,8 +33,8 @@ public interface ElevatorControl extends Subsystem {
         return this.getSensors().angle;
     }
 
-    public static Distance getHeight(ElevatorControl elevator) {
-        return elevator.getExtension().times(Math.sin(elevator.getAngle().in(Radians))).plus(elevator.getPivotHeight());
+    default Distance getHeight() {
+        return this.getExtension().times(Math.cos(this.getAngle().in(Radians))).plus(this.getPivotHeight());
 
 
     }

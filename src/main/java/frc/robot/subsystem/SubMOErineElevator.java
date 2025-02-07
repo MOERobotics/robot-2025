@@ -33,7 +33,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     public void readSensors(ElevatorInputsAutoLogged sensors) {
         sensors.extension = _getExtension();
         sensors.angle = tiltEncoder.getAbsolutePosition().getValue();
-        sensors.height = getPivotHeight();
+        sensors.height = getHeight();
         sensors.horizontalSpeed = RPM.of(elevatorPivotMotor.getEncoder().getVelocity());
         sensors.extensionSpeed = InchesPerSecond.of(elevatorHeightMotor.getEncoder().getVelocity());
     }
