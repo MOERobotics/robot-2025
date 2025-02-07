@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.wpilibj.AnalogInput;
 import frc.robot.MOESubsystem;
 
 import static edu.wpi.first.units.Units.*;
@@ -13,16 +14,19 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     SparkMax elevatorHeightMotor;
     SparkMax elevatorPivotMotor;
     CANcoder tiltEncoder;
+    AnalogInput heightPot;
 
     public SubMOErineElevator(
         SparkMax elevatorHeightMotor,
         SparkMax elevatorPivotMotor,
-        CANcoder tiltEncoder
+        CANcoder tiltEncoder,
+        AnalogInput heightPot
     ) {
         this.setSensors(new ElevatorInputsAutoLogged());
         this.elevatorHeightMotor = elevatorHeightMotor;
         this.elevatorPivotMotor = elevatorPivotMotor;
         this.tiltEncoder = tiltEncoder;
+        this.heightPot = heightPot;
     }
 
     @Override
@@ -30,6 +34,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         sensors.angle = tiltEncoder.getAbsolutePosition().getValue();
         sensors.horizontalSpeed = RPM.of(elevatorPivotMotor.getEncoder().getVelocity());
         sensors.extensionSpeed = InchesPerSecond.of(elevatorHeightMotor.getEncoder().getVelocity());
+        sensors.extension = Foot.of(heightPot.getVoltage());
     }
 
     @Override

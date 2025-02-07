@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.commands.ElevatorTeleopCommand;
 import frc.robot.subsystem.SubMOErineElevator;
@@ -81,15 +82,17 @@ public class SubMOErine extends RobotContainer{
         SparkMax height = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
         SparkMax pivot = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
         CANcoder tilt = new CANcoder(35);
+        AnalogInput heightPot = new AnalogInput(0);
 
         this.setSwerveDrive(swerveDrive);
         this.setElevator(new SubMOErineElevator(
                 height,
                 pivot,
-                tilt
+                tilt,
+                heightPot
         ));
         elevatorTeleopCommand = new ElevatorTeleopCommand(this.getElevator(),new Joystick(0));
-        this.getElevator().setDefaultCommand(elevatorTeleopCommand);
+//        this.getElevator().setDefaultCommand(elevatorTeleopCommand);
     }
 }
 
