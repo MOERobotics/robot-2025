@@ -13,6 +13,8 @@ public abstract @Data class RobotContainer {
 	private ElevatorControl elevator;
 	private AlgaeCollectorControl algaeCollector;
     private CoralCollectorControl coralCollector;
+    private SubMOErineClimber climber;
+
 
 
     public RobotContainer() {

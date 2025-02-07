@@ -87,10 +87,28 @@ public class Robot extends LoggedRobot {
     public void teleopPeriodic() {
 
         robot.getSwerveDrive().drive(
-                 -driverJoystick.getRawAxis(1),
-                 -driverJoystick.getRawAxis(0),
-                  driverJoystick.getRawAxis(2)
+                -driverJoystick.getRawAxis(1),
+                -driverJoystick.getRawAxis(0),
+                driverJoystick.getRawAxis(2)
         );
+
+        double climberPower=0;
+
+        if(driverJoystick.getRawButton(1)){
+            climberPower=0.5;
+        }
+
+
+
+        if(driverJoystick.getRawButton(2)){
+            climberPower=-0.5;
+        }
+
+        robot.getClimber().setClimberVelocity(RPM.of(climberPower));
+
+
+
+        /*
         double elevatorVertPower=0;
 
         if(driverJoystick.getRawButton(1)){
@@ -101,7 +119,12 @@ public class Robot extends LoggedRobot {
             elevatorVertPower=-0.5;
         }
 
+
+
         robot.getElevator().moveVertically(InchesPerSecond.of(elevatorVertPower));
+
+
+         */
 
         double elevatorHorizontalPower=0;
 
