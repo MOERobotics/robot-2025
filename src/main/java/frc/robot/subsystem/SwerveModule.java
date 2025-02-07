@@ -5,6 +5,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -24,10 +25,13 @@ public class SwerveModule {
     public Distance yPos;
     public Angle heading;
     SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
+    public SimpleMotorFeedforward feedforwardDrive = new SimpleMotorFeedforward(0,0,0);
+    public SimpleMotorFeedforward feedforwardPivot = new SimpleMotorFeedforward(0,0,0);
 
     @AutoLog
     public static class SwerveModuleInputs {
         public double currentRotationDegrees;
+        public double getCurrentRotationDegreesNotWrapped;
         public double pivotPower;
         public double drivePower;
         public double error, integral;
@@ -68,6 +72,7 @@ public class SwerveModule {
 
     public SwerveModuleInputsAutoLogged readSensors() {
         inputs.currentRotationDegrees =  getHeading().in(Degrees);
+        inputs.getCurrentRotationDegreesNotWrapped = pivotMotor.getEncoder().getPosition();
         inputs.pivotPower = pivotMotor.get();
         inputs.drivePower = driveMotor.get();
         inputs.pivotVelocity = pivotMotor.getEncoder().getVelocity();
@@ -77,19 +82,19 @@ public class SwerveModule {
     }
 
     public void drive(double power) {
-        driveMotor.set(power/4);
+        power = feedforwardDrive.calculate(power/12);
+        driveMotor.set(power);
     }
 
     public void pivot(Angle targetHeading) {
         Angle currentHeading =  getHeading();
         Angle error = currentHeading.minus(targetHeading);
-        double power = pivotController.calculate(inputs.error = error.in(Radians));
+        double power = feedforwardDrive.calculate(pivotController.calculate(inputs.error = error.in(Radians)));
         inputs.integral = pivotController.getAccumulatedError();
         pivotMotor.set(power);
     }
     public void pivotVolts(double volts){
         pivotMotor.setVoltage(volts);
-
     }
 
     public SwerveModuleState getModuleState() {

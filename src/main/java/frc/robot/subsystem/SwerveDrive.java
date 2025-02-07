@@ -1,6 +1,7 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -12,7 +13,7 @@ import frc.robot.MOESubsystem;
 import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
 public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> implements SwerveDriveControl {
     public SwerveModule swerveModuleFL;
@@ -28,7 +29,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
     public SysIdRoutine sysIdRoutinePivotFL = new SysIdRoutine(
             new SysIdRoutine.Config(
-                    null,null,null, (state) -> Logger.recordOutput("SysIDTestStateFL", state.toString())
+                    Volts.of(0.2).per(Second),Volts.of(3.5),Seconds.of(5.0), (state) -> Logger.recordOutput("SysIDTestStateFL", state.toString())
             ),
             new SysIdRoutine.Mechanism((voltage) -> {
                 double power = voltage.in(Volts);
@@ -37,7 +38,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
     public SysIdRoutine sysIdRoutinePivotFR = new SysIdRoutine(
             new SysIdRoutine.Config(
-                    null,null,null, (state) -> Logger.recordOutput("SysIDTestStateFR", state.toString())
+                    Volts.of(0.2).per(Second),Volts.of(3.5),Seconds.of(5.0), (state) -> Logger.recordOutput("SysIDTestStateFR", state.toString())
             ),
             new SysIdRoutine.Mechanism((voltage) -> {
                 double power = voltage.in(Volts);
@@ -46,7 +47,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
     public SysIdRoutine sysIdRoutinePivotBL = new SysIdRoutine(
             new SysIdRoutine.Config(
-                    null,null,null, (state) -> Logger.recordOutput("SysIDTestStateBL", state.toString())
+                    Volts.of(0.2).per(Second),Volts.of(3.5),Seconds.of(5.0), (state) -> Logger.recordOutput("SysIDTestStateBL", state.toString())
             ),
             new SysIdRoutine.Mechanism((voltage) -> {
                 double power = voltage.in(Volts);
@@ -55,12 +56,25 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
     public SysIdRoutine sysIdRoutinePivotBR = new SysIdRoutine(
             new SysIdRoutine.Config(
-                    null,null,null, (state) -> Logger.recordOutput("SysIDTestStateBR", state.toString())
+                    Volts.of(0.2).per(Second),Volts.of(3.5),Seconds.of(5.0), (state) -> Logger.recordOutput("SysIDTestStateBR", state.toString())
             ),
             new SysIdRoutine.Mechanism((voltage) -> {
                 double power = voltage.in(Volts);
                 swerveModuleBR.pivotVolts(power);
             }, null, this));
+    public SysIdRoutine sysIdRoutineDrive = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    Volts.of(0.2).per(Second),Volts.of(3.5),Seconds.of(5.0), (state) -> Logger.recordOutput("SysIDTestStateDrive", state.toString())
+            ),
+            new SysIdRoutine.Mechanism((voltage) -> {
+                double power = voltage.in(Volts);
+                swerveModuleFL.drive(power);
+                swerveModuleBR.drive(power);
+                swerveModuleBL.drive(power);
+                swerveModuleFR.drive(power);
+            }, null, this));
+
+
 
 
 
@@ -174,22 +188,55 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     }
 
     @Override
-    public Command sysIDCommands(CommandType commandType) {
+    public Command sysIDCommands(CommandType commandType, ModuleType moduleType, DriveOrPivot driveOrPivot) {
+        SysIdRoutine currentRoutine = null;
+        String type = " ";
+        if (type.equals("pivot")){
+        switch (moduleType) {
+            case modFL -> {
+                currentRoutine = sysIdRoutinePivotFL;
+            }
+            case modFR -> {
+                currentRoutine = sysIdRoutinePivotFR;
+            }
+            case modBL -> {
+                currentRoutine = sysIdRoutinePivotBL;
+            }
+            case modBR -> {
+                currentRoutine = sysIdRoutinePivotBR;
+            }
+        }
 
+
+        }
        switch(commandType){
            case QuasistaticForward -> {
-               return sysIdRoutinePivotFL.quasistatic(SysIdRoutine.Direction.kForward);
+               return currentRoutine.quasistatic(SysIdRoutine.Direction.kForward);
            }
            case QuasistaticReverse -> {
-               return sysIdRoutinePivotFL.quasistatic(SysIdRoutine.Direction.kReverse);
+               return currentRoutine.quasistatic(SysIdRoutine.Direction.kReverse);
            }
            case DynamicForward -> {
-               return sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kForward);
+               return currentRoutine.dynamic(SysIdRoutine.Direction.kForward);
            }
            case DynamicReverse -> {
-               return sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kReverse);
+               return currentRoutine.dynamic(SysIdRoutine.Direction.kReverse);
            }
+ 
         }
+        switch (driveOrPivot){
+            case setPivot -> {
+                type = "pivot";
+            }
+            case setDrive -> {
+                currentRoutine = sysIdRoutineDrive;
+            }
+        }
+
+
+
         return Commands.none();
     }
+
+
 }

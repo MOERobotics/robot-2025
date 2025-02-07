@@ -23,6 +23,8 @@ import static edu.wpi.first.units.Units.Inches;
 public class FortissiMOEContainer extends RobotContainer {
 
     SendableChooser<SwerveDriveControl.CommandType> chooser = new SendableChooser<>();
+    SendableChooser<SwerveDriveControl.ModuleType> modChooser = new SendableChooser<>();
+    SendableChooser<SwerveDriveControl.DriveOrPivot> driveTypeChooser = new SendableChooser<>();
     public FortissiMOEContainer (){
         double pivotkP = 0.01;
         double pivotkI = 0.1;
@@ -46,6 +48,16 @@ public class FortissiMOEContainer extends RobotContainer {
         chooser.addOption("SysTDDynamic_Forward", SwerveDriveControl.CommandType.DynamicForward);
         chooser.setDefaultOption("SysTDDynamic_Reverse", SwerveDriveControl.CommandType.DynamicReverse);
         SmartDashboard.putData("Command Chooser",chooser);
+
+        modChooser.addOption("All Modules", SwerveDriveControl.ModuleType.allMods);
+        modChooser.addOption("FL", SwerveDriveControl.ModuleType.modFL);
+        modChooser.addOption("FR", SwerveDriveControl.ModuleType.modFR);
+        modChooser.addOption("BL", SwerveDriveControl.ModuleType.modBL);
+        modChooser.setDefaultOption("BR", SwerveDriveControl.ModuleType.modBR);
+        SmartDashboard.putData("Module Chooser",modChooser);
+
+        driveTypeChooser.setDefaultOption("Pivot", SwerveDriveControl.DriveOrPivot.setPivot);
+
 
 
 
@@ -94,10 +106,12 @@ public class FortissiMOEContainer extends RobotContainer {
         this.setElevator(new FakeElevator());
 
         this.setCoralCollector(new FakeCoralCollector());
+
         var sysidCommand = Commands.defer(() -> {
-            return getSwerveDrive().sysIDCommands(chooser.getSelected());
+            return getSwerveDrive().sysIDCommands(chooser.getSelected(), modChooser.getSelected(), driveTypeChooser.getSelected());
         }, Set.of(getSwerveDrive()));
         SmartDashboard.putData("SysIDCommand", sysidCommand);
     }
-
 }
+
+

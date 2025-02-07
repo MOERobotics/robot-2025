@@ -36,6 +36,7 @@ public class Robot extends LoggedRobot {
 
 
     Command autoCommand = Commands.none();
+//    TimeOfFlight tof_sensor_center = new TimeOfFlight(42);
 
     @Override
     public void robotInit() {
