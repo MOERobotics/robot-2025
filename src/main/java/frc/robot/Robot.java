@@ -15,10 +15,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
-import frc.robot.subsystem.RobotElevatorSim;
-import frc.robot.subsystem.SubMOErineElevator;
-import frc.robot.subsystem.SwerveDrive;
-import frc.robot.subsystem.SwerveModuleSim;
+import frc.robot.subsystem.*;
 import org.littletonrobotics.junction.LoggedRobot;
 import frc.robot.commands.SwerveModuleCommand;
 
@@ -39,6 +36,7 @@ public class Robot extends LoggedRobot {
 
     SwerveModuleSim swerveModuleSimFL,swerveModuleSimFR,swerveModuleSimBR,swerveModuleSimBL;
     RobotElevatorSim elevatorSim;
+    AlgaeCollectorSim algaeCollectorSim;
 
     @Override
     public void robotInit() {
@@ -223,14 +221,16 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationInit() {
-        if(!(robot.getSwerveDrive() instanceof  SwerveDrive)||!(robot.getElevator() instanceof SubMOErineElevator))return;
+        if(!(robot.getSwerveDrive() instanceof  SwerveDrive)||!(robot.getElevator() instanceof SubMOErineElevator)||!(robot.getAlgaeCollector() instanceof AlgaeCollector))return;
         SwerveDrive swerveDrive = (SwerveDrive) robot.getSwerveDrive();
         SubMOErineElevator elevator = (SubMOErineElevator) robot.getElevator();
+        AlgaeCollector algaeCollector = (AlgaeCollector) robot.getAlgaeCollector();
         swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.heading,swerveDrive.swerveModuleFL.driveMotor,swerveDrive.swerveModuleFL.pivotMotor,swerveDrive.swerveModuleFL.compass);
         swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.heading,swerveDrive.swerveModuleFR.driveMotor,swerveDrive.swerveModuleFR.pivotMotor,swerveDrive.swerveModuleFR.compass);
         swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.heading,swerveDrive.swerveModuleBR.driveMotor,swerveDrive.swerveModuleBR.pivotMotor,swerveDrive.swerveModuleBR.compass);
         swerveModuleSimBL = new SwerveModuleSim(swerveDrive.swerveModuleBL.heading,swerveDrive.swerveModuleBL.driveMotor,swerveDrive.swerveModuleBL.pivotMotor,swerveDrive.swerveModuleBL.compass);
         elevatorSim = new RobotElevatorSim(elevator);
+        algaeCollectorSim = new AlgaeCollectorSim(algaeCollector);
     }
 
     @Override
@@ -240,5 +240,6 @@ public class Robot extends LoggedRobot {
         swerveModuleSimBR.updateSimState();
         swerveModuleSimBL.updateSimState();
         elevatorSim.updteSimState();
+        algaeCollectorSim.updateSimState();
     }
 }
