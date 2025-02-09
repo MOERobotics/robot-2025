@@ -83,7 +83,6 @@ public class SubMOErine extends RobotContainer{
         SparkMax height = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
         SparkMax pivot = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
         CANcoder tilt = new CANcoder(35);
-        AnalogInput heightPot = new AnalogInput(0);
 
         AnalogInput extensionSensor = new AnalogInput(1);
 

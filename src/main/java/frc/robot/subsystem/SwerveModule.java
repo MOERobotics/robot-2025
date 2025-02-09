@@ -24,7 +24,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     public Distance xPos;
     public Distance yPos;
     public Angle heading;
-    public Angle targetHeading
+    public Angle targetHeading;
 
     public SwerveModule(
             SparkMax driveMotor,
@@ -88,6 +88,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
         pivotMotor.set(power);
     }
 
+    @Override
     public SwerveModuleState getModuleState() {
         return new SwerveModuleState(
                 driveMotor.getEncoder().getVelocity(),
@@ -95,6 +96,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
         );
     }
 
+    @Override
     public SwerveModulePosition getModulePosition() {
         SwerveModulePosition position = new SwerveModulePosition(
                 Units.Inches.of(driveMotor.getEncoder().getPosition()).in(Units.Meters),

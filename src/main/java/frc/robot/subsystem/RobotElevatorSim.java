@@ -24,7 +24,7 @@ public class RobotElevatorSim {//TODO: Fix constants
     private final SparkMaxSim elevatorHeightSim, elevatorPivotSim;
     private final SparkMax elevatorHeightMotor, elevatorPivotMotor;
     private final CANcoderSimState tiltEncoderSim;
-    private final AnalogInputSim heightPotSim;
+    private final AnalogInputSim extensionSensorSim;
     private final DCMotorSim elevatorPivotSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNeo550(1), 20, pivotGearing), DCMotor.getNeo550(1));
     private final ElevatorSim elevatorHeightSystem = new ElevatorSim(DCMotor.getNEO(1), heightGearing, carriageMassKg, drumRadius, 0, Units.feetToMeters(10), true, 0);
 
@@ -34,7 +34,7 @@ public class RobotElevatorSim {//TODO: Fix constants
         this.elevatorHeightSim = new SparkMaxSim(elevatorHeightMotor, DCMotor.getNEO(1));
         this.elevatorPivotSim = new SparkMaxSim(elevatorPivotMotor, DCMotor.getNEO(1));
         this.tiltEncoderSim = elevator.tiltEncoder.getSimState();
-        this.heightPotSim = new AnalogInputSim(elevator.heightPot);
+        this.extensionSensorSim = new AnalogInputSim(elevator.extensionSensor);
     }
 
     public void updteSimState() {
@@ -51,7 +51,7 @@ public class RobotElevatorSim {//TODO: Fix constants
         elevatorPivotSim.iterate(elevatorPivotSystem.getAngularVelocityRPM() * pivotGearing, 12, 0.02);
         tiltEncoderSim.setRawPosition(elevatorPivotSystem.getAngularPosition());
         tiltEncoderSim.setVelocity(elevatorPivotSystem.getAngularVelocity());
-        heightPotSim.setVoltage(Units.metersToFeet(elevatorHeightSystem.getPositionMeters()));
+        extensionSensorSim.setVoltage(Units.metersToFeet(elevatorHeightSystem.getPositionMeters()));
     }
 
     public AngularVelocity getHeightMotorVelocity() {

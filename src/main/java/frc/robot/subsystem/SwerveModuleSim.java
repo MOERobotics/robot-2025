@@ -13,7 +13,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static frc.robot.subsystem.SimulationHelpers.decelerate;
 
 public class SwerveModuleSim {
-    private final double pivotReduction = 46;
+    private final double pivotReduction = 1;
     private final double decelerationCoef = 30;
     private final SparkMaxSim driveMotorSim, pivotMotorSim;
     private final SparkMax driveMotor, pivotMotor;
