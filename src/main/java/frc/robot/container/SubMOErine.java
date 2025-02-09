@@ -24,6 +24,7 @@ public class SubMOErine extends RobotContainer{
         double pivotkIMax = 1;
         PIDController pivotControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerFL.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleFL = new SwerveModule(
                 new SparkMax(1, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(20, SparkLowLevel.MotorType.kBrushless),
@@ -35,6 +36,7 @@ public class SubMOErine extends RobotContainer{
         );
         PIDController pivotControllerFR = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerFR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerFR.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleFR = new SwerveModule(
                 new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(2, SparkLowLevel.MotorType.kBrushless),
@@ -46,6 +48,7 @@ public class SubMOErine extends RobotContainer{
         );
         PIDController pivotControllerBR = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerBR.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleBR = new SwerveModule(
                 new SparkMax(17, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(16, SparkLowLevel.MotorType.kBrushless),
@@ -57,6 +60,7 @@ public class SubMOErine extends RobotContainer{
         );
         PIDController pivotControllerBL= new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerBL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerBL.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleBL = new SwerveModule(
                 new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(18, SparkLowLevel.MotorType.kBrushless),
@@ -79,6 +83,7 @@ public class SubMOErine extends RobotContainer{
         SparkMax height = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
         SparkMax pivot = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
         CANcoder tilt = new CANcoder(35);
+        AnalogInput heightPot = new AnalogInput(0);
 
         AnalogInput extensionSensor = new AnalogInput(1);
 

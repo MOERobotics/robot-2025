@@ -13,6 +13,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     SparkMax elevatorHeightMotor;
     SparkMax elevatorPivotMotor;
     CANcoder tiltEncoder;
+    AnalogInput heightPot;
 
     AnalogInput extensionSensor;
 
@@ -28,6 +29,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         this.elevatorHeightMotor = elevatorHeightMotor;
         this.elevatorPivotMotor = elevatorPivotMotor;
         this.tiltEncoder = tiltEncoder;
+        this.heightPot = heightPot;
     }
 
     @Override

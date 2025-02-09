@@ -12,11 +12,11 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
-import org.littletonrobotics.junction.AutoLog;
+import frc.robot.MOESubsystem;
 
 import static edu.wpi.first.units.Units.*;
 
-public class SwerveModule {
+public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> implements SwerveModuleControl{
     public SparkMax driveMotor;
     public SparkMax pivotMotor;
     public PIDController pivotController;
@@ -24,22 +24,7 @@ public class SwerveModule {
     public Distance xPos;
     public Distance yPos;
     public Angle heading;
-
-    public Angle targetHeading;
-    SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
-
-    @AutoLog
-    public static class SwerveModuleInputs {
-        public Angle currentRotationDegrees;
-        public double pivotPower;
-        public double drivePower;
-        public double error, integral;
-
-        public Angle targetHeading;
-
-
-
-    }
+    public Angle targetHeading
 
     public SwerveModule(
             SparkMax driveMotor,
@@ -50,6 +35,7 @@ public class SwerveModule {
             Angle heading,
             PIDController pivotController
     ) {
+        this.setSensors(new SwerveModuleInputsAutoLogged());
         this.compass = compass;
         this.pivotMotor = pivotMotor;
         this.driveMotor = driveMotor;
@@ -79,24 +65,26 @@ public class SwerveModule {
         return _heading;
     }
 
-    public SwerveModuleInputsAutoLogged readSensors() {
-        inputs.currentRotationDegrees =  getHeading();
-        inputs.pivotPower = pivotMotor.get();
-        inputs.drivePower = driveMotor.get();
-        inputs.targetHeading = targetHeading;
-        return inputs;
+    @Override
+    public void readSensors(SwerveModuleInputsAutoLogged sensors) {
+        sensors.currentRotationDegrees =  getHeading();
+        sensors.pivotPower = pivotMotor.get();
+        sensors.drivePower = driveMotor.get();
+        sensors.targetHeading = targetHeading;
     }
 
+    @Override
     public void drive(double power) {
         driveMotor.set(power);
     }
 
+    @Override
     public void pivot(Angle targetHeading) {
-        this.targetHeading =targetHeading;
-        Angle currentHeading =  getHeading();
+        this.targetHeading = targetHeading;
+        Angle currentHeading = getHeading();
         Angle error = currentHeading.minus(targetHeading);
-        double power = pivotController.calculate(inputs.error = error.in(Radians));
-        inputs.integral = pivotController.getAccumulatedError();
+        double power = pivotController.calculate(this.getSensors().error = error.in(Radians));
+        this.getSensors().integral = pivotController.getAccumulatedError();
         pivotMotor.set(power);
     }
 

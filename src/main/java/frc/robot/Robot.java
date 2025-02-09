@@ -15,6 +15,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
+import frc.robot.subsystem.RobotElevatorSim;
+import frc.robot.subsystem.SubMOErineElevator;
+import frc.robot.subsystem.SwerveDrive;
+import frc.robot.subsystem.SwerveModuleSim;
 import org.littletonrobotics.junction.LoggedRobot;
 import frc.robot.commands.SwerveModuleCommand;
 
@@ -33,7 +37,8 @@ public class Robot extends LoggedRobot {
 
     Command autoCommand = Commands.none();
 
-
+    SwerveModuleSim swerveModuleSimFL,swerveModuleSimFR,swerveModuleSimBR,swerveModuleSimBL;
+    RobotElevatorSim elevatorSim;
 
     @Override
     public void robotInit() {
@@ -218,9 +223,22 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationInit() {
+        if(!(robot.getSwerveDrive() instanceof  SwerveDrive)||!(robot.getElevator() instanceof SubMOErineElevator))return;
+        SwerveDrive swerveDrive = (SwerveDrive) robot.getSwerveDrive();
+        SubMOErineElevator elevator = (SubMOErineElevator) robot.getElevator();
+        swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.heading,swerveDrive.swerveModuleFL.driveMotor,swerveDrive.swerveModuleFL.pivotMotor,swerveDrive.swerveModuleFL.compass);
+        swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.heading,swerveDrive.swerveModuleFR.driveMotor,swerveDrive.swerveModuleFR.pivotMotor,swerveDrive.swerveModuleFR.compass);
+        swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.heading,swerveDrive.swerveModuleBR.driveMotor,swerveDrive.swerveModuleBR.pivotMotor,swerveDrive.swerveModuleBR.compass);
+        swerveModuleSimBL = new SwerveModuleSim(swerveDrive.swerveModuleBL.heading,swerveDrive.swerveModuleBL.driveMotor,swerveDrive.swerveModuleBL.pivotMotor,swerveDrive.swerveModuleBL.compass);
+        elevatorSim = new RobotElevatorSim(elevator);
     }
 
     @Override
     public void simulationPeriodic() {
+        swerveModuleSimFL.updateSimState();
+        swerveModuleSimFR.updateSimState();
+        swerveModuleSimBR.updateSimState();
+        swerveModuleSimBL.updateSimState();
+        elevatorSim.updteSimState();
     }
 }
