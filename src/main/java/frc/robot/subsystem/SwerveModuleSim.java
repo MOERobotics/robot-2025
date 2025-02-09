@@ -7,12 +7,12 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Angle;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static frc.robot.subsystem.SimulationHelpers.decelerate;
 
-public class SwerveModuleSim{
+public class SwerveModuleSim {
     private final double pivotReduction = 46;
     private final double decelerationCoef = 30;
     private final SparkMaxSim driveMotorSim, pivotMotorSim;
@@ -32,25 +32,20 @@ public class SwerveModuleSim{
     }
 
     public void updateSimState() {
-        driveMotorSystem.setInput(driveMotor.get());
+        driveMotorSystem.setInputVoltage(driveMotor.getBusVoltage() * driveMotor.getAppliedOutput());
 //        driveMotorSystem.setAngularVelocity(decelerate(driveMotorSystem.getAngularVelocity()).in(RadiansPerSecond));
-        pivotMotorSystem.setAngularVelocity(decelerate(pivotMotorSystem.getAngularVelocity()).in(RadiansPerSecond));
-        pivotMotorSystem.setInput(pivotMotor.get());
+        pivotMotorSystem.setInputVoltage(pivotMotor.getBusVoltage() * pivotMotor.getAppliedOutput());
+        pivotMotorSystem.setAngularVelocity(decelerate(pivotMotorSystem.getAngularVelocity(),decelerationCoef).in(RadiansPerSecond));
+
         driveMotorSystem.update(.02);
         pivotMotorSystem.update(.02);
-        driveMotorSim.iterate(driveMotorSystem.getAngularVelocityRPM(),12.0,0.02);
-        pivotMotorSim.iterate(pivotMotorSystem.getAngularVelocityRPM(),12.0,0.02);
-        pivotMotorSim.getAlternateEncoderSim().iterate(pivotMotorSystem.getAngularVelocityRPM(),.02);
+
+        driveMotorSim.iterate(driveMotorSystem.getAngularVelocityRPM(), 12.0, 0.02);
+        pivotMotorSim.iterate(pivotMotorSystem.getAngularVelocityRPM(), 12.0, 0.02);
+        pivotMotorSim.getAlternateEncoderSim().iterate(pivotMotorSystem.getAngularVelocityRPM(), .02);
         pivotEncoderSim.setRawPosition(pivotMotorSystem.getAngularPosition().div(pivotReduction).unaryMinus().plus(heading));
         pivotEncoderSim.setVelocity(pivotMotorSystem.getAngularVelocity().div(pivotReduction).unaryMinus());
     }
 
-    public AngularVelocity decelerate(AngularVelocity velocity){
-        if(velocity.isNear(RPM.zero(),0.01)){
-            return RPM.zero();
-        }else {
-            return velocity.abs(RPM)>decelerationCoef?velocity.minus(RPM.of(Math.copySign(decelerationCoef,velocity.in(RPM)))):RPM.zero();
-        }
-    }
 
 }
