@@ -32,7 +32,10 @@ public interface SwerveDriveControl extends Subsystem {
 
     edu.wpi.first.math.kinematics.SwerveDriveKinematics getKinematics();
 
-    edu.wpi.first.math.kinematics.SwerveDriveOdometry getOdometry();
+
+
+
+        edu.wpi.first.math.kinematics.SwerveDriveOdometry getOdometry();
 
     @AutoLog
     public static class SwerveDriveInputs {
