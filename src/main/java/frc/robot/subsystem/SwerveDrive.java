@@ -71,10 +71,10 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         getSensors().moduleStates = new SwerveModuleState[4];
         getSensors().modulePositions = new SwerveModulePosition[4];
 
-        getSensors().swerveModuleFL = swerveModuleFL.inputs;
-        getSensors().swerveModuleFR = swerveModuleFR.inputs;
-        getSensors().swerveModuleBR = swerveModuleBR.inputs;
-        getSensors().swerveModuleBL = swerveModuleBL.inputs;
+        getSensors().swerveModuleFL = swerveModuleFL.getSensors();
+        getSensors().swerveModuleFR = swerveModuleFR.getSensors();
+        getSensors().swerveModuleBR = swerveModuleBR.getSensors();
+        getSensors().swerveModuleBL = swerveModuleBL.getSensors();
     }
 
     @Override
@@ -111,10 +111,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         sensors.modulePositions[2] = swerveModuleBR.getModulePosition();
         sensors.modulePositions[3] = swerveModuleBL.getModulePosition();
 
-        swerveModuleFL.readSensors();
-        swerveModuleFR.readSensors();
-        swerveModuleBR.readSensors();
-        swerveModuleBL.readSensors();
         sensors.robotRelativeSpeeds = kinematics.toChassisSpeeds(
                 swerveModuleFL.getModuleState(),
                 swerveModuleFR.getModuleState(),
@@ -143,6 +139,17 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public void drive(ChassisSpeeds speeds) {
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
         this.getSensors().driveDesiredStates = moduleStates;
+        /*
+        swerveModuleFL.setModuleState(moduleStates[0]);
+        swerveModuleFR.setModuleState(moduleStates[1]);
+        swerveModuleBR.setModuleState(moduleStates[2]);
+        swerveModuleBL.setModuleState(moduleStates[3]);
+
+
+
+         */
+
+
         swerveModuleFL.drive(moduleStates[0].speedMetersPerSecond);
         swerveModuleFL.pivot(moduleStates[0].angle.getMeasure());
 
@@ -154,6 +161,9 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
         swerveModuleBL.drive(moduleStates[3].speedMetersPerSecond);
         swerveModuleBL.pivot(moduleStates[3].angle.getMeasure());
+
+
+
     }
 
     /**

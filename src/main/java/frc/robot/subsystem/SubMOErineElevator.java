@@ -2,9 +2,7 @@ package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.AnalogInput;
 import frc.robot.MOESubsystem;
 
@@ -15,33 +13,45 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     SparkMax elevatorHeightMotor;
     SparkMax elevatorPivotMotor;
     CANcoder tiltEncoder;
-    AnalogInput heightSensor;
+
+    AnalogInput extensionSensor;
 
     public SubMOErineElevator(
         SparkMax elevatorHeightMotor,
         SparkMax elevatorPivotMotor,
-        CANcoder tiltEncoder
+        CANcoder tiltEncoder,
+        AnalogInput extensionSensor
     ) {
         this.setSensors(new ElevatorInputsAutoLogged());
         this.elevatorHeightMotor = elevatorHeightMotor;
         this.elevatorPivotMotor = elevatorPivotMotor;
         this.tiltEncoder = tiltEncoder;
-        this.heightSensor = new AnalogInput(1);
+        this.extensionSensor = extensionSensor;
     }
 
     @Override
     public void readSensors(ElevatorInputsAutoLogged sensors) {
-        sensors.extension = _getExtension();
+        sensors.extension = getExtension();
         sensors.angle = tiltEncoder.getAbsolutePosition().getValue();
         sensors.height = getHeight();
         sensors.horizontalSpeed = RPM.of(elevatorPivotMotor.getEncoder().getVelocity());
         sensors.extensionSpeed = InchesPerSecond.of(elevatorHeightMotor.getEncoder().getVelocity());
+        sensors.elevatorVoltage = Volts.of(extensionSensor.getVoltage());
+        sensors.extension = getExtension();
+
     }
 
     @Override
     public void moveVertically(LinearVelocity speed) {
         elevatorHeightMotor.set(speed.in(InchesPerSecond));
     }
+
+    @Override
+    public Angle getAngle() {
+        return tiltEncoder.getAbsolutePosition().getValue();
+    }
+
+
 
     @Override
     public void moveHorizontally(AngularVelocity speed) {
@@ -53,7 +63,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         return Inches.of(8);
     }
 
-    public Distance _getExtension() {
+    public Distance getExtension() {
         return Feet.of(heightSensor.getVoltage());
         // 1 foot per 1 volt
     }

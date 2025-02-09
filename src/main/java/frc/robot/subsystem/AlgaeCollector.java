@@ -42,6 +42,7 @@ public class AlgaeCollector extends MOESubsystem<AlgaeCollectorInputsAutoLogged>
         algaeArm.set(armVelocity.in(RPM));
     }
 
+
     @Override
     public void setWheelVelocity(AngularVelocity wheelVelocity) {
         algaeWheel.set(wheelVelocity.in(RPM));
