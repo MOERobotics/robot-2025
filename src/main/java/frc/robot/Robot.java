@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.container.FortissiMOEContainer;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -92,26 +91,10 @@ public class Robot extends LoggedRobot {
                 driverJoystick.getRawAxis(2)
         );
 
-        double climberPower=0;
-
-        if(driverJoystick.getRawButton(1)){
-            climberPower=0.5;
-        }
-
-
-
-        if(driverJoystick.getRawButton(2)){
-            climberPower=-0.5;
-        }
-
-        robot.getClimber().setClimberTopVelocity(RPM.of(climberPower));
-
-        robot.getClimber().setClimberBottomVelocity(RPM.of(climberPower));
 
 
 
 
-        /*
         double elevatorVertPower=0;
 
         if(driverJoystick.getRawButton(1)){
@@ -125,6 +108,38 @@ public class Robot extends LoggedRobot {
 
 
         robot.getElevator().moveVertically(InchesPerSecond.of(elevatorVertPower));
+
+
+        /*
+
+ double climberPower=0;
+
+        if(driverJoystick.getRawButton(1)){
+            climberPower=0.5;
+        }
+
+
+
+        if(driverJoystick.getRawButton(2)){
+            climberPower=-0.5;
+        }
+
+        robot.getClimber().setClimberVelocity(RPM.of(climberPower));
+
+         double climberPower=0;
+
+        if(driverJoystick.getRawButton(1)){
+            climberPower=0.5;
+        }
+
+
+
+        if(driverJoystick.getRawButton(2)){
+            climberPower=-0.5;
+        }
+
+        robot.getClimber().setClimberVelocity(RPM.of(climberPower));
+
 
 
          */

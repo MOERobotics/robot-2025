@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.AnalogInput;
 import frc.robot.subsystem.*;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.commands.ElevatorTeleopCommand;
@@ -17,10 +18,10 @@ import static edu.wpi.first.units.Units.Inches;
 
 public class SubMOErine extends RobotContainer{
     public SubMOErine(){
-        double pivotkP = 1.6e-1;
-        double pivotkI = 1e-3;
-        double pivotkD =3e-5;;
-        double pivotkIMax = 1e0;
+        double pivotkP = 0.15;
+        double pivotkI = 0.001;
+        double pivotkD =0.003;;
+        double pivotkIMax = 1;
         PIDController pivotControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
         SwerveModule swerveModuleFL = new SwerveModule(
@@ -61,7 +62,7 @@ public class SubMOErine extends RobotContainer{
                 new SparkMax(18, SparkLowLevel.MotorType.kBrushless),
                 new CANcoder(34),
                 Inches.of(-14.5),
-                Inches.of(-14.5),
+                Inches.of(14.5),
                 Degrees.of(135),
                 pivotControllerBL
         );
@@ -79,20 +80,27 @@ public class SubMOErine extends RobotContainer{
         SparkMax pivot = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
         CANcoder tilt = new CANcoder(35);
 
+        AnalogInput extensionSensor = new AnalogInput(1);
+
+
         this.setSwerveDrive(swerveDrive);
         this.setElevator(new SubMOErineElevator(
                 height,
                 pivot,
-                tilt
+                tilt,
+                extensionSensor
         ));
 
         this.setCoralCollector(new CoralCollector(new SparkMax(13, SparkLowLevel.MotorType.kBrushless), new SparkMax(12,  SparkLowLevel.MotorType.kBrushless)));
         this.setAlgaeCollector(new AlgaeCollectorControlFake());
+      /*
         this.setClimber(new SubMOErineClimber(
                 new SparkMax(0, SparkLowLevel.MotorType.kBrushless),
-                new SparkMax(0, SparkLowLevel.MotorType.kBrushless),
-                new CANcoder(0),
-                new CANcoder(1)));
+                new CANcoder(0)
+                ));
+
+
+       */
     }
 }
 

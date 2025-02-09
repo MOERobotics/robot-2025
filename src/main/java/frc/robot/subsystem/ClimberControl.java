@@ -9,54 +9,37 @@ public interface ClimberControl extends Subsystem {
 
     @AutoLog
      class ClimberInputs{
-        boolean canGoUpTop;
-        boolean canGoDownTop;
+        boolean canGoUp;
+        boolean canGoDown;
 
-        boolean canGoUpBottom;
-        boolean canGoDownBottom;
-        AngularVelocity topMotorVelocity;
-        AngularVelocity bottomMotorVelocity;
+        AngularVelocity motorVelocity;
 
-        Angle topPosition;
-        Angle bottomPosition;
+        Angle position;
     }
 
 
     ClimberInputsAutoLogged getSensors();
 
-    default boolean canGoUpTop(){
-        return this.getSensors().canGoUpTop;
+    default boolean canGoUp(){
+        return this.getSensors().canGoUp;
     }
 
-    default boolean canGoDownTop(){
-        return this.getSensors().canGoDownTop;
-    }
-
-    default boolean canGoUpBottom(){
-        return this.getSensors().canGoUpBottom;
-    }
-
-    default boolean canGoDownBottom(){
-        return this.getSensors().canGoDownBottom;
+    default boolean canGoDown(){
+        return this.getSensors().canGoDown;
     }
 
 
-    public void setClimberTopVelocity(AngularVelocity power);
-
-    public void setClimberBottomVelocity(AngularVelocity power);
+    public void setClimberVelocity(AngularVelocity power);
 
 
-    public default Angle getTopPosition(){ return this.getSensors().topPosition; }
 
-    public default Angle getBottomPosition(){ return this.getSensors().bottomPosition; }
+    public default Angle getPosition(){ return this.getSensors().position; }
 
-    default AngularVelocity getTopMotorVelocity(){
-        return this.getSensors().topMotorVelocity;
+
+    default AngularVelocity getMotorVelocity(){
+        return this.getSensors().motorVelocity;
     }
 
-    default AngularVelocity getBottomMotorVelocity(){
-        return this.getSensors().bottomMotorVelocity;
-    }
 
 
 }

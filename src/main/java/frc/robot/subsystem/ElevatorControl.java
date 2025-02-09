@@ -11,6 +11,8 @@ public interface ElevatorControl extends Subsystem {
         public Angle angle;
         public AngularVelocity horizontalSpeed;
         public LinearVelocity extensionSpeed;
+
+        public Voltage elevatorVoltage;
     }
 
     public ElevatorInputsAutoLogged getSensors();
@@ -22,6 +24,8 @@ public interface ElevatorControl extends Subsystem {
     default Distance getExtension() {
         return this.getSensors().extension;
     }
+
+
 
     default Angle getAngle() {
         return this.getSensors().angle;
