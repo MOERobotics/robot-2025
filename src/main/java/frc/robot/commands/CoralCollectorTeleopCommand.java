@@ -19,7 +19,6 @@ public class CoralCollectorTeleopCommand extends Command {
         this.coralCollectorRControl = coralCollectorRControl;
         this.coralcollectorLControl = coralcollectorLControl;
         this.joystick = joystick;
-        addRequirements(algaeCollectorControl);
     }
 
     @Override
@@ -30,11 +29,11 @@ public class CoralCollectorTeleopCommand extends Command {
 
     @Override
     public void execute() {
-        if (joystick.getRawButton(idk)) {
+        if (joystick.getRawButton(1)) {
             coralWheelRVelocity = RadiansPerSecond.of(1);
             coralWheelRVelocity = RadiansPerSecond.of(1);
 
-        } else if (joystick.getRawButton(idk)) {
+        } else if (joystick.getRawButton(1)) {
             coralWheelRVelocity = RadiansPerSecond.of(-1);
             coralWheelLVelocity = RadiansPerSecond.of(-1);
         } else {
@@ -43,7 +42,7 @@ public class CoralCollectorTeleopCommand extends Command {
 
         }
 
-        if (joystick.getRawButton(idk)) {
+        if (joystick.getRawButton(2)) {
             coralWheelRVelocity = RPM.of(-1);
             coralWheelLVelocity = RPM.of(1);
 
