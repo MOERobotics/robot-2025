@@ -14,8 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.SwerveModuleCommand;
-import frc.robot.commands.standardDeviation;
+import frc.robot.commands.*;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.RobotElevatorSim;
@@ -68,14 +67,14 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
-        try {
+        /*try {
             // Load the path you want to follow using its name in the GUI
             PathPlannerAutoBuilder.configure(robot.getSwerveDrive());
             PathPlannerPath path = PathPlannerPath.fromPathFile("testPath");
             AutoBuilder.followPath(path).schedule();
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     @Override
@@ -85,116 +84,23 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
+        new ElevatorTeleopCommand(
+            robot.getElevator(),
+            functionJoystick
+        ).schedule();
+        new AlgaeCollectorTeleopCommand(
+            robot.getAlgaeCollector(),
+            functionJoystick
+        );
+        new DriveCoralCollectorCommand(
+            robot.getCoralCollector(),
+            functionJoystick
+        );
     }
 
     @Override
     public void teleopPeriodic() {
 
-        robot.getSwerveDrive().drive(
-                -driverJoystick.getRawAxis(1),
-                -driverJoystick.getRawAxis(0),
-                driverJoystick.getRawAxis(2)
-        );
-
-        double elevatorVertPower=0;
-        if(driverJoystick.getRawButton(1)){
-            elevatorVertPower=0.5;
-        }
-        if(driverJoystick.getRawButton(2)){
-            elevatorVertPower=-0.5;
-        }
-        robot.getElevator().moveVertically(InchesPerSecond.of(elevatorVertPower));
-        /*
-
- double climberPower=0;
-
-        if(driverJoystick.getRawButton(1)){
-            climberPower=0.5;
-        }
-
-
-
-        if(driverJoystick.getRawButton(2)){
-            climberPower=-0.5;
-        }
-
-        robot.getClimber().setClimberVelocity(RPM.of(climberPower));
-
-         double climberPower=0;
-
-        if(driverJoystick.getRawButton(1)){
-            climberPower=0.5;
-        }
-
-
-
-        if(driverJoystick.getRawButton(2)){
-            climberPower=-0.5;
-        }
-
-        robot.getClimber().setClimberVelocity(RPM.of(climberPower));
-
-
-
-         */
-
-        double elevatorHorizontalPower=0;
-
-        if(driverJoystick.getRawButton(3)){
-            elevatorHorizontalPower=0.5;
-        }
-
-        if(driverJoystick.getRawButton(4)){
-            elevatorHorizontalPower=-0.5;
-        }
-
-        robot.getElevator().moveHorizontally(DegreesPerSecond.of(elevatorHorizontalPower));
-
-
-        double coralCollectorPowerRight=0;
-        double coralCollectorPowerLeft=0;
-
-
-        if(driverJoystick.getRawButton(5)){
-            coralCollectorPowerRight=0.5;
-            coralCollectorPowerLeft=0.5;
-
-        }
-
-        if(driverJoystick.getRawButton(6)){
-            coralCollectorPowerRight=-0.5;
-            coralCollectorPowerLeft=-0.5;
-        }
-
-        robot.getCoralCollector().setCoralVelocity(RPM.of(coralCollectorPowerLeft), RPM.of(coralCollectorPowerRight));
-
-
-        double algaeCollectorPower=0;
-
-
-        if(driverJoystick.getRawButton(7)){
-            algaeCollectorPower=0.5;
-        }
-
-        if(driverJoystick.getRawButton(8)){
-            algaeCollectorPower=-0.5;
-        }
-
-        robot.getAlgaeCollector().setArmVelocity(RPM.of(algaeCollectorPower));
-
-
-        double algaeWheelPower=0;
-
-
-        if(driverJoystick.getRawButton(9)){
-            algaeWheelPower=0.5;
-        }
-
-        if(driverJoystick.getRawButton(10)){
-            algaeWheelPower=-0.5;
-        }
-
-        robot.getAlgaeCollector().setWheelVelocity(RPM.of(algaeWheelPower));
 
     }
 

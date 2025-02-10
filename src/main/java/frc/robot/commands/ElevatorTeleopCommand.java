@@ -28,21 +28,8 @@ public class ElevatorTeleopCommand extends Command {
 
     @Override
     public void execute() {//TODO update magic numbers for velocities
-        if (joystick.getRawButton(5)) {
-            verticalVelocity = MetersPerSecond.of(1);
-        } else if (joystick.getRawButton(6)) {
-            verticalVelocity = MetersPerSecond.of(-1);
-        } else {
-            verticalVelocity = MetersPerSecond.zero();
-        }
-
-        if (joystick.getRawButton(7)) {
-            angularVelocity = RadiansPerSecond.of(1);
-        } else if (joystick.getRawButton(8)) {
-            angularVelocity = RadiansPerSecond.of(-1);
-        } else {
-            angularVelocity = RadiansPerSecond.zero();
-        }
+        verticalVelocity = MetersPerSecond.of(0.5).times(joystick.getRawAxis(1));
+        angularVelocity = RadiansPerSecond.of(0.5).times(joystick.getRawAxis(0));
         elevatorControl.moveVertically(verticalVelocity);
         elevatorControl.moveHorizontally(angularVelocity);
     }
