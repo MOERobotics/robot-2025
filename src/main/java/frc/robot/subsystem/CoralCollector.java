@@ -41,7 +41,7 @@ public class CoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged>
 
     @Override
     public void readSensors(CoralCollectorInputsAutoLogged sensors) {
-        sensors.hasCoral = leftMotor.getReverseLimitSwitch().isPressed();
+        sensors.hasCoral = rightMotor.getReverseLimitSwitch().isPressed();
         sensors.inFrontReef = false;
         sensors.velocityLeft = RPM.of(leftMotor.getEncoder().getVelocity());
         sensors.velocityRight = RPM.of(rightMotor.getEncoder().getVelocity());

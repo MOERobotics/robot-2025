@@ -43,6 +43,12 @@ public class RobotElevatorSim {//TODO: Fix constants
 
         elevatorPivotSystem.setInputVoltage(elevatorPivotMotor.getBusVoltage() * elevatorPivotMotor.getAppliedOutput());
         elevatorPivotSystem.setAngularVelocity(decelerate(elevatorPivotSystem.getAngularVelocity(), decelerationCoefPivot).in(RadiansPerSecond));
+        if(elevatorPivotSystem.getAngularPosition().lt(Degrees.of(-45))){
+            elevatorPivotSystem.setState(-Math.PI/4,0);
+        }
+        if(elevatorPivotSystem.getAngularPosition().gt(Degrees.of(45))){
+            elevatorPivotSystem.setState(Math.PI/4,0);
+        }
 
         elevatorHeightSystem.update(0.02);
         elevatorPivotSystem.update(0.02);
