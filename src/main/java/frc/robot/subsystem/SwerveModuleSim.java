@@ -20,10 +20,10 @@ public class SwerveModuleSim {
     private final CANcoderSimState pivotEncoderSim;
     private final DCMotorSim driveMotorSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.005, 1.0), DCMotor.getNEO(1));
     private final DCMotorSim pivotMotorSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.01, 1.0), DCMotor.getNEO(1));
-    Angle heading;
+    private final Angle offset;
 
-    public SwerveModuleSim(Angle heading, SparkMax driveMotor, SparkMax pivotMotor, CANcoder pivotEncoder) {
-        this.heading = heading;
+    public SwerveModuleSim(Angle offset, SparkMax driveMotor, SparkMax pivotMotor, CANcoder pivotEncoder) {
+        this.offset = offset;
         this.driveMotor = driveMotor;
         this.pivotMotor = pivotMotor;
         this.driveMotorSim = new SparkMaxSim(driveMotor, DCMotor.getNEO(1));
@@ -43,7 +43,7 @@ public class SwerveModuleSim {
         driveMotorSim.iterate(driveMotorSystem.getAngularVelocityRPM(), 12.0, 0.02);
         pivotMotorSim.iterate(pivotMotorSystem.getAngularVelocityRPM(), 12.0, 0.02);
         pivotMotorSim.getAlternateEncoderSim().iterate(pivotMotorSystem.getAngularVelocityRPM(), .02);
-        pivotEncoderSim.setRawPosition(pivotMotorSystem.getAngularPosition().div(pivotReduction).unaryMinus().plus(heading));
+        pivotEncoderSim.setRawPosition(pivotMotorSystem.getAngularPosition().div(pivotReduction).unaryMinus().plus(offset));
         pivotEncoderSim.setVelocity(pivotMotorSystem.getAngularVelocity().div(pivotReduction).unaryMinus());
     }
 
