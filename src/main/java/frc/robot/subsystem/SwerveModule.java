@@ -2,6 +2,7 @@ package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.pathplanner.lib.config.PIDConstants;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -12,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.Voltage;
 import org.littletonrobotics.junction.AutoLog;
 
 import static edu.wpi.first.units.Units.*;
@@ -25,8 +27,8 @@ public class SwerveModule {
     public Distance yPos;
     public Angle heading;
     SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
-    public SimpleMotorFeedforward feedforwardDrive = new SimpleMotorFeedforward(0,0,0);
-    public SimpleMotorFeedforward feedforwardPivot = new SimpleMotorFeedforward(0,0,0);
+    public SimpleMotorFeedforward feedforwardDrive = new SimpleMotorFeedforward(0.19959,0.1233,0.019658);
+    public SimpleMotorFeedforward feedforwardPivot = new SimpleMotorFeedforward(0.025*0,0.0,0);
 
     @AutoLog
     public static class SwerveModuleInputs {
@@ -36,7 +38,11 @@ public class SwerveModule {
         public double drivePower;
         public double error, integral;
         public double pivotVolts;
+        public double driveVolts;
         public double pivotVelocity;
+        public double driveSpeedDesired;
+        public double driveLocation;
+        public double driveVelocity;
     }
 
     public SwerveModule(
@@ -77,19 +83,23 @@ public class SwerveModule {
         inputs.drivePower = driveMotor.get();
         inputs.pivotVelocity = pivotMotor.getEncoder().getVelocity();
         inputs.pivotVolts = pivotMotor.getAppliedOutput() * pivotMotor.getBusVoltage();
+        inputs.driveVolts = driveMotor.getAppliedOutput() * driveMotor.getBusVoltage();
+        inputs.driveLocation = driveMotor.getEncoder().getPosition();
+        inputs.driveVelocity = driveMotor.getEncoder().getVelocity();
 
         return inputs;
     }
 
-    public void drive(double power) {
-        power = feedforwardDrive.calculate(power/12);
-        driveMotor.set(power);
+    public void drive(double speedMetersPerSec) {
+        inputs.driveSpeedDesired = speedMetersPerSec;
+        double motorPower = feedforwardDrive.calculate(speedMetersPerSec*39.37/1.413);
+        driveMotor.setVoltage(motorPower);
     }
 
     public void pivot(Angle targetHeading) {
-        Angle currentHeading =  getHeading();
+        Angle currentHeading = getHeading();
         Angle error = currentHeading.minus(targetHeading);
-        double power = feedforwardDrive.calculate(pivotController.calculate(inputs.error = error.in(Radians)));
+        double power = feedforwardPivot.calculate(-error.in(Degrees))+pivotController.calculate(inputs.error = error.in(Radians));
         inputs.integral = pivotController.getAccumulatedError();
         pivotMotor.set(power);
     }

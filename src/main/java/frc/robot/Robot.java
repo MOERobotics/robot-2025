@@ -10,15 +10,22 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.container.FortissiMOEContainer;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.SwerveDrive;
+import frc.robot.subsystem.SwerveDriveControl;
 import org.littletonrobotics.junction.LoggedRobot;
+
+import java.util.Set;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -27,7 +34,7 @@ public class Robot extends LoggedRobot {
 
 
 
-    Joystick driverJoystick = new Joystick(0);
+    CommandJoystick driverJoystick = new CommandJoystick(1);
     CommandScheduler scheduler;
 
 
@@ -37,6 +44,11 @@ public class Robot extends LoggedRobot {
 
     Command autoCommand = Commands.none();
 //    TimeOfFlight tof_sensor_center = new TimeOfFlight(42);
+
+
+    SendableChooser<SwerveDriveControl.CommandType> chooser = new SendableChooser<>();
+    SendableChooser<SwerveDriveControl.ModuleType> modChooser = new SendableChooser<>();
+    SendableChooser<SwerveDriveControl.DriveOrPivot> driveTypeChooser = new SendableChooser<>();
 
     @Override
     public void robotInit() {
@@ -48,7 +60,24 @@ public class Robot extends LoggedRobot {
 
         scheduler = CommandScheduler.getInstance();
         //robot.getDrive().setDefaultCommand(Commands.none());
+
+        chooser.addOption("SysTDStatic_Forward",SwerveDriveControl.CommandType.QuasistaticForward);
+        chooser.addOption("SysTDStatic_Reverse", SwerveDriveControl.CommandType.QuasistaticReverse);
+        chooser.addOption("SysTDDynamic_Forward", SwerveDriveControl.CommandType.DynamicForward);
+        chooser.setDefaultOption("SysTDDynamic_Reverse", SwerveDriveControl.CommandType.DynamicReverse);
+        SmartDashboard.putData("Command Chooser",chooser);
+
+        modChooser.addOption("FL", SwerveDriveControl.ModuleType.modFL);
+        modChooser.addOption("FR", SwerveDriveControl.ModuleType.modFR);
+        modChooser.addOption("BL", SwerveDriveControl.ModuleType.modBL);
+        modChooser.setDefaultOption("BR", SwerveDriveControl.ModuleType.modBR);
+        SmartDashboard.putData("Module Chooser",modChooser);
+
+        driveTypeChooser.setDefaultOption("Pivot", SwerveDriveControl.DriveOrPivot.setPivot);
+        driveTypeChooser.addOption("Drive", SwerveDriveControl.DriveOrPivot.setDrive);
+        SmartDashboard.putData("DriveTypeChooser",driveTypeChooser);
     }
+
 
     @Override
     public void robotPeriodic() {
@@ -82,25 +111,57 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
+        CommandScheduler.getInstance().cancelAll();
+        var driveOneSecond = robot.getSwerveDrive().run(() ->
+        {
+            robot.getSwerveDrive().drive(1, 0, 0);
+        }).withTimeout(1);
+        driverJoystick.button(4).whileTrue(Commands.defer(() -> {
+
+            if (chooser.getSelected() == SwerveDriveControl.CommandType.QuasistaticForward) {
+                return  ((SwerveDrive) robot.getSwerveDrive()).sysIdRoutineDrive.quasistatic(SysIdRoutine.Direction.kForward);
+            }
+            if (chooser.getSelected() == SwerveDriveControl.CommandType.QuasistaticReverse) {
+                return ((SwerveDrive) robot.getSwerveDrive()).sysIdRoutineDrive.quasistatic(SysIdRoutine.Direction.kReverse);
+            }
+            if (chooser.getSelected() == SwerveDriveControl.CommandType.DynamicForward) {
+                return ((SwerveDrive) robot.getSwerveDrive()).sysIdRoutineDrive.dynamic(SysIdRoutine.Direction.kForward);
+            }
+            if (chooser.getSelected() == SwerveDriveControl.CommandType.DynamicReverse) {
+                return ((SwerveDrive) robot.getSwerveDrive()).sysIdRoutineDrive.dynamic(SysIdRoutine.Direction.kReverse);
+            }
+            return Commands.none();
+        }, Set.of(robot.getSwerveDrive())));
+        driverJoystick.button(5).whileTrue(driveOneSecond);
+        robot.getSwerveDrive().setDefaultCommand(robot.getSwerveDrive().run(() -> {
+            robot.getSwerveDrive().drive(
+                    -driverJoystick.getRawAxis(1),
+                    -driverJoystick.getRawAxis(0),
+                    driverJoystick.getRawAxis(2) //TODO: REVERT
+            );
+        }));
+
+//        ((SwerveDrive)robot.getSwerveDrive()).sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kReverse).schedule();
     }
 
     @Override
     public void teleopPeriodic() {
 
-        /*robot.getSwerveDrive().drive(
-                 -driverJoystick.getRawAxis(1),
-                 -driverJoystick.getRawAxis(0),
-                  driverJoystick.getRawAxis(2 /*TODO: REVERT)
-        );*/
-        double elevatorPowerVert = 0;
-        if (driverJoystick.getRawButton(1)){
-            elevatorPowerVert = 0.5;
-        }
-        if (driverJoystick.getRawButton(2)){
-            elevatorPowerVert = -0.5;
-        }
-        robot.getElevator().moveVertically(InchesPerSecond.of(elevatorPowerVert));
-        robot.getElevator().moveHorizontally(DegreesPerSecond.of(driverJoystick.getRawAxis(3)));
+
+
+            double elevatorPowerVert = 0;
+            if (driverJoystick.getHID().getRawButton(1)) {
+                elevatorPowerVert = 0.5;
+            }
+            if (driverJoystick.getHID().getRawButton(2)) {
+                elevatorPowerVert = -0.5;
+            }
+            if(driverJoystick.getHID().getRawButton(3)){
+                robot.getSwerveDrive().pivotAngle(Radians.of(Math.atan2(-driverJoystick.getRawAxis(0),-driverJoystick.getRawAxis(1))));
+            }
+            robot.getElevator().moveVertically(InchesPerSecond.of(elevatorPowerVert));
+            robot.getElevator().moveHorizontally(DegreesPerSecond.of(driverJoystick.getRawAxis(3)));
+
     }
 
     @Override

@@ -22,41 +22,25 @@ import static edu.wpi.first.units.Units.Inches;
 
 public class FortissiMOEContainer extends RobotContainer {
 
-    SendableChooser<SwerveDriveControl.CommandType> chooser = new SendableChooser<>();
-    SendableChooser<SwerveDriveControl.ModuleType> modChooser = new SendableChooser<>();
-    SendableChooser<SwerveDriveControl.DriveOrPivot> driveTypeChooser = new SendableChooser<>();
     public FortissiMOEContainer (){
-        double pivotkP = 0.01;
-        double pivotkI = 0.1;
-        double pivotkD = 0;
+        double pivotkP = 0.3;
+        double pivotkI = 0.001*0;
+        double pivotkD = 0.003;
+        double pivotkIMax = 1;
 
         PIDController pivotControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
-        //pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
         PIDController pivotControllerFR = new PIDController(pivotkP, pivotkI, pivotkD);
-       // pivotControllerFR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerFR.setIntegratorRange(-pivotkIMax, pivotkIMax);
         PIDController pivotControllerBR = new PIDController(pivotkP, pivotkI, pivotkD);
-       // pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
         PIDController pivotControllerBL = new PIDController(pivotkP, pivotkI, pivotkD);
-       // pivotControllerBL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerBL.setIntegratorRange(-pivotkIMax, pivotkIMax);
         pivotControllerBR.enableContinuousInput(-Math.PI, Math.PI);
         pivotControllerBL.enableContinuousInput(-Math.PI, Math.PI);
         pivotControllerFR.enableContinuousInput(-Math.PI, Math.PI);
         pivotControllerFL.enableContinuousInput(-Math.PI, Math.PI);
 
-        chooser.addOption("SysTDStatic_Forward",SwerveDriveControl.CommandType.QuasistaticForward);
-        chooser.addOption("SysTDStatic_Reverse", SwerveDriveControl.CommandType.QuasistaticReverse);
-        chooser.addOption("SysTDDynamic_Forward", SwerveDriveControl.CommandType.DynamicForward);
-        chooser.setDefaultOption("SysTDDynamic_Reverse", SwerveDriveControl.CommandType.DynamicReverse);
-        SmartDashboard.putData("Command Chooser",chooser);
-
-        modChooser.addOption("All Modules", SwerveDriveControl.ModuleType.allMods);
-        modChooser.addOption("FL", SwerveDriveControl.ModuleType.modFL);
-        modChooser.addOption("FR", SwerveDriveControl.ModuleType.modFR);
-        modChooser.addOption("BL", SwerveDriveControl.ModuleType.modBL);
-        modChooser.setDefaultOption("BR", SwerveDriveControl.ModuleType.modBR);
-        SmartDashboard.putData("Module Chooser",modChooser);
-
-        driveTypeChooser.setDefaultOption("Pivot", SwerveDriveControl.DriveOrPivot.setPivot);
 
 
 
@@ -79,7 +63,7 @@ public class FortissiMOEContainer extends RobotContainer {
                                 new CANcoder(33),
                                 Inches.of(14),
                                 Inches.of(-14),
-                                Degrees.of(-45),
+                                Degrees.of(180-45),
                                 pivotControllerFR
                         ),
                         new SwerveModule(//BR
@@ -107,11 +91,8 @@ public class FortissiMOEContainer extends RobotContainer {
 
         this.setCoralCollector(new FakeCoralCollector());
 
-        var sysidCommand = Commands.defer(() -> {
-            return getSwerveDrive().sysIDCommands(chooser.getSelected(), modChooser.getSelected(), driveTypeChooser.getSelected());
-        }, Set.of(getSwerveDrive()));
-        SmartDashboard.putData("SysIDCommand", sysidCommand);
     }
+
 }
 
 

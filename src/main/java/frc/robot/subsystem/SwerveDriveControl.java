@@ -1,9 +1,11 @@
 package frc.robot.subsystem;
 
+import com.fasterxml.jackson.databind.introspect.Annotated;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -37,10 +39,12 @@ public interface SwerveDriveControl extends Subsystem {
         setDrive, setPivot,
     }
 
-    default public Command sysIDCommands(CommandType commandType, ModuleType moduleType, DriveOrPivot driveOrPivot){
+    default public Command sysIDCommandsPivot(CommandType commandType, ModuleType moduleType){
        return Commands.none();
     }
-    default public Command sysIDDrive(){return Commands.none();}
+    default public Command sysIDCommandsDrive(CommandType commandType){
+        return Commands.none();
+    }
 
     default ChassisSpeeds getRobotRelativeSpeeds() {
         return this.getSensors().robotRelativeSpeeds;
@@ -49,6 +53,8 @@ public interface SwerveDriveControl extends Subsystem {
     edu.wpi.first.math.kinematics.SwerveDriveKinematics getKinematics();
 
     edu.wpi.first.math.kinematics.SwerveDriveOdometry getOdometry();
+
+    public void pivotAngle(Angle angle);
 
     @AutoLog
     public static class SwerveDriveInputs {
