@@ -81,6 +81,8 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
 
             } else if (power.in(RPM) < 0 && canGoDown()) {
                 climbMotor.set(power.in(RPM));
+            } else{
+                climbMotor.set(0);
             }
 
         }

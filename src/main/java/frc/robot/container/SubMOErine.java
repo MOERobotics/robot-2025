@@ -7,8 +7,6 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
 import frc.robot.subsystem.*;
-import edu.wpi.first.wpilibj.Joystick;
-import frc.robot.commands.ElevatorTeleopCommand;
 import frc.robot.subsystem.SubMOErineElevator;
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
@@ -95,7 +93,7 @@ public class SubMOErine extends RobotContainer{
                 extensionSensor
         ));
 
-        this.setCoralCollector(new CoralCollector(new SparkMax(13, SparkLowLevel.MotorType.kBrushless), new SparkMax(12,  SparkLowLevel.MotorType.kBrushless)));
+        this.setCoralCollector(new CoralHead(new SparkMax(13, SparkLowLevel.MotorType.kBrushless), new SparkMax(12,  SparkLowLevel.MotorType.kBrushless)));
         this.setAlgaeCollector(new AlgaeCollectorControlFake());
       /*
         this.setClimber(new SubMOErineClimber(

@@ -1,24 +1,21 @@
 package frc.robot.subsystem;
 
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.units.measure.*;
-import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.MOESubsystem;
 
 import edu.wpi.first.units.measure.AngularVelocity;
-import frc.robot.MOESubsystem;
 
 import static edu.wpi.first.units.Units.RPM;
 
-public class CoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged> implements CoralCollectorControl {
+public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implements CoralHeadControl {
 
     public SparkMax leftMotor ;
     public SparkMax rightMotor;
 
 
 
-    public CoralCollector(SparkMax leftMotor, SparkMax rightMotor){
-        this.setSensors(new CoralCollectorInputsAutoLogged());
+    public CoralHead(SparkMax leftMotor, SparkMax rightMotor){
+        this.setSensors(new CoralHeadInputsAutoLogged());
         this.leftMotor = leftMotor;
         this.rightMotor = rightMotor;
         getSensors().hasCoral = false;
@@ -40,7 +37,7 @@ public class CoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged>
 
 
     @Override
-    public void readSensors(CoralCollectorInputsAutoLogged sensors) {
+    public void readSensors(CoralHeadInputsAutoLogged sensors) {
         sensors.hasCoral = leftMotor.getReverseLimitSwitch().isPressed();
         sensors.inFrontReef = false;
         sensors.velocityLeft = RPM.of(leftMotor.getEncoder().getVelocity());
@@ -49,9 +46,9 @@ public class CoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged>
 
 
     @Override
-    public void setCoralVelocity(AngularVelocity leftPower, AngularVelocity rightPower) {
-        leftMotor.set(leftPower.in(RPM));
-        rightMotor.set(rightPower.in(RPM));
+    public void setCoralVelocity(AngularVelocity leftAngularVelocity, AngularVelocity rightAngularVelocity) {
+        leftMotor.set(leftAngularVelocity.in(RPM));
+        rightMotor.set(rightAngularVelocity.in(RPM));
     }
 
     @Override

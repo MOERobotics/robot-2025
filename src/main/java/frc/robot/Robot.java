@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.CoralHeadTeleopCollectCommand;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.RobotElevatorSim;
@@ -96,8 +97,7 @@ public class Robot extends LoggedRobot {
                 driverJoystick.getRawAxis(2)
         );
 
-
-
+        CommandScheduler.getInstance().schedule(new CoralHeadTeleopCollectCommand(robot.getCoralCollector(), functionJoystick));
 
 
         double elevatorVertPower=0;

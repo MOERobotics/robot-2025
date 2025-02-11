@@ -6,8 +6,8 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
+import frc.robot.subsystem.FakeCoralHead;
 import frc.robot.subsystem.FakeElevator;
-import frc.robot.subsystem.FakeCoralCollector;
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
 
@@ -79,7 +79,7 @@ public class FortissiMOEContainer extends RobotContainer {
 
 
 
-        this.setCoralCollector(new FakeCoralCollector());
+        this.setCoralCollector(new FakeCoralHead());
     }
 
 }

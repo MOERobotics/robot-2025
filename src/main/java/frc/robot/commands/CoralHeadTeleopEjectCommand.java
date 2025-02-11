@@ -7,16 +7,16 @@ package frc.robot.commands;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystem.CoralCollectorControl;
+import frc.robot.subsystem.CoralHeadControl;
 
 import static edu.wpi.first.units.Units.*;
 
 /**
  * An example command that uses an example subsystem.
  */
-public class CoralCollectorTeleopEjectCommand extends Command {
+public class CoralHeadTeleopEjectCommand extends Command {
 
-    CoralCollectorControl coralCollectorControl;
+    CoralHeadControl coralHeadControl;
 
 
     Joystick joystick;
@@ -26,13 +26,10 @@ public class CoralCollectorTeleopEjectCommand extends Command {
 
 
 
-    public CoralCollectorTeleopEjectCommand(CoralCollectorControl coralCollectorControl, Joystick joystick) {
-        this.coralCollectorControl = coralCollectorControl;
+    public CoralHeadTeleopEjectCommand(CoralHeadControl coralHeadControl, Joystick joystick) {
+        this.coralHeadControl = coralHeadControl;
         this.joystick = joystick;
-
-        addRequirements(coralCollectorControl);
-
-
+        addRequirements(coralHeadControl);
     }
 
     // Called when the command is initially scheduled.
@@ -46,28 +43,22 @@ public class CoralCollectorTeleopEjectCommand extends Command {
     //TODO update magic numbers for velocities
     @Override
     public void execute() {
-
-        leftVelocity = RPM.of(0);
-        rightVelocity = RPM.of(0);
-
-
-        if(coralCollectorControl.hasCoral()){
+      if(coralHeadControl.hasCoral()){
             if (joystick.getRawButton(1)) {
                 leftVelocity = RPM.of(1);
                 rightVelocity = RPM.of(1);
+            }else{
+                leftVelocity = RPM.of(0);
+                rightVelocity = RPM.of(0);
             }
         }
-
-        coralCollectorControl.setCoralVelocity(leftVelocity, rightVelocity);
-
-
-
+        coralHeadControl.setCoralVelocity(leftVelocity, rightVelocity);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        coralCollectorControl.setCoralVelocity(RPM.zero(), RPM.zero());
+        coralHeadControl.setCoralVelocity(RPM.zero(), RPM.zero());
     }
 
     // Returns true when the command should end.
