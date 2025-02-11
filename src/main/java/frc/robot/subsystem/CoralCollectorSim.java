@@ -50,7 +50,7 @@ public class CoralCollectorSim {
         }
         timer.advanceIfElapsed(6);
 
-        coralLimitSim.setPressed(3 < timer.get() && timer.get() < 4);
+        //coralLimitSim.setPressed(3 < timer.get() && timer.get() < 4);
 
         SmartDashboard.putNumber("Coral Timer", timer.get());
         SmartDashboard.putBoolean("Coral Limit", coralLimitSim.getPressed());

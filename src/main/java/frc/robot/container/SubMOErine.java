@@ -91,7 +91,10 @@ public class SubMOErine extends RobotContainer {
             extensionSensor
         ));
 
-        this.setCoralCollector(new CoralCollector(new SparkMax(13, SparkLowLevel.MotorType.kBrushless), new SparkMax(12, SparkLowLevel.MotorType.kBrushless)));
+        this.setCoralCollector(new CoralCollector(
+                new SparkMax(13, SparkLowLevel.MotorType.kBrushless),
+                new SparkMax(12, SparkLowLevel.MotorType.kBrushless)
+        ));
         this.setAlgaeCollector(new AlgaeCollector(
             new SparkMax(11, SparkLowLevel.MotorType.kBrushless),
             new SparkMax(10, SparkLowLevel.MotorType.kBrushless),

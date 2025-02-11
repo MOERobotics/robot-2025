@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.CoralHeadTeleopCommand;
 import frc.robot.commands.SwerveModuleCommand;
 import frc.robot.container.RobotContainer;
 import frc.robot.container.SubMOErine;
@@ -85,6 +86,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopInit() {
         CommandScheduler.getInstance().cancelAll();
+        new CoralHeadTeleopCommand(robot.getCoralCollector(), functionJoystick).schedule();
     }
 
     @Override
@@ -149,24 +151,6 @@ public class Robot extends LoggedRobot {
         }
 
         robot.getElevator().moveHorizontally(DegreesPerSecond.of(elevatorHorizontalPower));
-
-
-        double coralCollectorPowerRight = 0;
-        double coralCollectorPowerLeft = 0;
-
-
-        if (driverJoystick.getRawButton(5)) {
-            coralCollectorPowerRight = 0.5;
-            coralCollectorPowerLeft = 0.5;
-
-        }
-
-        if (driverJoystick.getRawButton(6)) {
-            coralCollectorPowerRight = -0.5;
-            coralCollectorPowerLeft = -0.5;
-        }
-
-        robot.getCoralCollector().setCoralVelocity(RPM.of(coralCollectorPowerLeft), RPM.of(coralCollectorPowerRight));
 
 
         double algaeCollectorPower = 0;
