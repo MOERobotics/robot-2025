@@ -100,16 +100,27 @@ public class Robot extends LoggedRobot {
         double elevatorVertPower = 0;
 
         if (driverJoystick.getRawButton(1)) {
-            elevatorVertPower = 0.5;
+            elevatorVertPower = 0.2;
         }
 
         if (driverJoystick.getRawButton(2)) {
-            elevatorVertPower = -0.5;
+            elevatorVertPower = -0.2;
         }
 
 
         robot.getElevator().moveVertically(InchesPerSecond.of(elevatorVertPower));
 
+        double elevatorHorizontalPower = 0;
+
+        if (driverJoystick.getRawButton(3)) {
+            elevatorHorizontalPower = 0.2;
+        }
+
+        if (driverJoystick.getRawButton(4)) {
+            elevatorHorizontalPower = -0.2;
+        }
+
+        robot.getElevator().moveHorizontally(DegreesPerSecond.of(elevatorHorizontalPower));
 
         double climberPowerMid = 0;
 
@@ -127,28 +138,15 @@ public class Robot extends LoggedRobot {
         double climberPowerRear = 0;
 
         if (driverJoystick.getRawButton(1)) {
-            climberPowerRear = 0.5;
+            climberPowerRear = 0.2;
         }
 
 
         if (driverJoystick.getRawButton(2)) {
-            climberPowerRear = -0.5;
+            climberPowerRear = -0.2;
         }
 
-        robot.getClimberRear().setClimberVelocity(RPM.of(climberPowerMid));
-
-
-        double elevatorHorizontalPower = 0;
-
-        if (driverJoystick.getRawButton(3)) {
-            elevatorHorizontalPower = 0.5;
-        }
-
-        if (driverJoystick.getRawButton(4)) {
-            elevatorHorizontalPower = -0.5;
-        }
-
-        robot.getElevator().moveHorizontally(DegreesPerSecond.of(elevatorHorizontalPower));
+        robot.getClimberRear().setClimberVelocity(RPM.of(climberPowerRear));
 
 
         double coralCollectorPowerRight = 0;
@@ -173,11 +171,11 @@ public class Robot extends LoggedRobot {
 
 
         if (driverJoystick.getRawButton(7)) {
-            algaeCollectorPower = 0.5;
+            algaeCollectorPower = 0.05;
         }
 
         if (driverJoystick.getRawButton(8)) {
-            algaeCollectorPower = -0.5;
+            algaeCollectorPower = -0.05;
         }
 
         robot.getAlgaeCollector().setArmVelocity(RPM.of(algaeCollectorPower));
@@ -187,11 +185,11 @@ public class Robot extends LoggedRobot {
 
 
         if (driverJoystick.getRawButton(9)) {
-            algaeWheelPower = 0.5;
+            algaeWheelPower = 0.2;
         }
 
         if (driverJoystick.getRawButton(10)) {
-            algaeWheelPower = -0.5;
+            algaeWheelPower = -0.2;
         }
 
         robot.getAlgaeCollector().setWheelVelocity(RPM.of(algaeWheelPower));

@@ -35,15 +35,9 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
         this.setSensors(new ClimberInputsAutoLogged());
         this.climbMotor = climbMotor;
         this.climbEncoder = climbEncoder;
-        SparkMaxConfig climberTopConfig = new SparkMaxConfig();
-        climberTopConfig.inverted(false).idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
-        climbMotor.configure(climberTopConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-
-
-        SparkMaxConfig climberBottomConfig = new SparkMaxConfig();
-        climberBottomConfig.inverted(false).idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
-
-
+        SparkMaxConfig climberConfig = new SparkMaxConfig();
+        climberConfig.inverted(false).idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
+        climbMotor.configure(climberConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     }
 
     @Override
@@ -86,8 +80,9 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
 
        } else if(power.in(RPM) < 0 && canGoDown()){
            climbMotor.set(power.in(RPM));
+       }else{
+           climbMotor.set(0);
        }
-
 
 
 }

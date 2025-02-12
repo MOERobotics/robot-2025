@@ -1,6 +1,6 @@
 package frc.robot.subsystem;
 
-import com.ctre.phoenix6.hardware.CANcoder;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -9,17 +9,17 @@ import frc.robot.MOESubsystem;
 import static edu.wpi.first.units.Units.*;
 
 public class AlgaeCollector extends MOESubsystem<AlgaeCollectorInputsAutoLogged> implements AlgaeCollectorControl {
-    ;
     SparkMax algaeWheel, algaeArm;
-    CANcoder algaeArmEncoder;
+    SparkAbsoluteEncoder algaeArmEncoder;
+//    CANcoder algaeArmEncoder;
     WheelState wheelState;
     Angle startAngle, collectAngle, tolerance;
 
-    public AlgaeCollector(SparkMax algaeWheel, SparkMax algaeArm, CANcoder algaeArmEncoder, Angle startAngle, Angle collectAngle, Angle tolerance) {
+    public AlgaeCollector(SparkMax algaeWheel, SparkMax algaeArm, Angle startAngle, Angle collectAngle, Angle tolerance) {
         this.setSensors(new AlgaeCollectorInputsAutoLogged());
         this.algaeWheel = algaeWheel;
         this.algaeArm = algaeArm;
-        this.algaeArmEncoder = algaeArmEncoder;
+        this.algaeArmEncoder = algaeArm.getAbsoluteEncoder();
         this.startAngle = startAngle;
         this.collectAngle = collectAngle;
         this.tolerance = tolerance;
@@ -30,7 +30,8 @@ public class AlgaeCollector extends MOESubsystem<AlgaeCollectorInputsAutoLogged>
         sensors.wheelAppliedVolts = Volts.of(algaeWheel.getAppliedOutput() * algaeArm.getBusVoltage());
         sensors.wheelVelocity = RPM.of(algaeWheel.getEncoder().getVelocity());
         sensors.algaeArmAppliedVolts = Volts.of(algaeArm.getAppliedOutput() * algaeArm.getBusVoltage());
-        sensors.algaeArmAngle = algaeArmEncoder.getAbsolutePosition().getValue();
+        sensors.algaeArmAngle = Rotations.of(algaeArmEncoder.getPosition());
+//        sensors.algaeArmAngle = algaeArmEncoder.getAbsolutePosition().getValue();
         sensors.hasAlgae = algaeWheel.getReverseLimitSwitch().isPressed();
         sensors.inStartPosition = getArmAngle().isNear(startAngle, tolerance);
         sensors.inCollectPosition = getArmAngle().isNear(collectAngle, tolerance);

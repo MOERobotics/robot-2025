@@ -95,7 +95,7 @@ public class SubMOErine extends RobotContainer {
         this.setAlgaeCollector(new AlgaeCollector(
             new SparkMax(11, SparkLowLevel.MotorType.kBrushless),
             new SparkMax(10, SparkLowLevel.MotorType.kBrushless),
-            new CANcoder(36),
+//            new CANcoder(36),
             Degrees.of(90),
             Degrees.of(0),
             Degrees.of(1)
