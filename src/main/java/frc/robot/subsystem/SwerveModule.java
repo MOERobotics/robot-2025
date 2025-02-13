@@ -17,13 +17,14 @@ import edu.wpi.first.units.measure.Voltage;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
+import static edu.wpi.first.math.util.Units.inchesToMeters;
 import static edu.wpi.first.units.Units.*;
 
 public class SwerveModule {
     public SparkMax driveMotor;
     public SparkMax pivotMotor;
     public PIDController pivotController;
-    public PIDController velocityDriveController = new PIDController(2e-3,0,0);
+    public PIDController velocityDriveController = new PIDController(1e-3,0,0);
     public CANcoder compass;
     public Distance xPos;
     public Distance yPos;
@@ -128,7 +129,7 @@ public class SwerveModule {
 
     public SwerveModulePosition getModulePosition() {
         SwerveModulePosition position = new SwerveModulePosition(
-                Units.Inches.of(driveMotor.getEncoder().getPosition()).in(Units.Meters),
+                inchesToMeters(driveMotor.getEncoder().getPosition()*(4*Math.PI/6.75)),
                 new Rotation2d( getHeading())
         );
         return position;

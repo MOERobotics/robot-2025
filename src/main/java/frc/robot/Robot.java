@@ -9,10 +9,13 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -53,9 +56,20 @@ public class Robot extends LoggedRobot {
     SendableChooser<SwerveDriveControl.ModuleType> modChooser = new SendableChooser<>();
     SendableChooser<SwerveDriveControl.DriveOrPivot> driveTypeChooser = new SendableChooser<>();
     SendableChooser<Command> pathChooser = new SendableChooser<>();
+    Field2d field = new Field2d();
 
     @Override
     public void robotInit() {
+        SmartDashboard.putData(field);
+        PathPlannerLogging.setLogActivePathCallback(path -> {
+            field.getObject("traj").setPoses(path);
+        });
+        PathPlannerLogging.setLogCurrentPoseCallback(path -> {
+            field.getRobotObject().setPose(path);
+        });
+        PathPlannerLogging.setLogTargetPoseCallback(path -> {
+            field.getObject("target").setPose(path);
+        });
 
         if (isSimulation())
             DriverStation.silenceJoystickConnectionWarning(true);
@@ -115,6 +129,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
+        robot.getSwerveDrive().resetPose(new Pose2d());
         try {
             // Load the path you want to follow using its name in the GUI
 //            PathPlannerAutoBuilder.configure(robot.getSwerveDrive());
@@ -158,7 +173,7 @@ public class Robot extends LoggedRobot {
         robot.getSwerveDrive().setDefaultCommand(robot.getSwerveDrive().run(() -> {
             double driveX =  -driverJoystick.getRawAxis(1);
             double driveY = -driverJoystick.getRawAxis(0);
-            double driveTheta = driverJoystick.getRawAxis(2);
+            double driveTheta = -driverJoystick.getRawAxis(2);
             driveTheta = MathUtil.applyDeadband(driveTheta, 0.2, 1);
             driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
             driveY = MathUtil.applyDeadband(driveY, 0.1, 1);
