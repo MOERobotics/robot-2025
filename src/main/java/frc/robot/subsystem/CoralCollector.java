@@ -27,16 +27,6 @@ public class CoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged>
         getSensors().velocityLeft = RPM.zero();
     }
 
-    @Override
-    public boolean hasCoral() {
-        return leftMotor.getReverseLimitSwitch().isPressed();
-    }
-
-
-    @Override
-    public boolean inFrontReef() {
-        return false;
-    }
 
 
     @Override
