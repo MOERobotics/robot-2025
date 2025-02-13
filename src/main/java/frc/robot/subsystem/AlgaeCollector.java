@@ -48,7 +48,7 @@ public class AlgaeCollector extends MOESubsystem<AlgaeCollectorInputsAutoLogged>
         algaeWheel.set(wheelVelocity.in(RPM));
         if (wheelVelocity.gt(RPM.zero())) {
             setWheelState(WheelState.COLLECTING);
-        } else if (wheelVelocity.gt(RPM.zero())) {
+        } else if (wheelVelocity.lt()t(RPM.zero())) {
             setWheelState(WheelState.EJECTING);
         } else {
             setWheelState(WheelState.HOLDING);
