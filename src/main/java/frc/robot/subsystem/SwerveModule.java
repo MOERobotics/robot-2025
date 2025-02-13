@@ -15,6 +15,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Voltage;
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -22,6 +23,7 @@ public class SwerveModule {
     public SparkMax driveMotor;
     public SparkMax pivotMotor;
     public PIDController pivotController;
+    public PIDController velocityDriveController = new PIDController(2e-3,0,0);
     public CANcoder compass;
     public Distance xPos;
     public Distance yPos;
@@ -93,13 +95,16 @@ public class SwerveModule {
     public void drive(double speedMetersPerSec) {
         inputs.driveSpeedDesired = speedMetersPerSec;
         double motorPower = feedforwardDrive.calculate(speedMetersPerSec*39.37/1.413);
+        motorPower += velocityDriveController.calculate(inputs.driveVelocity,speedMetersPerSec*39.37/1.413);
         driveMotor.setVoltage(motorPower);
+        Logger.recordOutput("VelocityError", velocityDriveController.getError());
     }
 
     public void pivot(Angle targetHeading) {
         Angle currentHeading = getHeading();
         Angle error = currentHeading.minus(targetHeading);
-        double power = feedforwardPivot.calculate(-error.in(Degrees))+pivotController.calculate(inputs.error = error.in(Radians));
+        double power = feedforwardPivot.calculate(-error.in(Degrees));
+        power += pivotController.calculate(inputs.error = error.in(Radians));
         inputs.integral = pivotController.getAccumulatedError();
         pivotMotor.set(power);
     }
