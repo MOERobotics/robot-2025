@@ -9,7 +9,9 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,6 +51,7 @@ public class Robot extends LoggedRobot {
     SendableChooser<SwerveDriveControl.CommandType> chooser = new SendableChooser<>();
     SendableChooser<SwerveDriveControl.ModuleType> modChooser = new SendableChooser<>();
     SendableChooser<SwerveDriveControl.DriveOrPivot> driveTypeChooser = new SendableChooser<>();
+    SendableChooser<Command> pathChooser = new SendableChooser<>();
 
     @Override
     public void robotInit() {
@@ -76,6 +79,21 @@ public class Robot extends LoggedRobot {
         driveTypeChooser.setDefaultOption("Pivot", SwerveDriveControl.DriveOrPivot.setPivot);
         driveTypeChooser.addOption("Drive", SwerveDriveControl.DriveOrPivot.setDrive);
         SmartDashboard.putData("DriveTypeChooser",driveTypeChooser);
+
+        PathPlannerAutoBuilder.configure(robot.getSwerveDrive());
+        try {
+            PathPlannerPath path1 = PathPlannerPath.fromPathFile("Test-Forward 5 Ft");
+            PathPlannerPath path2 = PathPlannerPath.fromPathFile("Test-Forward-Left 5 Ft");
+            PathPlannerPath path3 = PathPlannerPath.fromPathFile("Test-Arc 5 Ft");
+            pathChooser.setDefaultOption("Test Path - Forward",AutoBuilder.followPath(path1));
+            pathChooser.addOption("Test Path - Forward-Left",AutoBuilder.followPath(path2));
+            pathChooser.addOption("Test Path - Arc",AutoBuilder.followPath(path3));
+            SmartDashboard.putData("Path Chooser",pathChooser);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
     }
 
 
@@ -97,9 +115,10 @@ public class Robot extends LoggedRobot {
     public void autonomousInit() {
         try {
             // Load the path you want to follow using its name in the GUI
-            PathPlannerAutoBuilder.configure(robot.getSwerveDrive());
-            PathPlannerPath path = PathPlannerPath.fromPathFile("testPath");
-            AutoBuilder.followPath(path).schedule();
+//            PathPlannerAutoBuilder.configure(robot.getSwerveDrive());
+//            PathPlannerPath path = PathPlannerPath.fromPathFile("testPath");
+//            AutoBuilder.followPath(path).schedule();
+            pathChooser.getSelected().schedule();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -174,6 +193,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationInit() {
+        DriverStationSim.setAllianceStationId(AllianceStationID.Blue1);
     }
 
     @Override

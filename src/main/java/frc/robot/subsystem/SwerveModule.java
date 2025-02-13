@@ -103,6 +103,13 @@ public class SwerveModule {
         inputs.integral = pivotController.getAccumulatedError();
         pivotMotor.set(power);
     }
+
+    public void setModuleState(SwerveModuleState state){
+        state.optimize(new Rotation2d(getHeading()));
+        drive(state.speedMetersPerSecond);
+        pivot(state.angle.getMeasure());
+    }
+
     public void pivotVolts(double volts){
         pivotMotor.setVoltage(volts);
     }
