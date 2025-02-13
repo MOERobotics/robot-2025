@@ -9,6 +9,7 @@ package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -76,6 +77,7 @@ public class Robot extends LoggedRobot {
         driveTypeChooser.setDefaultOption("Pivot", SwerveDriveControl.DriveOrPivot.setPivot);
         driveTypeChooser.addOption("Drive", SwerveDriveControl.DriveOrPivot.setDrive);
         SmartDashboard.putData("DriveTypeChooser",driveTypeChooser);
+        SmartDashboard.putData("Scheduler", scheduler);
     }
 
 
@@ -115,7 +117,8 @@ public class Robot extends LoggedRobot {
         var driveOneSecond = robot.getSwerveDrive().run(() ->
         {
             robot.getSwerveDrive().drive(1, 0, 0);
-        }).withTimeout(1);
+        }).withTimeout(1)
+                .withName("DriveOneSec");
         driverJoystick.button(4).whileTrue(Commands.defer(() -> {
 
             if (chooser.getSelected() == SwerveDriveControl.CommandType.QuasistaticForward) {
@@ -134,10 +137,16 @@ public class Robot extends LoggedRobot {
         }, Set.of(robot.getSwerveDrive())));
         driverJoystick.button(5).whileTrue(driveOneSecond);
         robot.getSwerveDrive().setDefaultCommand(robot.getSwerveDrive().run(() -> {
+            double driveX =  -driverJoystick.getRawAxis(1);
+            double driveY = -driverJoystick.getRawAxis(0);
+            double driveTheta = driverJoystick.getRawAxis(2);
+            driveTheta = MathUtil.applyDeadband(driveTheta, 0.2, 1);
+            driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
+            driveY = MathUtil.applyDeadband(driveY, 0.1, 1);
             robot.getSwerveDrive().drive(
-                    -driverJoystick.getRawAxis(1),
-                    -driverJoystick.getRawAxis(0),
-                    driverJoystick.getRawAxis(2) //TODO: REVERT
+                    driveX,
+                    driveY,
+                    driveTheta //TODO: REVERT
             );
         }));
 
@@ -156,9 +165,9 @@ public class Robot extends LoggedRobot {
             if (driverJoystick.getHID().getRawButton(2)) {
                 elevatorPowerVert = -0.5;
             }
-            if(driverJoystick.getHID().getRawButton(3)){
+        /*    if(driverJoystick.getHID().getRawButton(3)){
                 robot.getSwerveDrive().pivotAngle(Radians.of(Math.atan2(-driverJoystick.getRawAxis(0),-driverJoystick.getRawAxis(1))));
-            }
+            } */
             robot.getElevator().moveVertically(InchesPerSecond.of(elevatorPowerVert));
             robot.getElevator().moveHorizontally(DegreesPerSecond.of(driverJoystick.getRawAxis(3)));
 
