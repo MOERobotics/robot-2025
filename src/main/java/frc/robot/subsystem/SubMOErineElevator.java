@@ -45,6 +45,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         elevatorHeightMotor.set(speed.in(InchesPerSecond));
     }
 
+
     @Override
     public Angle getAngle() {
         return tiltEncoder.getAbsolutePosition().getValue();

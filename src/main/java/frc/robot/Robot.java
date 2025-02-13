@@ -17,11 +17,9 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.*;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
-import frc.robot.subsystem.RobotElevatorSim;
-import frc.robot.subsystem.SubMOErineElevator;
-import frc.robot.subsystem.SwerveDrive;
-import frc.robot.subsystem.SwerveModuleSim;
+import frc.robot.subsystem.*;
 import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -75,6 +73,12 @@ public class Robot extends LoggedRobot {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }*/
+        CommandScheduler.getInstance().cancelAll();
+        new ElevatorAutoCommand(robot.getElevator(),
+                3,
+                MetersPerSecond.of(0.5),
+                false).schedule();
+
     }
 
     @Override
@@ -87,11 +91,11 @@ public class Robot extends LoggedRobot {
         new ElevatorTeleopCommand(
             robot.getElevator(),
             functionJoystick
-        ).schedule();
+        );
         new AlgaeCollectorTeleopCommand(
             robot.getAlgaeCollector(),
             functionJoystick
-        );
+        ).schedule();
         new DriveCoralCollectorCommand(
             robot.getCoralCollector(),
             functionJoystick
@@ -100,7 +104,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
-
 
     }
 

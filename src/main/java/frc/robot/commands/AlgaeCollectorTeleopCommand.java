@@ -4,6 +4,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.AlgaeCollectorControl;
+import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -38,6 +39,8 @@ public class AlgaeCollectorTeleopCommand extends Command {
 
         algaeCollectorControl.setArmVelocity(algaeArmVelocity);
         algaeCollectorControl.setWheelVelocity(algaeWheelVelocity);
+        Logger.recordOutput("armvelocity", algaeArmVelocity);
+        Logger.recordOutput("wheelVelocity", algaeWheelVelocity);
     }
 
     @Override
