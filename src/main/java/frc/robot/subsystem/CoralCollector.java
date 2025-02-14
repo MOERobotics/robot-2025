@@ -7,6 +7,7 @@ import frc.robot.MOESubsystem;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.MOESubsystem;
+import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.RPM;
 
@@ -42,6 +43,8 @@ public class CoralCollector extends MOESubsystem<CoralCollectorInputsAutoLogged>
     public void setCoralVelocity(AngularVelocity leftPower, AngularVelocity rightPower) {
         leftMotor.set(leftPower.in(RPM));
         rightMotor.set(rightPower.in(RPM));
+        Logger.recordOutput("leftspeed", leftPower);
+        Logger.recordOutput("rightspeed", rightPower);
     }
 
     @Override

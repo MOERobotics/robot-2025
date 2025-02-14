@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.commands.*;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
@@ -28,7 +29,7 @@ import static edu.wpi.first.units.Units.*;
 public class Robot extends LoggedRobot {
 
     Joystick driverJoystick = new Joystick(0);
-    Joystick functionJoystick = new Joystick(1);
+    CommandJoystick functionJoystick = new CommandJoystick(1);
     CommandScheduler scheduler;
 
     RobotContainer robot = new SubMOErine();
@@ -94,22 +95,26 @@ public class Robot extends LoggedRobot {
         CommandScheduler.getInstance().cancelAll();
         new ElevatorTeleopCommand(
             robot.getElevator(),
-            functionJoystick
+            functionJoystick.getHID()
         );
         new AlgaeCollectorTeleopCommand(
             robot.getAlgaeCollector(),
-            functionJoystick
+            functionJoystick.getHID()
         ).schedule();
         new DriveCoralCollectorCommand(
             robot.getCoralCollector(),
-            functionJoystick
+            functionJoystick.getHID()
         );
-        new CoralHeadTeleopCommand(robot.getCoralCollector(), functionJoystick).schedule();
+        var coralCollector = robot.getCoralCollector();
+        coralCollector.setDefaultCommand(robot.getCoralCollector().run(() -> {
+            robot.getCoralCollector().setCoralVelocity(RPM.of(0), RPM.of(0));
+        }));
+        functionJoystick.button(1).toggleOnTrue(new CoralHeadAutoCommand(robot.getCoralCollector(), false, RPM.of(0.5)));
+        functionJoystick.button(2).toggleOnTrue(new CoralHeadAutoCommand(robot.getCoralCollector(), false, RPM.of(1)));
     }
 
     @Override
     public void teleopPeriodic() {
-
         robot.getSwerveDrive().drive(
             -driverJoystick.getRawAxis(1),
             -driverJoystick.getRawAxis(0),
@@ -117,18 +122,17 @@ public class Robot extends LoggedRobot {
         );
 
 
-        double elevatorVertPower = 0;
+        double coralHeadPower = 0;
 
         if (driverJoystick.getRawButton(1)) {
-            elevatorVertPower = 0.5;
+            coralHeadPower = 0.5;
         }
 
         if (driverJoystick.getRawButton(2)) {
-            elevatorVertPower = -0.5;
+            coralHeadPower = -0.5;
         }
 
 
-        robot.getElevator().moveVertically(InchesPerSecond.of(elevatorVertPower));
 
 
         double climberPowerMid = 0;
