@@ -4,71 +4,89 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.controller.PIDController;
 import frc.robot.subsystem.SubMOErineElevator;
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
+import frc.robot.utils.FeedforwardConstants;
+import frc.robot.utils.PIDConstants;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 
-public class SubMOErine extends RobotContainer{
-    public SubMOErine(){
+public class SubMOErine extends RobotContainer {
+    public SubMOErine() {
         double pivotkP = 0.01;
         double pivotkI = 0.3;
         double pivotkD = 0;
-        double pivotkIMax = 2;
-        PIDController pivotControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
-        pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        double pivotkIMax = 1;
+
+        double drivekP = 1e-3;
+        double drivekI = 0;
+        double drivekD = 0;
+
+        double drivekS = 0.19959;
+        double drivekV = 0.1233;
+        double drivekA = 0.019658;
+
+        PIDConstants pivotFeedback = new PIDConstants(pivotkP, pivotkI, pivotkD, pivotkIMax);
+        PIDConstants driveFeedback = new PIDConstants(drivekP, drivekI, drivekD);
+        FeedforwardConstants driveFeedForward = new FeedforwardConstants(drivekS, drivekV, drivekA);
+
         SwerveModule swerveModuleFL = new SwerveModule(
-                new SparkMax(1, SparkLowLevel.MotorType.kBrushless),
-                new SparkMax(20, SparkLowLevel.MotorType.kBrushless),
-                new CANcoder(31),
-                Inches.of(14.5),
-                Inches.of(14.5),
-                Degrees.of(45),
-                pivotControllerFL
+            new SparkMax(1, SparkLowLevel.MotorType.kBrushless),
+            new SparkMax(20, SparkLowLevel.MotorType.kBrushless),
+            true,
+            new CANcoder(31),
+            Inches.of(14.5),
+            Inches.of(14.5),
+            Degrees.of(45),
+            pivotFeedback,
+            driveFeedback,
+            driveFeedForward
         );
-        PIDController pivotControllerFR = new PIDController(pivotkP, pivotkI, pivotkD);
-        pivotControllerFR.setIntegratorRange(-pivotkIMax, pivotkIMax);
         SwerveModule swerveModuleFR = new SwerveModule(
-                new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
-                new SparkMax(2, SparkLowLevel.MotorType.kBrushless),
-                new CANcoder(32),
-                Inches.of(14.5),
-                Inches.of(-14.5),
-                Degrees.of(-45),
-                pivotControllerFR
+            new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
+            new SparkMax(2, SparkLowLevel.MotorType.kBrushless),
+            true,
+            new CANcoder(32),
+            Inches.of(14.5),
+            Inches.of(-14.5),
+            Degrees.of(-45),
+            pivotFeedback,
+            driveFeedback,
+            driveFeedForward
         );
-        PIDController pivotControllerBR = new PIDController(pivotkP, pivotkI, pivotkD);
-        pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
         SwerveModule swerveModuleBR = new SwerveModule(
-                new SparkMax(17, SparkLowLevel.MotorType.kBrushless),
-                new SparkMax(16, SparkLowLevel.MotorType.kBrushless),
-                new CANcoder(33),
-                Inches.of(-14.5),
-                Inches.of(-14.5),
-                Degrees.of(-135),
-                pivotControllerBR
+            new SparkMax(17, SparkLowLevel.MotorType.kBrushless),
+            new SparkMax(16, SparkLowLevel.MotorType.kBrushless),
+            true,
+            new CANcoder(33),
+            Inches.of(-14.5),
+            Inches.of(-14.5),
+            Degrees.of(-135),
+            pivotFeedback,
+            driveFeedback,
+            driveFeedForward
         );
-        PIDController pivotControllerBL= new PIDController(pivotkP, pivotkI, pivotkD);
-        pivotControllerBL.setIntegratorRange(-pivotkIMax, pivotkIMax);
         SwerveModule swerveModuleBL = new SwerveModule(
-                new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
-                new SparkMax(18, SparkLowLevel.MotorType.kBrushless),
-                new CANcoder(34),
-                Inches.of(-14.5),
-                Inches.of(-14.5),
-                Degrees.of(-135),
-                pivotControllerBL
+            new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
+            new SparkMax(18, SparkLowLevel.MotorType.kBrushless),
+            true,
+            new CANcoder(34),
+            Inches.of(-14.5),
+            Inches.of(-14.5),
+            Degrees.of(-135),
+            pivotFeedback,
+            driveFeedback,
+            driveFeedForward
         );
         Pigeon2 pigeon2 = new Pigeon2(0);
         SwerveDrive swerveDrive = new SwerveDrive(
-                swerveModuleFL,
-                swerveModuleFR,
-                swerveModuleBR,
-                swerveModuleBL,
-                pigeon2
+            swerveModuleFL,
+            swerveModuleFR,
+            swerveModuleBR,
+            swerveModuleBL,
+            pigeon2
         );
 
         SparkMax height = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
@@ -77,9 +95,9 @@ public class SubMOErine extends RobotContainer{
 
         this.setSwerveDrive(swerveDrive);
         this.setElevator(new SubMOErineElevator(
-                height,
-                pivot,
-                tilt
+            height,
+            pivot,
+            tilt
         ));
     }
 }

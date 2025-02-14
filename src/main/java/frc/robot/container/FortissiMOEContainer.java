@@ -4,89 +4,90 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.subsystem.*;
-
-import java.util.Set;
-import java.util.function.Supplier;
+import frc.robot.subsystem.FakeCoralCollector;
+import frc.robot.subsystem.FakeElevator;
+import frc.robot.subsystem.SwerveDrive;
+import frc.robot.subsystem.SwerveModule;
+import frc.robot.utils.FeedforwardConstants;
+import frc.robot.utils.PIDConstants;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 
 public class FortissiMOEContainer extends RobotContainer {
 
-    public FortissiMOEContainer (){
+    public FortissiMOEContainer() {
         double pivotkP = 0.3;
-        double pivotkI = 0.001*0;
+        double pivotkI = 0;
         double pivotkD = 0.003;
         double pivotkIMax = 1;
 
-        PIDController pivotControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
-        pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
-        PIDController pivotControllerFR = new PIDController(pivotkP, pivotkI, pivotkD);
-        pivotControllerFR.setIntegratorRange(-pivotkIMax, pivotkIMax);
-        PIDController pivotControllerBR = new PIDController(pivotkP, pivotkI, pivotkD);
-        pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
-        PIDController pivotControllerBL = new PIDController(pivotkP, pivotkI, pivotkD);
-        pivotControllerBL.setIntegratorRange(-pivotkIMax, pivotkIMax);
-        pivotControllerBR.enableContinuousInput(-Math.PI, Math.PI);
-        pivotControllerBL.enableContinuousInput(-Math.PI, Math.PI);
-        pivotControllerFR.enableContinuousInput(-Math.PI, Math.PI);
-        pivotControllerFL.enableContinuousInput(-Math.PI, Math.PI);
+        double drivekP = 1e-3;
+        double drivekI = 0;
+        double drivekD = 0;
 
+        double drivekS = 0.19959;
+        double drivekV = 0.1233;
+        double drivekA = 0.019658;
 
-
-
+        PIDConstants pivotFeedback = new PIDConstants(pivotkP, pivotkI, pivotkD, pivotkIMax);
+        PIDConstants driveFeedback = new PIDConstants(drivekP, drivekI, drivekD);
+        FeedforwardConstants driveFeedForward = new FeedforwardConstants(drivekS, drivekV, drivekA);
 
         // drive.setDefaultCommand(Commands.run(() -> drive.drive(operatorInterface.getTeleopAxisX().getAsDouble(), operatorInterface.getTeleopAxisY().getAsDouble()), drive).withName("Joystick Control"));
         this.setSwerveDrive(
-                new SwerveDrive(
-                        new SwerveModule(//FL
-                                new SparkMax(17, SparkLowLevel.MotorType.kBrushless),
-                                new SparkMax(16, SparkLowLevel.MotorType.kBrushless){{this.configure(new SparkMaxConfig().inverted(true), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);}},
-                                new CANcoder(34),
-                                Inches.of(14),
-                                Inches.of(14),
-                                Degrees.of(45),
-                                pivotControllerFL
-                        ),
-                        new SwerveModule(//FR
-                                new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
-                                new SparkMax(2, SparkLowLevel.MotorType.kBrushless){{this.configure(new SparkMaxConfig().inverted(true), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);}},
-                                new CANcoder(33),
-                                Inches.of(14),
-                                Inches.of(-14),
-                                Degrees.of(180-45),
-                                pivotControllerFR
-                        ),
-                        new SwerveModule(//BR
-                                new SparkMax( 1, SparkLowLevel.MotorType.kBrushless),
-                                new SparkMax(20, SparkLowLevel.MotorType.kBrushless){{this.configure(new SparkMaxConfig().inverted(true), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);}},
-                                new CANcoder(32),
-                                Inches.of(-14),
-                                Inches.of(-14),
-                                Degrees.of(-135),
-                                pivotControllerBR
-                        ),
-                        new SwerveModule(//BL
-                                new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
-                                new SparkMax(18, SparkLowLevel.MotorType.kBrushless){{this.configure(new SparkMaxConfig().inverted(true), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);}},
-                                new CANcoder(31),
-                                Inches.of(-14),
-                                Inches.of(14),
-                                Degrees.of(135),
-                                pivotControllerBL
-                        ),
-                        new Pigeon2(0)
+            new SwerveDrive(
+                new SwerveModule(//FL
+                    new SparkMax(17, SparkLowLevel.MotorType.kBrushless),
+                    new SparkMax(16, SparkLowLevel.MotorType.kBrushless),
+                    true,
+                    new CANcoder(34),
+                    Inches.of(14),
+                    Inches.of(14),
+                    Degrees.of(45),
+                    pivotFeedback,
+                    driveFeedback,
+                    driveFeedForward
+                ),
+                new SwerveModule(//FR
+                    new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
+                    new SparkMax(2, SparkLowLevel.MotorType.kBrushless),
+                    true,
+                    new CANcoder(33),
+                    Inches.of(14),
+                    Inches.of(-14),
+                    Degrees.of(180 - 45),
+                    pivotFeedback,
+                    driveFeedback,
+                    driveFeedForward
+                ),
+                new SwerveModule(//BR
+                    new SparkMax(1, SparkLowLevel.MotorType.kBrushless),
+                    new SparkMax(20, SparkLowLevel.MotorType.kBrushless),
+                    true,
+                    new CANcoder(32),
+                    Inches.of(-14),
+                    Inches.of(-14),
+                    Degrees.of(-135),
+                    pivotFeedback,
+                    driveFeedback,
+                    driveFeedForward
+                ),
+                new SwerveModule(//BL
+                    new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
+                    new SparkMax(18, SparkLowLevel.MotorType.kBrushless),
+                    true,
+                    new CANcoder(31),
+                    Inches.of(-14),
+                    Inches.of(14),
+                    Degrees.of(135),
+                    pivotFeedback,
+                    driveFeedback,
+                    driveFeedForward
+                ),
+                new Pigeon2(0)
 
-        ));
+            ));
         this.setElevator(new FakeElevator());
 
         this.setCoralCollector(new FakeCoralCollector());
