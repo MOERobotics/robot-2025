@@ -33,11 +33,12 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public void readSensors(ElevatorInputsAutoLogged sensors) {
-        sensors.angle = tiltEncoder.getAbsolutePosition().getValue();
+        sensors.angle = Degree.of(elevatorPivotMotor.getAbsoluteEncoder().getPosition());
         sensors.horizontalSpeed = RPM.of(elevatorPivotMotor.getEncoder().getVelocity());
         sensors.extensionSpeed = InchesPerSecond.of(elevatorHeightMotor.getEncoder().getVelocity());
         sensors.elevatorVoltage = Volts.of(extensionSensor.getVoltage());
         sensors.extension = getExtension();
+        sensors.canGoDown = canGoDown();
 
     }
 
@@ -49,6 +50,12 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     @Override
     public Distance getExtension() {
         return Inch.of(extensionSensor.getVoltage());
+    }
+
+
+
+    public boolean canGoDown() {
+        return  elevatorPivotMotor.getReverseLimitSwitch().isPressed();
     }
 
     @Override

@@ -20,11 +20,11 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
 
 
 
-    public final double maxEncoderValue = 1;
+    public final double maxEncoderValue = 72;
     public final double minEncoderValue = 0;
 
 
-    public double tolerance =5;
+    public double tolerance = 5;
 
 
 
@@ -35,10 +35,6 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
         this.setSensors(new ClimberInputsAutoLogged());
         this.climbMotor = climbMotor;
         this.climbEncoder = climbEncoder;
-        SparkMaxConfig climberConfig = new SparkMaxConfig();
-        climberConfig.inverted(false).idleMode(SparkBaseConfig.IdleMode.kBrake);
-        climbMotor.configure(climberConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-
 
     }
 
@@ -54,12 +50,12 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
     }
     @Override
     public boolean canGoUp() {
-        return !(getPosition().in(Degree) + tolerance> maxEncoderValue);
+        return (getPosition().in(Degree) > minEncoderValue);
     }
 
     @Override
     public boolean canGoDown() {
-        return !(getPosition().in(Degree) + tolerance < minEncoderValue);
+        return (getPosition().in(Degree) < maxEncoderValue);
     }
 
     @Override
@@ -82,7 +78,7 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
             } else if (power.in(RPM) < 0 && canGoDown()) {
                 climbMotor.set(power.in(RPM));
             } else{
-                climbMotor.set(0);
+               climbMotor.set(0);
             }
 
         }

@@ -13,6 +13,8 @@ public interface ElevatorControl extends Subsystem {
         public LinearVelocity extensionSpeed;
 
         public Voltage elevatorVoltage;
+
+        public boolean canGoDown;
     }
 
     public ElevatorInputsAutoLogged getSensors();
@@ -23,6 +25,9 @@ public interface ElevatorControl extends Subsystem {
 
     default Distance getExtension() {
         return this.getSensors().extension;
+    }
+    default boolean canGoDown() {
+        return this.getSensors().canGoDown;
     }
 
 

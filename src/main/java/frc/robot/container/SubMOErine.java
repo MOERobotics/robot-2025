@@ -2,8 +2,10 @@ package frc.robot.container;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
 import frc.robot.subsystem.*;
@@ -82,8 +84,12 @@ public class SubMOErine extends RobotContainer{
         SparkMax pivot = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
         CANcoder tilt = new CANcoder(35);
 
+
+
         AnalogInput extensionSensor = new AnalogInput(1);
 
+        SparkMax algaeWheel = new SparkMax(11, SparkLowLevel.MotorType.kBrushless);
+        SparkMax algaeArm = new SparkMax(10, SparkLowLevel.MotorType.kBrushless);
 
         this.setSwerveDrive(swerveDrive);
         this.setElevator(new SubMOErineElevator(
@@ -94,15 +100,33 @@ public class SubMOErine extends RobotContainer{
         ));
 
         this.setCoralCollector(new CoralHead(new SparkMax(13, SparkLowLevel.MotorType.kBrushless), new SparkMax(12,  SparkLowLevel.MotorType.kBrushless)));
-        this.setAlgaeCollector(new AlgaeCollectorControlFake());
-      /*
-        this.setClimber(new SubMOErineClimber(
-                new SparkMax(0, SparkLowLevel.MotorType.kBrushless),
-                new CANcoder(0)
+        this.setAlgaeCollector(new AlgaeCollector(algaeWheel,algaeArm, Degrees.of(0), Degrees.of(0), Degrees.of(0)));
+        SparkMax rear = new SparkMax(8, SparkLowLevel.MotorType.kBrushless);
+        SparkMax mid = new SparkMax(7, SparkLowLevel.MotorType.kBrushless);
+
+        SparkMaxConfig rearConfig = new SparkMaxConfig();
+        rearConfig.inverted(false);
+        rear.configure(rearConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+
+        SparkMaxConfig midConfig = new SparkMaxConfig();
+        midConfig.inverted(true);
+        mid.configure(midConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+
+        this.setClimberRear(new SubMOErineClimber(
+             rear,
+                new CANcoder(38)
+        ));
+
+
+        this.setClimberMid(new SubMOErineClimber(
+                mid,
+                new CANcoder(39)
                 ));
 
 
-       */
+
     }
 }
 

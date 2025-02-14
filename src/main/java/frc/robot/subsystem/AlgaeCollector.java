@@ -28,8 +28,8 @@ public class AlgaeCollector extends MOESubsystem<AlgaeCollectorInputsAutoLogged>
         sensors.wheelAppliedVolts = Volts.of(algaeWheel.getAppliedOutput() * algaeArm.getBusVoltage());
         sensors.wheelVelocity = RPM.of(algaeWheel.getEncoder().getVelocity());
         sensors.algaeArmAppliedVolts = Volts.of(algaeArm.getAppliedOutput() * algaeArm.getBusVoltage());
-        sensors.algaeArmAngle = Degrees.of(algaeArm.getAbsoluteEncoder().getPosition());
-        sensors.hasAlgae = algaeWheel.getReverseLimitSwitch().isPressed();
+        sensors.algaeArmAngle = Rotations.of(algaeArm.getAbsoluteEncoder().getPosition());
+        sensors.hasAlgae = algaeWheel.getForwardLimitSwitch().isPressed();
         sensors.inStartPosition = getArmAngle().isNear(startAngle, tolerance);
         sensors.inCollectPosition = getArmAngle().isNear(collectAngle, tolerance);
         sensors.wheelState = wheelState;
@@ -52,6 +52,7 @@ public class AlgaeCollector extends MOESubsystem<AlgaeCollectorInputsAutoLogged>
             setWheelState(WheelState.HOLDING);
         }
     }
+
 
     @Override
     public void setWheelState(WheelState wheelState) {

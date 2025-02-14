@@ -91,16 +91,33 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopPeriodic() {
 
+
+        double joyX =  -driverJoystick.getRawAxis(1);
+        if(Math.abs(joyX) < 0.05 ) joyX=0;
+
+
+        double joyY = -driverJoystick.getRawAxis(0);
+        if(Math.abs(joyY) < 0.05 ) joyY=0;
+
+        double joyZ = driverJoystick.getRawAxis(2);
+        if(Math.abs(joyZ) < 0.05 ) joyZ=0;
+
         robot.getSwerveDrive().drive(
-                -driverJoystick.getRawAxis(1),
-                -driverJoystick.getRawAxis(0),
-                driverJoystick.getRawAxis(2)
+                joyX,
+               joyY,
+                joyZ
         );
 
-        CommandScheduler.getInstance().schedule(new CoralHeadTeleopCollectCommand(robot.getCoralCollector(), functionJoystick));
+        //CommandScheduler.getInstance().schedule(new CoralHeadTeleopCollectCommand(robot.getCoralCollector(), functionJoystick));
 
 
-        double elevatorVertPower=0;
+
+
+
+
+
+
+  double elevatorVertPower=0;
 
         if(driverJoystick.getRawButton(1)){
             elevatorVertPower=0.5;
@@ -114,41 +131,6 @@ public class Robot extends LoggedRobot {
 
         robot.getElevator().moveVertically(InchesPerSecond.of(elevatorVertPower));
 
-
-        /*
-
- double climberPower=0;
-
-        if(driverJoystick.getRawButton(1)){
-            climberPower=0.5;
-        }
-
-
-
-        if(driverJoystick.getRawButton(2)){
-            climberPower=-0.5;
-        }
-
-        robot.getClimber().setClimberVelocity(RPM.of(climberPower));
-
-         double climberPower=0;
-
-        if(driverJoystick.getRawButton(1)){
-            climberPower=0.5;
-        }
-
-
-
-        if(driverJoystick.getRawButton(2)){
-            climberPower=-0.5;
-        }
-
-        robot.getClimber().setClimberVelocity(RPM.of(climberPower));
-
-
-
-         */
-
         double elevatorHorizontalPower=0;
 
         if(driverJoystick.getRawButton(3)){
@@ -161,34 +143,15 @@ public class Robot extends LoggedRobot {
 
         robot.getElevator().moveHorizontally(DegreesPerSecond.of(elevatorHorizontalPower));
 
-
-        double coralCollectorPowerRight=0;
-        double coralCollectorPowerLeft=0;
+  double algaeCollectorPower=0;
 
 
         if(driverJoystick.getRawButton(5)){
-            coralCollectorPowerRight=0.5;
-            coralCollectorPowerLeft=0.5;
-
+            algaeCollectorPower=0.05;
         }
 
         if(driverJoystick.getRawButton(6)){
-            coralCollectorPowerRight=-0.5;
-            coralCollectorPowerLeft=-0.5;
-        }
-
-        robot.getCoralCollector().setCoralVelocity(RPM.of(coralCollectorPowerLeft), RPM.of(coralCollectorPowerRight));
-
-
-        double algaeCollectorPower=0;
-
-
-        if(driverJoystick.getRawButton(7)){
-            algaeCollectorPower=0.5;
-        }
-
-        if(driverJoystick.getRawButton(8)){
-            algaeCollectorPower=-0.5;
+            algaeCollectorPower=-0.05;
         }
 
         robot.getAlgaeCollector().setArmVelocity(RPM.of(algaeCollectorPower));
@@ -197,15 +160,76 @@ public class Robot extends LoggedRobot {
         double algaeWheelPower=0;
 
 
-        if(driverJoystick.getRawButton(9)){
-            algaeWheelPower=0.5;
+        if(driverJoystick.getRawButton(7)){
+            algaeWheelPower=0.25;
         }
 
-        if(driverJoystick.getRawButton(10)){
-            algaeWheelPower=-0.5;
+        if(driverJoystick.getRawButton(8)){
+            algaeWheelPower=-0.25;
         }
 
         robot.getAlgaeCollector().setWheelVelocity(RPM.of(algaeWheelPower));
+
+
+
+
+
+
+
+        double coralCollectorPowerRight=0;
+        double coralCollectorPowerLeft=0;
+
+
+        if(functionJoystick.getRawButton(1)){
+            coralCollectorPowerRight=0.5;
+            coralCollectorPowerLeft=0.5;
+
+        }
+
+        if(functionJoystick.getRawButton(4)){
+            coralCollectorPowerRight=-0.5;
+            coralCollectorPowerLeft=-0.5;
+        }
+
+
+
+        if(functionJoystick.getRawButton(3)){
+            coralCollectorPowerLeft=0.2;
+            coralCollectorPowerRight=1;
+        }
+
+        if(functionJoystick.getRawButton(2)){
+            coralCollectorPowerLeft=1;
+            coralCollectorPowerRight=1;
+        }
+
+        robot.getCoralCollector().setCoralVelocity(RPM.of(coralCollectorPowerLeft), RPM.of(coralCollectorPowerRight));
+
+
+
+
+
+        double climberPowRear=0;
+        double climberPowMid=0;
+
+
+        if(driverJoystick.getRawButton(9)){
+            climberPowRear=1;
+            climberPowMid=1;
+
+        }
+
+        if(driverJoystick.getRawButton(10)){
+            climberPowRear=-1;
+            climberPowMid=-1;
+
+        }
+
+        robot.getClimberMid().setClimberVelocity(RPM.of(climberPowMid));
+
+        robot.getClimberRear().setClimberVelocity(RPM.of(climberPowRear));
+
+
 
     }
 

@@ -1,6 +1,9 @@
 package frc.robot.subsystem;
 
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.MOESubsystem;
 
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -22,6 +25,10 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         getSensors().inFrontReef = false;
         getSensors().velocityRight = RPM.zero();
         getSensors().velocityLeft = RPM.zero();
+        SparkMaxConfig leftConfig = new SparkMaxConfig();
+        leftConfig.inverted(true);
+        leftMotor.configure(leftConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        //leftMotor.setInverted(true);
     }
 
     @Override

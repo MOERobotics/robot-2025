@@ -1,103 +1,53 @@
 package frc.robot.commands;
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
 
-
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.subsystem.CoralHeadControl;
+import edu.wpi.first.wpilibj.Joystick;
 
-import static edu.wpi.first.units.Units.*;
-
-/**
- * An example command that uses an example subsystem.
- */
 public class CoralHeadTeleopCollectCommand extends Command {
+    private final CoralHeadControl coralHead;
+    private final Joystick joystick;
+    private boolean seenCoral = false;
 
-    CoralHeadControl coralHeadControl;
+    private AngularVelocity SPEED = Units.RPM.of(500);
 
-
-    Joystick joystick;
-
-    AngularVelocity leftVelocity;
-    AngularVelocity rightVelocity;
-
-
-    int time;
-    boolean hasCollected;
-
-
-
-    public CoralHeadTeleopCollectCommand(CoralHeadControl coralHeadControl, Joystick joystick) {
-        this.coralHeadControl = coralHeadControl;
+    public CoralHeadTeleopCollectCommand(CoralHeadControl coralHead, Joystick joystick) {
+        this.coralHead = coralHead;
         this.joystick = joystick;
-
-        addRequirements(coralHeadControl);
-
-
+        addRequirements(coralHead);
     }
 
-    // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        leftVelocity = RPM.zero();
-        rightVelocity = RPM.zero();
-        time =0;
-        hasCollected = false;
-
+        seenCoral = false;
     }
 
-
-    //TODO update magic numbers for velocities
     @Override
     public void execute() {
-      int currTime;
+        if (joystick.getRawButton(2)) {
+            coralHead.setCoralVelocity(SPEED, SPEED);
+            return;
+        }
 
-
-
-        if (!hasCollected) {
-
-            if(joystick.getRawButton(1)){
-                leftVelocity = RPM.of(1);
-                rightVelocity = RPM.of(1);
-            } else{
-                leftVelocity = RPM.of(0);
-                rightVelocity = RPM.of(0);
-            }
-
-            if(coralHeadControl.hasCoral()) {
-                hasCollected = true;
-                leftVelocity = RPM.of(0);
-                rightVelocity = RPM.of(0);
-            }
-
-
-
-
-
-        } else {
-            time++;
+        if (coralHead.hasCoral()) {
+            seenCoral = true;
         }
 
 
-
-        coralHeadControl.setCoralVelocity(leftVelocity, rightVelocity);
-
-
-
+        if (seenCoral && !coralHead.hasCoral()) {
+            coralHead.setCoralVelocity(Units.RPM.zero(), Units.RPM.zero());
+        }
     }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        coralHeadControl.setCoralVelocity(RPM.zero(), RPM.zero());
-    }
-
-    // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return hasCollected && time>=3;
+        return !joystick.getRawButton(2) || (seenCoral && !coralHead.hasCoral());
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        coralHead.setCoralVelocity(Units.RPM.zero(), Units.RPM.zero());
     }
 }
