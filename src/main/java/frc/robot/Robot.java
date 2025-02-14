@@ -147,11 +147,11 @@ public class Robot extends LoggedRobot {
 
 
         if(driverJoystick.getRawButton(5)){
-            algaeCollectorPower=0.05;
+            algaeCollectorPower=0.08;
         }
 
         if(driverJoystick.getRawButton(6)){
-            algaeCollectorPower=-0.05;
+            algaeCollectorPower=-0.08;
         }
 
         robot.getAlgaeCollector().setArmVelocity(RPM.of(algaeCollectorPower));
@@ -194,7 +194,7 @@ public class Robot extends LoggedRobot {
 
 
         if(functionJoystick.getRawButton(3)){
-            coralCollectorPowerLeft=0.2;
+            coralCollectorPowerLeft=0.3;
             coralCollectorPowerRight=1;
         }
 

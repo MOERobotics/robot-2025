@@ -12,7 +12,8 @@ public interface ElevatorControl extends Subsystem {
         public AngularVelocity horizontalSpeed;
         public LinearVelocity extensionSpeed;
 
-        public Voltage elevatorVoltage;
+        public double elevatorVoltage;
+        public String elevatorVoltageFromADC;
 
         public boolean canGoDown;
     }
