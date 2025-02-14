@@ -117,15 +117,17 @@ public class SubMOErine extends RobotContainer {
             Degrees.of(1)
         ));
 
-        this.setClimberMid(new SubMOErineClimber(
+        SubMOErineClimber climberMid = new SubMOErineClimber(
             new SparkMax(7, SparkLowLevel.MotorType.kBrushless),
-            new CANcoder(37)
-        ));
+            new CANcoder(37));
+        climberMid.setName("ClimberMid");
+        this.setClimberMid(climberMid);
 
-        this.setClimberRear(new SubMOErineClimber(
+        SubMOErineClimber climberRear = new SubMOErineClimber(
             new SparkMax(8, SparkLowLevel.MotorType.kBrushless),
-            new CANcoder(38)
-        ));
+            new CANcoder(38));
+        climberRear.setName("ClimberRear");
+        this.setClimberRear(climberRear);
 
     }
 }
