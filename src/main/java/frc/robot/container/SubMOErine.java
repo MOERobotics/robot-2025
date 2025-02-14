@@ -4,9 +4,8 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import frc.robot.subsystem.SubMOErineElevator;
-import frc.robot.subsystem.SwerveDrive;
-import frc.robot.subsystem.SwerveModule;
+import edu.wpi.first.wpilibj.AnalogInput;
+import frc.robot.subsystem.*;
 import frc.robot.utils.FeedforwardConstants;
 import frc.robot.utils.PIDConstants;
 
@@ -81,6 +80,7 @@ public class SubMOErine extends RobotContainer {
             driveFeedForward
         );
         Pigeon2 pigeon2 = new Pigeon2(0);
+
         SwerveDrive swerveDrive = new SwerveDrive(
             swerveModuleFL,
             swerveModuleFR,
@@ -93,12 +93,40 @@ public class SubMOErine extends RobotContainer {
         SparkMax pivot = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
         CANcoder tilt = new CANcoder(35);
 
+        AnalogInput extensionSensor = new AnalogInput(1);
+
+
         this.setSwerveDrive(swerveDrive);
         this.setElevator(new SubMOErineElevator(
             height,
             pivot,
-            tilt
+            tilt,
+            extensionSensor
         ));
+
+        this.setCoralCollector(new CoralCollector(
+                new SparkMax(13, SparkLowLevel.MotorType.kBrushless),
+                new SparkMax(12, SparkLowLevel.MotorType.kBrushless)
+        ));
+        this.setAlgaeCollector(new AlgaeCollector(
+            new SparkMax(11, SparkLowLevel.MotorType.kBrushless),
+            new SparkMax(10, SparkLowLevel.MotorType.kBrushless),
+            new CANcoder(36),
+            Degrees.of(90),
+            Degrees.of(0),
+            Degrees.of(1)
+        ));
+
+        this.setClimberMid(new SubMOErineClimber(
+            new SparkMax(7, SparkLowLevel.MotorType.kBrushless),
+            new CANcoder(37)
+        ));
+
+        this.setClimberRear(new SubMOErineClimber(
+            new SparkMax(8, SparkLowLevel.MotorType.kBrushless),
+            new CANcoder(38)
+        ));
+
     }
 }
 
