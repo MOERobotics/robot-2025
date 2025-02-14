@@ -10,11 +10,9 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
-import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -22,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.CoralHeadTeleopCommand;
 import frc.robot.commands.SwerveModuleCommand;
@@ -281,7 +278,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
-        robot.getSwerveDrive().setDefaultCommand(new SwerveModuleCommand(robot.getSwerveDrive(), driverJoystick));
+        robot.getSwerveDrive().setDefaultCommand(new SwerveModuleCommand(robot.getSwerveDrive(), driverJoystick.getHID()));
 
     }
 
@@ -304,10 +301,10 @@ public class Robot extends LoggedRobot {
         CoralCollector coralCollector = (CoralCollector) robot.getCoralCollector();
         SubMOErineClimber climberMid = (SubMOErineClimber) robot.getClimberMid();
         SubMOErineClimber climberRear = (SubMOErineClimber) robot.getClimberRear();
-        swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.heading, swerveDrive.swerveModuleFL.driveMotor, swerveDrive.swerveModuleFL.pivotMotor, swerveDrive.swerveModuleFL.compass);
-        swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.heading, swerveDrive.swerveModuleFR.driveMotor, swerveDrive.swerveModuleFR.pivotMotor, swerveDrive.swerveModuleFR.compass);
-        swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.heading, swerveDrive.swerveModuleBR.driveMotor, swerveDrive.swerveModuleBR.pivotMotor, swerveDrive.swerveModuleBR.compass);
-        swerveModuleSimBL = new SwerveModuleSim(swerveDrive.swerveModuleBL.heading, swerveDrive.swerveModuleBL.driveMotor, swerveDrive.swerveModuleBL.pivotMotor, swerveDrive.swerveModuleBL.compass);
+        swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.offset, swerveDrive.swerveModuleFL.driveMotor, swerveDrive.swerveModuleFL.pivotMotor, swerveDrive.swerveModuleFL.pivotEncoder);
+        swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.offset, swerveDrive.swerveModuleFR.driveMotor, swerveDrive.swerveModuleFR.pivotMotor, swerveDrive.swerveModuleFR.pivotEncoder);
+        swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.offset, swerveDrive.swerveModuleBR.driveMotor, swerveDrive.swerveModuleBR.pivotMotor, swerveDrive.swerveModuleBR.pivotEncoder);
+        swerveModuleSimBL = new SwerveModuleSim(swerveDrive.swerveModuleBL.offset, swerveDrive.swerveModuleBL.driveMotor, swerveDrive.swerveModuleBL.pivotMotor, swerveDrive.swerveModuleBL.pivotEncoder);
         elevatorSim = new RobotElevatorSim(elevator);
         algaeCollectorSim = new AlgaeCollectorSim(algaeCollector);
         coralCollectorSim = new CoralCollectorSim(coralCollector);

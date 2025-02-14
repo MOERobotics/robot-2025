@@ -4,8 +4,6 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.units.measure.Angle;
@@ -138,10 +136,10 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         getSensors().moduleStates = new SwerveModuleState[4];
         getSensors().modulePositions = new SwerveModulePosition[4];
 
-        getSensors().swerveModuleFL = swerveModuleFL.getSensors();
-        getSensors().swerveModuleFR = swerveModuleFR.getSensors();
-        getSensors().swerveModuleBR = swerveModuleBR.getSensors();
-        getSensors().swerveModuleBL = swerveModuleBL.getSensors();
+        getSensors().swerveModuleFL = swerveModuleFL.readSensors();
+        getSensors().swerveModuleFR = swerveModuleFR.readSensors();
+        getSensors().swerveModuleBR = swerveModuleBR.readSensors();
+        getSensors().swerveModuleBL = swerveModuleBL.readSensors();
     }
     // public Pose2d visionMeasurement(){
     // Pose2d robotVisionPosition = swerveDrivePoseEstimator.addVisionMeasurement(null);

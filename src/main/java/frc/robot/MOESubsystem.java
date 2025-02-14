@@ -18,7 +18,7 @@ public abstract class MOESubsystem<SensorType extends LoggableInputs> extends Su
     @Override
     public void periodic() {
         this.readSensors(this.sensors);
-        Logger.processInputs(sensors.getClass().getName(), sensors);
+        Logger.processInputs(getName()/*sensors.getClass().getSimpleName()*/, sensors);
      //   this.visionMeasurement();
        // Logger.processInputs("Vision Pose",visionMeasurement());
     }
