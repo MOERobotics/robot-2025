@@ -11,7 +11,7 @@ import static edu.wpi.first.units.Units.*;
 public class AlgaeCollector extends MOESubsystem<AlgaeCollectorInputsAutoLogged> implements AlgaeCollectorControl {
     ;
     SparkMax algaeWheel, algaeArm;
-    CANcoder algaeArmEncoder;
+
     WheelState wheelState;
     Angle startAngle, collectAngle, tolerance;
 
@@ -19,7 +19,6 @@ public class AlgaeCollector extends MOESubsystem<AlgaeCollectorInputsAutoLogged>
         this.setSensors(new AlgaeCollectorInputsAutoLogged());
         this.algaeWheel = algaeWheel;
         this.algaeArm = algaeArm;
-        this.algaeArmEncoder = algaeArmEncoder;
         this.startAngle = startAngle;
         this.collectAngle = collectAngle;
         this.tolerance = tolerance;
@@ -30,7 +29,7 @@ public class AlgaeCollector extends MOESubsystem<AlgaeCollectorInputsAutoLogged>
         sensors.wheelAppliedVolts = Volts.of(algaeWheel.getAppliedOutput() * algaeArm.getBusVoltage());
         sensors.wheelVelocity = RPM.of(algaeWheel.getEncoder().getVelocity());
         sensors.algaeArmAppliedVolts = Volts.of(algaeArm.getAppliedOutput() * algaeArm.getBusVoltage());
-        sensors.algaeArmAngle = algaeArmEncoder.getAbsolutePosition().getValue();
+        sensors.algaeArmAngle = Rotations.of(algaeArm.getAbsoluteEncoder().getPosition());
         sensors.hasAlgae = algaeWheel.getReverseLimitSwitch().isPressed();
         sensors.inStartPosition = getArmAngle().isNear(startAngle, tolerance);
         sensors.inCollectPosition = getArmAngle().isNear(collectAngle, tolerance);
