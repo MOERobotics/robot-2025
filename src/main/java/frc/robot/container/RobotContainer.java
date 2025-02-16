@@ -4,14 +4,21 @@
 
 package frc.robot.container;
 
-import frc.robot.subsystem.DriveSubsystem;
+import frc.robot.subsystem.*;
 import lombok.Data;
 
 
 public abstract @Data class RobotContainer {
-	private DriveSubsystem drive;
+	private SwerveDriveControl swerveDrive;
+	private ElevatorControl elevator;
+	private AlgaeCollectorControl algaeCollector;
+    private CoralHeadControl coralCollector;
+    private SubMOErineClimber climberRear;
+    private SubMOErineClimber climberMid;
 
-	public RobotContainer() {
+
+
+    public RobotContainer() {
 		System.out.println("Constructed RobotContainer type: " + getClass());
 	}
 }
