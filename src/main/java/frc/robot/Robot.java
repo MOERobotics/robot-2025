@@ -38,6 +38,7 @@ public class Robot extends LoggedRobot {
         scheduler = CommandScheduler.getInstance();
 //        robot.getDrive().setDefaultCommand(Commands.none());
         SmartDashboard.putData("limelight", new LimeLights());
+        SmartDashboard.putData("limelightcommand", new standardDeviation());
     }
 
     @Override
