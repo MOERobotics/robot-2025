@@ -36,6 +36,7 @@ public class SwerveModule implements SwerveModuleControl{
     public SwerveModule(
         SparkMax driveMotor,
         SparkMax pivotMotor,
+        boolean driveInvert,
         boolean pivotInvert,
         CANcoder pivotEncoder,
         Distance xPos,
@@ -54,7 +55,7 @@ public class SwerveModule implements SwerveModuleControl{
         this.driveFeedforward = driveFeedforward.makeSimpleFeedforward();
 
         SparkMaxConfig driveConfig = new SparkMaxConfig();
-        driveConfig.smartCurrentLimit(40).idleMode(SparkBaseConfig.IdleMode.kBrake);
+        driveConfig.inverted(driveInvert).smartCurrentLimit(40).idleMode(SparkBaseConfig.IdleMode.kBrake);
         SparkMaxConfig pivotConfig = new SparkMaxConfig();
         pivotConfig.inverted(pivotInvert).smartCurrentLimit(40).idleMode(SparkBaseConfig.IdleMode.kBrake);
 

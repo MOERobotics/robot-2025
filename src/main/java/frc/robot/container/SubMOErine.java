@@ -14,9 +14,9 @@ import static edu.wpi.first.units.Units.Inches;
 
 public class SubMOErine extends RobotContainer {
     public SubMOErine() {
-        double pivotkP = 0.01;
-        double pivotkI = 0.3;
-        double pivotkD = 0;
+        double pivotkP = 0.3;
+        double pivotkI = 0;
+        double pivotkD = 0.003;
         double pivotkIMax = 1;
 
         double drivekP = 1e-3;
@@ -35,6 +35,7 @@ public class SubMOErine extends RobotContainer {
             new SparkMax(1, SparkLowLevel.MotorType.kBrushless),
             new SparkMax(20, SparkLowLevel.MotorType.kBrushless),
             true,
+            true,
             new CANcoder(31),
             Inches.of(14.5),
             Inches.of(14.5),
@@ -46,6 +47,7 @@ public class SubMOErine extends RobotContainer {
         SwerveModule swerveModuleFR = new SwerveModule(
             new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
             new SparkMax(2, SparkLowLevel.MotorType.kBrushless),
+            true,
             true,
             new CANcoder(32),
             Inches.of(14.5),
@@ -59,6 +61,7 @@ public class SubMOErine extends RobotContainer {
             new SparkMax(17, SparkLowLevel.MotorType.kBrushless),
             new SparkMax(16, SparkLowLevel.MotorType.kBrushless),
             true,
+            true,
             new CANcoder(33),
             Inches.of(-14.5),
             Inches.of(-14.5),
@@ -71,10 +74,11 @@ public class SubMOErine extends RobotContainer {
             new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
             new SparkMax(18, SparkLowLevel.MotorType.kBrushless),
             true,
+            true,
             new CANcoder(34),
             Inches.of(-14.5),
-            Inches.of(-14.5),
-            Degrees.of(-135),
+            Inches.of(14.5),
+            Degrees.of(135),
             pivotFeedback,
             driveFeedback,
             driveFeedForward

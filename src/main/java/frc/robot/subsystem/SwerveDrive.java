@@ -215,6 +215,11 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
       */
 
     @Override
+    public void drive(double xSpeed, double ySpeed, double rotation) {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed,ySpeed,rotation,pigeon.getRotation2d()));
+    }
+
+    @Override
     public void drive(ChassisSpeeds speeds) {
         Logger.recordOutput("ChassisSpeeds", speeds);
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);

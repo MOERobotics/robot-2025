@@ -8,6 +8,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.MathUtil;
@@ -21,8 +22,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.container.Autos;
 import frc.robot.commands.CoralHeadTeleopCommand;
 import frc.robot.commands.SwerveModuleCommand;
+import frc.robot.container.FortissiMOEContainer;
 import frc.robot.container.RobotContainer;
 import frc.robot.container.SubMOErine;
 import frc.robot.subsystem.*;
@@ -40,8 +43,9 @@ public class Robot extends LoggedRobot {
     Joystick functionJoystick = new Joystick(1);
     CommandScheduler scheduler;
 
-    RobotContainer robot = new SubMOErine();
 
+    RobotContainer robot = new SubMOErine();
+    Autos autos;
     Command autoCommand = Commands.none();
 //    TimeOfFlight tof_sensor_center = new TimeOfFlight(42);
 
@@ -96,8 +100,8 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putData("DriveTypeChooser",driveTypeChooser);
         SmartDashboard.putData("Scheduler", scheduler);
 
-        PathPlannerAutoBuilder.configure(robot.getSwerveDrive());
-        try {
+        autos = new Autos(robot);
+        /*try {
             PathPlannerPath path1 = PathPlannerPath.fromPathFile("Test-Forward 5 Ft");
             PathPlannerPath path2 = PathPlannerPath.fromPathFile("Test-Forward-Left 5 Ft");
             PathPlannerPath path3 = PathPlannerPath.fromPathFile("Test-Arc 5 Ft");
@@ -108,7 +112,7 @@ public class Robot extends LoggedRobot {
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException(e);
-        }
+        }*/
 
     }
 
@@ -129,16 +133,12 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
-        robot.getSwerveDrive().resetPose(new Pose2d());
-        try {
-            // Load the path you want to follow using its name in the GUI
-//            PathPlannerAutoBuilder.configure(robot.getSwerveDrive());
-//            PathPlannerPath path = PathPlannerPath.fromPathFile("testPath");
-//            AutoBuilder.followPath(path).schedule();
-            pathChooser.getSelected().schedule();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        var swerveDrive = robot.getSwerveDrive();
+        Command stopCommand = swerveDrive.run(()-> { swerveDrive.drive(0,0,0);});
+        stopCommand.setName("SwerveStop");
+        swerveDrive.setDefaultCommand(stopCommand);
+        autoCommand = autos.getSelectedAuto();
+        autoCommand.schedule();
     }
 
     @Override
@@ -147,7 +147,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
-        CommandScheduler.getInstance().cancelAll();
+        autoCommand.cancel();
         var driveOneSecond = robot.getSwerveDrive().run(() ->
         {
             robot.getSwerveDrive().drive(1, 0, 0);
@@ -178,9 +178,9 @@ public class Robot extends LoggedRobot {
             driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
             driveY = MathUtil.applyDeadband(driveY, 0.1, 1);
             robot.getSwerveDrive().drive(
-                    driveX,
-                    driveY,
-                    driveTheta //TODO: REVERT
+                    2*driveX,
+                    2*driveY,
+                    Math.PI*driveTheta //TODO: REVERT
             );
         }));
 
@@ -189,10 +189,11 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
+        SmartDashboard.putNumber("Drive-x",driverJoystick.getRawAxis(1));
 
 
 
-        double elevatorVertPower = 0;
+        /*double elevatorVertPower = 0;
 
         if (driverJoystick.getHID().getRawButton(1)) {
             elevatorVertPower = 0.5;
@@ -271,7 +272,7 @@ public class Robot extends LoggedRobot {
             algaeWheelPower = -0.5;
         }
 
-        robot.getAlgaeCollector().setWheelVelocity(RPM.of(algaeWheelPower));
+        robot.getAlgaeCollector().setWheelVelocity(RPM.of(algaeWheelPower));*/
 
     }
 

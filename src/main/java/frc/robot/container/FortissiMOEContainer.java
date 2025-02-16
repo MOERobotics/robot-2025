@@ -40,6 +40,7 @@ public class FortissiMOEContainer extends RobotContainer {
                 new SwerveModule(//FL
                     new SparkMax(17, SparkLowLevel.MotorType.kBrushless),
                     new SparkMax(16, SparkLowLevel.MotorType.kBrushless),
+                    false,
                     true,
                     new CANcoder(34),
                     Inches.of(14),
@@ -52,6 +53,7 @@ public class FortissiMOEContainer extends RobotContainer {
                 new SwerveModule(//FR
                     new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
                     new SparkMax(2, SparkLowLevel.MotorType.kBrushless),
+                    false,
                     true,
                     new CANcoder(33),
                     Inches.of(14),
@@ -64,6 +66,7 @@ public class FortissiMOEContainer extends RobotContainer {
                 new SwerveModule(//BR
                     new SparkMax(1, SparkLowLevel.MotorType.kBrushless),
                     new SparkMax(20, SparkLowLevel.MotorType.kBrushless),
+                    false,
                     true,
                     new CANcoder(32),
                     Inches.of(-14),
@@ -76,6 +79,7 @@ public class FortissiMOEContainer extends RobotContainer {
                 new SwerveModule(//BL
                     new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
                     new SparkMax(18, SparkLowLevel.MotorType.kBrushless),
+                    false,
                     true,
                     new CANcoder(31),
                     Inches.of(-14),
