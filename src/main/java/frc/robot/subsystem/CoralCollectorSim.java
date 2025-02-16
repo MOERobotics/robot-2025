@@ -21,7 +21,7 @@ public class CoralCollectorSim {
     private final DCMotorSim rightMotorSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNeo550(1), 0.001, 1.0), DCMotor.getNeo550(1));
     private final Timer timer = new Timer();
 
-    public CoralCollectorSim(CoralCollector coralCollector) {
+    public CoralCollectorSim(CoralHead coralCollector) {
         this.leftMotor = coralCollector.leftMotor;
         this.rightMotor = coralCollector.rightMotor;
         this.leftMotorSim = new SparkMaxSim(leftMotor, DCMotor.getNeo550(1));

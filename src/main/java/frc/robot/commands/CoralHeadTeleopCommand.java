@@ -3,20 +3,20 @@ package frc.robot.commands;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystem.CoralCollector;
-import frc.robot.subsystem.CoralCollectorControl;
+
+import frc.robot.subsystem.CoralHeadControl;
 import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.*;
 
 public class CoralHeadTeleopCommand extends Command {
-    CoralCollectorControl coralCollectorControl;
+    CoralHeadControl coralCollectorControl;
     Joystick joystick;
 
     private boolean preparingCoral = false;
 
 
-    public CoralHeadTeleopCommand(CoralCollectorControl coralCollectorControl, Joystick joystick) {
+    public CoralHeadTeleopCommand(CoralHeadControl coralCollectorControl, Joystick joystick) {
         this.coralCollectorControl = coralCollectorControl;
         this.joystick = joystick;
     }

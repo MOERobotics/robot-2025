@@ -29,7 +29,7 @@ public class RobotElevatorSim {//TODO: Fix constants
     private final ElevatorSim elevatorHeightSystem = new ElevatorSim(DCMotor.getNEO(1), heightGearing, carriageMassKg, drumRadius, 0, Units.feetToMeters(10), true, 0);
 
     public RobotElevatorSim(SubMOErineElevator elevator) {
-        this.elevatorHeightMotor = elevator.elevatorHeightMotor;
+        this.elevatorHeightMotor = elevator.elevatorExtensionMotor;
         this.elevatorPivotMotor = elevator.elevatorPivotMotor;
         this.elevatorHeightSim = new SparkMaxSim(elevatorHeightMotor, DCMotor.getNEO(1));
         this.elevatorPivotSim = new SparkMaxSim(elevatorPivotMotor, DCMotor.getNEO(1));

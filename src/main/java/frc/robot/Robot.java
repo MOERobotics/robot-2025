@@ -120,11 +120,11 @@ public class Robot extends LoggedRobot {
   double elevatorVertPower=0;
 
         if(driverJoystick.getRawButton(1)){
-            elevatorVertPower=0.5;
+            elevatorVertPower=0.3;
         }
 
         if(driverJoystick.getRawButton(2)){
-            elevatorVertPower=-0.5;
+            elevatorVertPower=-0.3;
         }
 
 

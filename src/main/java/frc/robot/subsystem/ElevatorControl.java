@@ -12,6 +12,8 @@ public interface ElevatorControl extends Subsystem {
         public AngularVelocity horizontalSpeed;
         public LinearVelocity extensionSpeed;
 
+        public Angle extensionMotorPosition;
+
         public double elevatorVoltage;
         public String elevatorVoltageFromADC;
 
