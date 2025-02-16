@@ -99,8 +99,5 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         return Inches.of(8);
     }
 
-    public Distance getExtension() {
-        return Feet.of(extensionSensor.getVoltage());
-        // 1 foot per 1 volt
-    }
+
 }

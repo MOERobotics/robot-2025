@@ -42,7 +42,6 @@ public class Robot extends LoggedRobot {
     CommandScheduler scheduler;
 
     RobotContainer robot = new SubMOErine();
-
     Command autoCommand = Commands.none();
 
     SwerveModuleSim swerveModuleSimFL,swerveModuleSimFR,swerveModuleSimBR,swerveModuleSimBL;

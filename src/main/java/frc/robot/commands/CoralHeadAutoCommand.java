@@ -2,16 +2,16 @@ package frc.robot.commands;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystem.CoralCollectorControl;
+import frc.robot.subsystem.CoralHeadControl;
 
 import static edu.wpi.first.units.Units.*;
 
 public class CoralHeadAutoCommand extends Command {
-    CoralCollectorControl coralcollector;
+    CoralHeadControl coralcollector;
     boolean scoring;
     AngularVelocity rotatespeed = RPM.of(0);
 
-    public CoralHeadAutoCommand(CoralCollectorControl coralcollector, boolean scoring, AngularVelocity rotatespeed){
+    public CoralHeadAutoCommand(CoralHeadControl coralcollector, boolean scoring, AngularVelocity rotatespeed){
         this.coralcollector = coralcollector;
         this.scoring = scoring;
         this.rotatespeed = rotatespeed;
