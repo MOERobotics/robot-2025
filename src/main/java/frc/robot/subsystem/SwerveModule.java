@@ -20,23 +20,23 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     public SparkMax driveMotor;
     public SparkMax pivotMotor;
     public PIDController pivotController;
-    public CANcoder compass;
+    public CANcoder pivotEncoder;
     public Distance xPos;
     public Distance yPos;
-    public Angle heading;
+    public Angle moduleOffset;
     public Angle targetHeading;
 
     public SwerveModule(
             SparkMax driveMotor,
             SparkMax pivotMotor,
-            CANcoder compass,
+            CANcoder pivotEncoder,
             Distance xPos,
             Distance yPos,
-            Angle heading,
+            Angle moduleOffset,
             PIDController pivotController
     ) {
         this.setSensors(new SwerveModuleInputsAutoLogged());
-        this.compass = compass;
+        this.pivotEncoder = pivotEncoder;
         this.pivotMotor = pivotMotor;
         this.driveMotor = driveMotor;
         SparkMaxConfig driveConfig = new SparkMaxConfig();
@@ -47,15 +47,15 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
         pivotController.enableContinuousInput(-Math.PI,Math.PI);
         this.xPos = xPos;
         this.yPos = yPos;
-        this.heading = heading;
+        this.moduleOffset = moduleOffset;
         driveMotor.configure(driveConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         pivotMotor.configure(pivotConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
 
     }
 
-    public Angle getHeading() {
-        Angle _heading =  this.compass.getAbsolutePosition().getValue().plus(heading);
+    public Angle getModuleOffset() {
+        Angle _heading =  this.pivotEncoder.getAbsolutePosition().getValue().plus(moduleOffset);
         while (_heading.gt(Rotations.of(.5))) {
             _heading = _heading.minus(Rotations.of(1));
         }
@@ -67,7 +67,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
 
     @Override
     public void readSensors(SwerveModuleInputsAutoLogged sensors) {
-        sensors.currentRotationDegrees =  getHeading();
+        sensors.currentRotationDegrees =  getModuleOffset();
         sensors.pivotPower = pivotMotor.get();
         sensors.drivePower = driveMotor.get();
         sensors.targetHeading = targetHeading;
@@ -81,7 +81,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     @Override
     public void pivot(Angle targetHeading) {
         this.targetHeading = targetHeading;
-        Angle currentHeading = getHeading();
+        Angle currentHeading = getModuleOffset();
         Angle error = currentHeading.minus(targetHeading);
         double power = pivotController.calculate(this.getSensors().error = error.in(Radians));
         this.getSensors().integral = pivotController.getAccumulatedError();
@@ -92,7 +92,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     public SwerveModuleState getModuleState() {
         return new SwerveModuleState(
                 driveMotor.getEncoder().getVelocity(),
-                new Rotation2d( getHeading())
+                new Rotation2d( getModuleOffset())
         );
     }
 
@@ -100,14 +100,15 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     public SwerveModulePosition getModulePosition() {
         SwerveModulePosition position = new SwerveModulePosition(
                 Units.Inches.of(driveMotor.getEncoder().getPosition()).in(Units.Meters),
-                new Rotation2d( getHeading())
+                new Rotation2d( getModuleOffset())
         );
         return position;
 
     }
 
+    @Override
     public void setModuleState(SwerveModuleState moduleState) {
-        moduleState.optimize(Rotation2d.fromDegrees(getHeading().in(Degrees)));
+        moduleState.optimize(Rotation2d.fromDegrees(getModuleOffset().in(Degrees)));
         drive(moduleState.speedMetersPerSecond);
         pivot( moduleState.angle.getMeasure());
     }

@@ -16,6 +16,13 @@ public interface ElevatorControl extends Subsystem {
         public AngularVelocity horizontalSpeed;
         public LinearVelocity extensionSpeed;
         public Voltage elevatorVoltage;
+
+        public Angle extensionMotorPosition;
+
+        public double elevatorVoltage;
+        public String elevatorVoltageFromADC;
+
+        public boolean canGoDown;
     }
 
     public ElevatorInputsAutoLogged getSensors();
@@ -26,6 +33,9 @@ public interface ElevatorControl extends Subsystem {
 
     default Distance getExtension() {
         return this.getSensors().extension;
+    }
+    default boolean canGoDown() {
+        return this.getSensors().canGoDown;
     }
 
     public Distance getPivotHeight();

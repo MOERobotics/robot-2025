@@ -24,5 +24,7 @@ public interface SwerveModuleControl {
 
     SwerveModulePosition getModulePosition();
     SwerveModuleState getModuleState();
+    void setModuleState(SwerveModuleState moduleState) ;
+
 
 }

@@ -12,21 +12,30 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.commands.*;
+import frc.robot.commands.CoralHeadTeleopCollectCommand;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.*;
+import frc.robot.container.RobotContainer;
+import frc.robot.subsystem.RobotElevatorSim;
+import frc.robot.subsystem.SubMOErineElevator;
+import frc.robot.subsystem.SwerveDrive;
+import frc.robot.subsystem.SwerveModuleSim;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
+import frc.robot.commands.SwerveModuleCommand;
 
 import static edu.wpi.first.units.Units.*;
 
 
 public class Robot extends LoggedRobot {
+
 
     Joystick driverJoystick = new Joystick(0);
     CommandJoystick functionJoystick = new CommandJoystick(1);
@@ -36,7 +45,7 @@ public class Robot extends LoggedRobot {
 
     Command autoCommand = Commands.none();
 
-    SwerveModuleSim swerveModuleSimFL, swerveModuleSimFR, swerveModuleSimBR, swerveModuleSimBL;
+    SwerveModuleSim swerveModuleSimFL,swerveModuleSimFR,swerveModuleSimBR,swerveModuleSimBL;
     RobotElevatorSim elevatorSim;
     AlgaeCollectorSim algaeCollectorSim;
     CoralCollectorSim coralCollectorSim;
@@ -115,92 +124,137 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
-        robot.getSwerveDrive().drive(
-            -driverJoystick.getRawAxis(1),
-            -driverJoystick.getRawAxis(0),
-            driverJoystick.getRawAxis(2)
-        );
 
+
+        double joyX =  -driverJoystick.getRawAxis(1);
+        if(Math.abs(joyX) < 0.05 ) joyX=0;
+
+
+        double joyY = -driverJoystick.getRawAxis(0);
+        if(Math.abs(joyY) < 0.05 ) joyY=0;
+
+        double joyZ = driverJoystick.getRawAxis(2);
+        if(Math.abs(joyZ) < 0.05 ) joyZ=0;
+
+        robot.getSwerveDrive().drive(
+                joyX,
+               joyY,
+                joyZ
+        );
 
         double coralHeadPower = 0;
 
-        if (driverJoystick.getRawButton(1)) {
-            coralHeadPower = 0.5;
+  double elevatorVertPower=0;
+
+        if(driverJoystick.getRawButton(1)){
+            elevatorVertPower=0.3;
         }
 
-        if (driverJoystick.getRawButton(2)) {
-            coralHeadPower = -0.5;
-        }
-
-
-
-
-        double climberPowerMid = 0;
-
-        if (driverJoystick.getRawButton(1)) {
-            climberPowerMid = 0.5;
+        if(driverJoystick.getRawButton(2)){
+            elevatorVertPower=-0.3;
         }
 
 
-        if (driverJoystick.getRawButton(2)) {
-            climberPowerMid = -0.5;
+
+        double elevatorHorizontalPower=0;
+
+        if(driverJoystick.getRawButton(3)){
+            elevatorHorizontalPower=0.5;
         }
 
-        robot.getClimberMid().setClimberVelocity(RPM.of(climberPowerMid));
-
-        double climberPowerRear = 0;
-
-        if (driverJoystick.getRawButton(1)) {
-            climberPowerRear = 0.5;
-        }
-
-
-        if (driverJoystick.getRawButton(2)) {
-            climberPowerRear = -0.5;
-        }
-
-        robot.getClimberRear().setClimberVelocity(RPM.of(climberPowerMid));
-
-
-        double elevatorHorizontalPower = 0;
-
-        if (driverJoystick.getRawButton(3)) {
-            elevatorHorizontalPower = 0.5;
-        }
-
-        if (driverJoystick.getRawButton(4)) {
-            elevatorHorizontalPower = -0.5;
+        if(driverJoystick.getRawButton(4)){
+            elevatorHorizontalPower=-0.5;
         }
 
         robot.getElevator().moveHorizontally(DegreesPerSecond.of(elevatorHorizontalPower));
 
+  double algaeCollectorPower=0;
 
-        double algaeCollectorPower = 0;
 
-
-        if (driverJoystick.getRawButton(7)) {
-            algaeCollectorPower = 0.5;
+        if(driverJoystick.getRawButton(5)){
+            algaeCollectorPower=0.08;
         }
 
-        if (driverJoystick.getRawButton(8)) {
-            algaeCollectorPower = -0.5;
+        if(driverJoystick.getRawButton(6)){
+            algaeCollectorPower=-0.08;
         }
 
         robot.getAlgaeCollector().setArmVelocity(RPM.of(algaeCollectorPower));
 
 
-        double algaeWheelPower = 0;
+        double algaeWheelPower=0;
 
 
-        if (driverJoystick.getRawButton(9)) {
-            algaeWheelPower = 0.5;
+        if(driverJoystick.getRawButton(7)){
+            algaeWheelPower=0.25;
         }
 
-        if (driverJoystick.getRawButton(10)) {
-            algaeWheelPower = -0.5;
+        if(driverJoystick.getRawButton(8)){
+            algaeWheelPower=-0.25;
         }
 
         robot.getAlgaeCollector().setWheelVelocity(RPM.of(algaeWheelPower));
+
+
+
+
+
+
+
+        double coralCollectorPowerRight=0;
+        double coralCollectorPowerLeft=0;
+
+
+        if(functionJoystick.getRawButton(1)){
+            coralCollectorPowerRight=0.5;
+            coralCollectorPowerLeft=0.5;
+
+        }
+
+        if(functionJoystick.getRawButton(4)){
+            coralCollectorPowerRight=-0.5;
+            coralCollectorPowerLeft=-0.5;
+        }
+
+
+
+        if(functionJoystick.getRawButton(3)){
+            coralCollectorPowerLeft=0.3;
+            coralCollectorPowerRight=1;
+        }
+
+        if(functionJoystick.getRawButton(2)){
+            coralCollectorPowerLeft=1;
+            coralCollectorPowerRight=1;
+        }
+
+        robot.getCoralCollector().setCoralVelocity(RPM.of(coralCollectorPowerLeft), RPM.of(coralCollectorPowerRight));
+
+
+
+
+
+        double climberPowRear=0;
+        double climberPowMid=0;
+
+
+        if(driverJoystick.getRawButton(9)){
+            climberPowRear=1;
+            climberPowMid=1;
+
+        }
+
+        if(driverJoystick.getRawButton(10)){
+            climberPowRear=-1;
+            climberPowMid=-1;
+
+        }
+
+        robot.getClimberMid().setClimberVelocity(RPM.of(climberPowMid));
+
+        robot.getClimberRear().setClimberVelocity(RPM.of(climberPowRear));
+
+
 
     }
 
@@ -228,16 +282,13 @@ public class Robot extends LoggedRobot {
             || !(robot.getCoralCollector() instanceof CoralCollector)
             || !(robot.getClimberRear() instanceof  SubMOErineClimber)
             || !(robot.getClimberMid() instanceof SubMOErineClimber)) return;
+        if(!(robot.getSwerveDrive() instanceof  SwerveDrive)||!(robot.getElevator() instanceof SubMOErineElevator))return;
         SwerveDrive swerveDrive = (SwerveDrive) robot.getSwerveDrive();
         SubMOErineElevator elevator = (SubMOErineElevator) robot.getElevator();
-        AlgaeCollector algaeCollector = (AlgaeCollector) robot.getAlgaeCollector();
-        CoralCollector coralCollector = (CoralCollector) robot.getCoralCollector();
-        SubMOErineClimber climberMid = (SubMOErineClimber) robot.getClimberMid();
-        SubMOErineClimber climberRear = (SubMOErineClimber) robot.getClimberRear();
-        swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.heading, swerveDrive.swerveModuleFL.driveMotor, swerveDrive.swerveModuleFL.pivotMotor, swerveDrive.swerveModuleFL.compass);
-        swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.heading, swerveDrive.swerveModuleFR.driveMotor, swerveDrive.swerveModuleFR.pivotMotor, swerveDrive.swerveModuleFR.compass);
-        swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.heading, swerveDrive.swerveModuleBR.driveMotor, swerveDrive.swerveModuleBR.pivotMotor, swerveDrive.swerveModuleBR.compass);
-        swerveModuleSimBL = new SwerveModuleSim(swerveDrive.swerveModuleBL.heading, swerveDrive.swerveModuleBL.driveMotor, swerveDrive.swerveModuleBL.pivotMotor, swerveDrive.swerveModuleBL.compass);
+        swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.moduleOffset,swerveDrive.swerveModuleFL.driveMotor,swerveDrive.swerveModuleFL.pivotMotor,swerveDrive.swerveModuleFL.pivotEncoder);
+        swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.moduleOffset,swerveDrive.swerveModuleFR.driveMotor,swerveDrive.swerveModuleFR.pivotMotor,swerveDrive.swerveModuleFR.pivotEncoder);
+        swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.moduleOffset,swerveDrive.swerveModuleBR.driveMotor,swerveDrive.swerveModuleBR.pivotMotor,swerveDrive.swerveModuleBR.pivotEncoder);
+        swerveModuleSimBL = new SwerveModuleSim(swerveDrive.swerveModuleBL.moduleOffset,swerveDrive.swerveModuleBL.driveMotor,swerveDrive.swerveModuleBL.pivotMotor,swerveDrive.swerveModuleBL.pivotEncoder);
         elevatorSim = new RobotElevatorSim(elevator);
         algaeCollectorSim = new AlgaeCollectorSim(algaeCollector);
         coralCollectorSim = new CoralCollectorSim(coralCollector);

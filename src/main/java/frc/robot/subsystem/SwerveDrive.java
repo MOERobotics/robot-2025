@@ -20,6 +20,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public SwerveModule swerveModuleBL;
     public SwerveModule swerveModuleBR;
     public SwerveModule[] swerveModules;
+
     public @Getter SwerveDriveKinematics kinematics;
     public @Getter SwerveDriveOdometry odometry;
     public SwerveDrivePoseEstimator poseEstimator;

@@ -25,7 +25,7 @@ public class AlgaeCollectorSim {
     private final SparkMax algaeWheel, algaeArm;
     private final SparkMaxSim algaeWheelSim, algaeArmSim;
     private final SparkLimitSwitchSim algaeWheelLimitSim;
-    private final CANcoderSimState algaeArmEncoderSim;
+   // private final CANcoderSimState algaeArmEncoderSim;
     private final SingleJointedArmSim algaeArmSystem = new SingleJointedArmSim(DCMotor.getNEO(1), armGearing, 0.1, Units.inchesToMeters(16), 0, Math.PI/2, true, Math.PI/2);
     private final DCMotorSim algaeWheelSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.01, wheelGearing), DCMotor.getNEO(1));
     public AlgaeCollectorSim(AlgaeCollector algaeCollector) {
@@ -34,7 +34,7 @@ public class AlgaeCollectorSim {
         this.algaeWheelSim = new SparkMaxSim(algaeWheel, DCMotor.getNEO(1));
         this.algaeArmSim = new SparkMaxSim(algaeArm, DCMotor.getNEO(1));
         this.algaeWheelLimitSim = new SparkLimitSwitchSim(algaeWheel,false);
-        this.algaeArmEncoderSim = algaeCollector.algaeArmEncoder.getSimState();
+       // this.algaeArmEncoderSim = algaeCollector.algaeArmEncoder.getSimState();
         algaeCollection.setDefaultOption("Algae Collection Successful",true);
         algaeCollection.addOption("Algae Collection Unsuccessful",false);
         SmartDashboard.putData(algaeCollection);
@@ -55,8 +55,8 @@ public class AlgaeCollectorSim {
 
         algaeWheelLimitSim.setPressed(algaeArmSystem.getAngleRads()<Units.degreesToRadians(40+Math.random()*5)&&algaeCollection.getSelected());
 
-        algaeArmEncoderSim.setVelocity(RadiansPerSecond.of(algaeArmSystem.getVelocityRadPerSec()));
-        algaeArmEncoderSim.setRawPosition(Radians.of(algaeArmSystem.getAngleRads()));
+   //     algaeArmEncoderSim.setVelocity(RadiansPerSecond.of(algaeArmSystem.getVelocityRadPerSec()));
+    //    algaeArmEncoderSim.setRawPosition(Radians.of(algaeArmSystem.getAngleRads()));
         SmartDashboard.putNumber("Arm Angle",algaeArmSystem.getAngleRads());
     }
 

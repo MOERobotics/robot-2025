@@ -12,8 +12,9 @@ public abstract @Data class RobotContainer {
 	private SwerveDriveControl swerveDrive;
 	private ElevatorControl elevator;
 	private AlgaeCollectorControl algaeCollector;
-    private CoralCollectorControl coralCollector;
-    private ClimberControl climberMid,climberRear;
+    private CoralHeadControl coralCollector;
+    private SubMOErineClimber climberRear;
+    private SubMOErineClimber climberMid;
 
 
 
