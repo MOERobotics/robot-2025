@@ -1,7 +1,8 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.simulations;
 
 
 import com.ctre.phoenix6.sim.CANcoderSimState;
+import com.revrobotics.sim.SparkAbsoluteEncoderSim;
 import com.revrobotics.sim.SparkLimitSwitchSim;
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkMax;
@@ -12,6 +13,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystem.AlgaeCollector;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystem.SimulationHelpers.*;
@@ -25,16 +27,17 @@ public class AlgaeCollectorSim {
     private final SparkMax algaeWheel, algaeArm;
     private final SparkMaxSim algaeWheelSim, algaeArmSim;
     private final SparkLimitSwitchSim algaeWheelLimitSim;
-   // private final CANcoderSimState algaeArmEncoderSim;
+    private final SparkAbsoluteEncoderSim algaeArmEncoderSim;
     private final SingleJointedArmSim algaeArmSystem = new SingleJointedArmSim(DCMotor.getNEO(1), armGearing, 0.1, Units.inchesToMeters(16), 0, Math.PI/2, true, Math.PI/2);
     private final DCMotorSim algaeWheelSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.01, wheelGearing), DCMotor.getNEO(1));
+
     public AlgaeCollectorSim(AlgaeCollector algaeCollector) {
         this.algaeWheel = algaeCollector.algaeWheel;
         this.algaeArm = algaeCollector.algaeArm;
         this.algaeWheelSim = new SparkMaxSim(algaeWheel, DCMotor.getNEO(1));
         this.algaeArmSim = new SparkMaxSim(algaeArm, DCMotor.getNEO(1));
         this.algaeWheelLimitSim = new SparkLimitSwitchSim(algaeWheel,false);
-       // this.algaeArmEncoderSim = algaeCollector.algaeArmEncoder.getSimState();
+        this.algaeArmEncoderSim = new SparkAbsoluteEncoderSim(algaeArm);
         algaeCollection.setDefaultOption("Algae Collection Successful",true);
         algaeCollection.addOption("Algae Collection Unsuccessful",false);
         SmartDashboard.putData(algaeCollection);
@@ -55,8 +58,8 @@ public class AlgaeCollectorSim {
 
         algaeWheelLimitSim.setPressed(algaeArmSystem.getAngleRads()<Units.degreesToRadians(40+Math.random()*5)&&algaeCollection.getSelected());
 
-   //     algaeArmEncoderSim.setVelocity(RadiansPerSecond.of(algaeArmSystem.getVelocityRadPerSec()));
-    //    algaeArmEncoderSim.setRawPosition(Radians.of(algaeArmSystem.getAngleRads()));
+        algaeArmEncoderSim.setVelocity(RadiansPerSecond.of(algaeArmSystem.getVelocityRadPerSec()).in(RPM));
+        algaeArmEncoderSim.setPosition(Radians.of(algaeArmSystem.getAngleRads()).in(Rotations));
         SmartDashboard.putNumber("Arm Angle",algaeArmSystem.getAngleRads());
     }
 

@@ -1,18 +1,14 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.units.Units;
 import frc.robot.MOESubsystem;
+import frc.robot.subsystem.interfaces.SwerveDriveControl;
+import frc.robot.subsystem.interfaces.SwerveDriveInputsAutoLogged;
 import lombok.Getter;
-
-import static edu.wpi.first.units.Units.Meters;
 
 public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> implements SwerveDriveControl {
     public SwerveModule swerveModuleFL;
@@ -33,7 +29,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         SwerveModule SwerveModuleBL,
         Pigeon2 pigeon
     ) {
-        this.setSensors(new SwerveDriveInputsAutoLogged());
+        super(new SwerveDriveInputsAutoLogged());
         this.swerveModuleBR = SwerveModuleBR;
         this.swerveModuleBL = SwerveModuleBL;
         this.swerveModuleFR = SwerveModuleFR;

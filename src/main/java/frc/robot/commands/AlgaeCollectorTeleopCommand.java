@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystem.AlgaeCollectorControl;
+import frc.robot.subsystem.interfaces.AlgaeCollectorControl;
 import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.*;
@@ -27,7 +27,7 @@ public class AlgaeCollectorTeleopCommand extends Command {
 
     @Override
     public void execute() {
-            algaeArmVelocity = RadiansPerSecond.of(joystick.getRawAxis(0));
+        algaeArmVelocity = RadiansPerSecond.of(joystick.getRawAxis(0));
 
         if (joystick.getRawButton(5)){
             algaeWheelVelocity = RPM.of(1);

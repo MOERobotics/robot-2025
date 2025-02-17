@@ -118,13 +118,15 @@ public class SubMOErine extends RobotContainer{
 
         this.setClimberRear(new SubMOErineClimber(
              rear,
-                new CANcoder(38)
+            new CANcoder(38),
+                "Rear Climber"
         ));
 
 
         this.setClimberMid(new SubMOErineClimber(
                 mid,
-                new CANcoder(39)
+                new CANcoder(39),
+                "Mid Climber"
                 ));
 
 

@@ -1,4 +1,4 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.simulations;
 
 import com.revrobotics.sim.SparkLimitSwitchSim;
 import com.revrobotics.sim.SparkMaxSim;
@@ -8,6 +8,7 @@ import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystem.CoralHead;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystem.SimulationHelpers.*;
@@ -26,7 +27,7 @@ public class CoralCollectorSim {
         this.rightMotor = coralCollector.rightMotor;
         this.leftMotorSim = new SparkMaxSim(leftMotor, DCMotor.getNeo550(1));
         this.rightMotorSim = new SparkMaxSim(rightMotor, DCMotor.getNeo550(1));
-        this.coralLimitSim = new SparkLimitSwitchSim(rightMotor, false);
+        this.coralLimitSim = new SparkLimitSwitchSim(leftMotor, false);
         timer.start();
     }
 
@@ -50,7 +51,7 @@ public class CoralCollectorSim {
         }
         timer.advanceIfElapsed(6);
 
-        //coralLimitSim.setPressed(3 < timer.get() && timer.get() < 4);
+        coralLimitSim.setPressed(3 < timer.get() && timer.get() < 4);
 
         SmartDashboard.putNumber("Coral Timer", timer.get());
         SmartDashboard.putBoolean("Coral Limit", coralLimitSim.getPressed());

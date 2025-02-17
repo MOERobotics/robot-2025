@@ -1,4 +1,4 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.simulations;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.sim.CANcoderSimState;

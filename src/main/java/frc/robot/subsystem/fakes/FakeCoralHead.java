@@ -1,14 +1,16 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.fakes;
 
 import edu.wpi.first.units.measure.*;
 import frc.robot.MOESubsystem;
+import frc.robot.subsystem.interfaces.CoralHeadInputsAutoLogged;
+import frc.robot.subsystem.interfaces.CoralHeadControl;
 
 import static edu.wpi.first.units.Units.*;
 
 public class FakeCoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implements CoralHeadControl {
 
     public FakeCoralHead() {
-        this.setSensors(new CoralHeadInputsAutoLogged());
+        super(new CoralHeadInputsAutoLogged());
         this.getSensors().inFrontReef = false;
         this.getSensors().hasCoral = false;
         this.getSensors().velocityLeft = RPM.zero();

@@ -2,11 +2,12 @@ package frc.robot.subsystem;
 
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import frc.robot.MOESubsystem;
 
 import edu.wpi.first.units.measure.AngularVelocity;
+import frc.robot.subsystem.interfaces.CoralHeadControl;
+import frc.robot.subsystem.interfaces.CoralHeadInputsAutoLogged;
 
 import static edu.wpi.first.units.Units.RPM;
 
@@ -18,7 +19,7 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
 
 
     public CoralHead(SparkMax leftMotor, SparkMax rightMotor){
-        this.setSensors(new CoralHeadInputsAutoLogged());
+        super(new CoralHeadInputsAutoLogged());
         this.leftMotor = leftMotor;
         this.rightMotor = rightMotor;
         getSensors().hasCoral = false;

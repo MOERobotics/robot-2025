@@ -15,15 +15,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.commands.*;
+import frc.robot.commands.junk.AlgaeArmSpeedMeasureCommand;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.*;
-import frc.robot.subsystem.RobotElevatorSim;
+import frc.robot.subsystem.simulations.*;
 import frc.robot.subsystem.SubMOErineElevator;
 import frc.robot.subsystem.SwerveDrive;
-import frc.robot.subsystem.SwerveModuleSim;
 import org.littletonrobotics.junction.LoggedRobot;
-import frc.robot.commands.SwerveModuleCommand;
+import frc.robot.commands.junk.SwerveModuleTestingCommand;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -81,10 +81,7 @@ public class Robot extends LoggedRobot {
             throw new RuntimeException(e);
         }*/
         CommandScheduler.getInstance().cancelAll();
-        new ElevatorAutoCommand(robot.getElevator(),
-                3,
-                MetersPerSecond.of(0.5),
-                false).schedule();
+        //new AlgaeArmSpeedMeasureCommand(robot.getAlgaeCollector()).schedule();
 
     }
 
@@ -102,21 +99,21 @@ public class Robot extends LoggedRobot {
         new AlgaeCollectorTeleopCommand(
             robot.getAlgaeCollector(),
             functionJoystick.getHID()
-        );
+        ).schedule();
         new CoralHeadTeleopCommand(
             robot.getCoralCollector(),
-            functionJoystick.getHID()
-        );
-        var coralCollector = robot.getCoralCollector();
-        coralCollector.setDefaultCommand(robot.getCoralCollector().run(() -> {
-            robot.getCoralCollector().setCoralVelocity(RPM.of(0), RPM.of(0));
-        }));
+            functionJoystick.getHID(),
+            robot.getElevator()
+        ).schedule();
+        new ClimberTeleopCommand(
+            robot.getClimberRear(),
+            robot.getClimberMid(),
+            driverJoystick
+        ).schedule();
     }
 
     @Override
     public void teleopPeriodic() {
-
-/*
         double joyX =  -driverJoystick.getRawAxis(1);
         if(Math.abs(joyX) < 0.05 ) joyX=0;
 
@@ -128,11 +125,13 @@ public class Robot extends LoggedRobot {
         if(Math.abs(joyZ) < 0.05 ) joyZ=0;
 
         robot.getSwerveDrive().drive(
-                joyX,
-               joyY,
-                joyZ
+            joyX,
+            joyY,
+            joyZ
         );
 
+
+/*
         double coralHeadPower = 0;
 
   double elevatorVertPower=0;
@@ -254,7 +253,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
-        robot.getSwerveDrive().setDefaultCommand(new SwerveModuleCommand(robot.getSwerveDrive(), driverJoystick));
+        robot.getSwerveDrive().setDefaultCommand(new SwerveModuleTestingCommand(robot.getSwerveDrive(), driverJoystick));
 
     }
 
@@ -284,32 +283,24 @@ public class Robot extends LoggedRobot {
         swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.moduleOffset,swerveDrive.swerveModuleBR.driveMotor,swerveDrive.swerveModuleBR.pivotMotor,swerveDrive.swerveModuleBR.pivotEncoder);
         swerveModuleSimBL = new SwerveModuleSim(swerveDrive.swerveModuleBL.moduleOffset,swerveDrive.swerveModuleBL.driveMotor,swerveDrive.swerveModuleBL.pivotMotor,swerveDrive.swerveModuleBL.pivotEncoder);
         elevatorSim = new RobotElevatorSim(elevator);
-        /*
-        algaeCollectorSim = new AlgaeCollectorSim(algaeCollector);
-        coralCollectorSim = new CoralCollectorSim(CoralHead);
-        climberMidSim = new ClimberSim(climberMid);
-        climberRearSim = new ClimberSim(climberRear);
-
-         */
+        algaeCollectorSim = new AlgaeCollectorSim((AlgaeCollector)robot.getAlgaeCollector());
+        coralCollectorSim = new CoralCollectorSim((CoralHead)robot.getCoralCollector());
+        climberMidSim = new ClimberSim(robot.getClimberMid());
+        climberRearSim = new ClimberSim(robot.getClimberRear());
 
 
     }
 
     @Override
     public void simulationPeriodic() {
-        /*
         swerveModuleSimFL.updateSimState();
         swerveModuleSimFR.updateSimState();
         swerveModuleSimBR.updateSimState();
         swerveModuleSimBL.updateSimState();
-        */
         elevatorSim.updteSimState();
-        /*
         algaeCollectorSim.updateSimState();
         coralCollectorSim.updateSimState();
         climberMidSim.updateSimState();
         climberRearSim.updateSimState();
-
-         */
     }
 }

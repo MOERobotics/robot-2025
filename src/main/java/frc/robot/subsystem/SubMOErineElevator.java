@@ -9,16 +9,18 @@ import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.MOESubsystem;
+import frc.robot.subsystem.interfaces.ElevatorControl;
+import frc.robot.subsystem.interfaces.ElevatorInputsAutoLogged;
 
 import static edu.wpi.first.units.Units.*;
 
 public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> implements ElevatorControl {
 
-    SparkMax elevatorExtensionMotor;
-    SparkMax elevatorPivotMotor;
-    CANcoder tiltEncoder;
+    public SparkMax elevatorExtensionMotor;
+    public SparkMax elevatorPivotMotor;
+    public CANcoder tiltEncoder;
 
-    AnalogInput extensionSensor;
+    public AnalogInput extensionSensor;
 
     public SubMOErineElevator(
         SparkMax elevatorExtensionMotor,
@@ -26,7 +28,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         CANcoder tiltEncoder,
         AnalogInput extensionSensor
     ) {
-        this.setSensors(new ElevatorInputsAutoLogged());
+        super(new ElevatorInputsAutoLogged());
         this.elevatorExtensionMotor = elevatorExtensionMotor;
         SparkMaxConfig extensionMotorConfig = new SparkMaxConfig();
         this.elevatorPivotMotor = elevatorPivotMotor;
@@ -56,12 +58,12 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public void moveVertically(LinearVelocity speed) {
-        elevatorExtensionMotor.set(speed.in(InchesPerSecond));
+        elevatorExtensionMotor.set(speed.in(FeetPerSecond));
     }
 
     @Override
     public Distance getExtension() {
-        return Centimeters.of(getSensors().elevatorVoltage*41.59222+13.11311);
+        return Centimeters.of((getSensors().elevatorVoltage*41.59222)+13.11311);
     }
 
 

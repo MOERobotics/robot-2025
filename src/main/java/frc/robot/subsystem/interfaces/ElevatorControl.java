@@ -1,7 +1,8 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.interfaces;
 
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystem.interfaces.ElevatorInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLog;
 
 import static edu.wpi.first.units.Units.Inches;

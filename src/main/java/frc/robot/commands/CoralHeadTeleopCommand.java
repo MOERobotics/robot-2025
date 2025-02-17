@@ -4,53 +4,66 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 
-import frc.robot.subsystem.CoralHeadControl;
-import org.littletonrobotics.junction.Logger;
+import frc.robot.subsystem.interfaces.CoralHeadControl;
+import frc.robot.subsystem.interfaces.ElevatorControl;
 
 import static edu.wpi.first.units.Units.*;
 
 public class CoralHeadTeleopCommand extends Command {
-    CoralHeadControl coralCollectorControl;
+    CoralHeadControl coralCollector;
     Joystick joystick;
+    ElevatorControl elevator;
+    boolean hasCoral;
+    boolean stopCoral = false;
 
-    private boolean preparingCoral = false;
 
-
-    public CoralHeadTeleopCommand(CoralHeadControl coralCollectorControl, Joystick joystick) {
-        this.coralCollectorControl = coralCollectorControl;
+    public CoralHeadTeleopCommand(CoralHeadControl coralCollector, Joystick joystick, ElevatorControl elevator) {
+        this.coralCollector = coralCollector;
         this.joystick = joystick;
+        this.elevator = elevator;
+        this.addRequirements(coralCollector);
     }
 
     @Override
     public void initialize() {
+
     }
+
+
     @Override
     public void execute() {
+        if(coralCollector.hasCoral()) {
+            hasCoral = true;
+        }
+        if(!coralCollector.hasCoral() && hasCoral){
+            stopCoral = true;
+        }
         AngularVelocity coralWheelRVelocity, coralWheelLVelocity;
-        if (preparingCoral && joystick.getRawButtonPressed(4)) preparingCoral = false;
-            else if (joystick.getRawButtonPressed(4)) preparingCoral = true;
-        Logger.recordOutput("CoralHeadTeleopCommand/preparingCoral", preparingCoral);
-        if (preparingCoral) {
-            if (coralCollectorControl.hasCoral()) {
-
-                coralWheelRVelocity = RPM.of(0.5);
-                coralWheelLVelocity = RPM.of(0.5);
-            } else {
-                coralWheelRVelocity = RPM.zero();
-                coralWheelLVelocity = RPM.zero();
-                preparingCoral = false;
-            }
-        }else {
-            if (joystick.getRawButton(1)) {
-                coralWheelRVelocity = RPM.of(1);
-                coralWheelLVelocity = RPM.of(1);
-            } else {
-                coralWheelRVelocity = RPM.zero();
-                coralWheelLVelocity = RPM.zero();
-            }
+        //eject the coral
+        if (joystick.getRawButton(2)){
+           hasCoral = false;
+           stopCoral = false;
+           // when at L1 we need to eject differently because the coral must be sideways
+           if (elevator.getHeight().lt(Inches.of(30))){
+               coralWheelRVelocity = RPM.of(1.00);
+               coralWheelLVelocity = RPM.of(0.30);
+           } else {
+               coralWheelRVelocity = RPM.of(1.00);
+               coralWheelLVelocity = RPM.of(1.00);
+           }
+        }
+        //intake the coral
+        else if(joystick.getRawButton(1) && !stopCoral) {
+            coralWheelLVelocity = RPM.of(0.20);
+            coralWheelRVelocity = RPM.of(0.20);
+        }
+        else {
+            coralWheelRVelocity = RPM.zero();
+            coralWheelLVelocity = RPM.zero();
         }
 
-        coralCollectorControl.setCoralVelocity(coralWheelRVelocity,coralWheelLVelocity);
+
+        coralCollector.setCoralVelocity(coralWheelRVelocity, coralWheelLVelocity);
 
 
     }

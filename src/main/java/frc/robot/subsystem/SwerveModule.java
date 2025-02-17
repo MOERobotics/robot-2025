@@ -13,10 +13,12 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.MOESubsystem;
+import frc.robot.subsystem.interfaces.SwerveModuleControl;
+import frc.robot.subsystem.interfaces.SwerveModuleInputsAutoLogged;
 
 import static edu.wpi.first.units.Units.*;
 
-public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> implements SwerveModuleControl{
+public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> implements SwerveModuleControl {
     public SparkMax driveMotor;
     public SparkMax pivotMotor;
     public PIDController pivotController;
@@ -35,7 +37,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
             Angle moduleOffset,
             PIDController pivotController
     ) {
-        this.setSensors(new SwerveModuleInputsAutoLogged());
+        super(new SwerveModuleInputsAutoLogged());
         this.pivotEncoder = pivotEncoder;
         this.pivotMotor = pivotMotor;
         this.driveMotor = driveMotor;

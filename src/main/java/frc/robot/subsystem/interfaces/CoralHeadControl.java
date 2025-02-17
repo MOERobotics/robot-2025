@@ -1,17 +1,18 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.interfaces;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystem.interfaces.CoralHeadInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface CoralHeadControl extends Subsystem {
 
     @AutoLog
     public class CoralHeadInputs {
-        boolean hasCoral;
-        boolean inFrontReef;
-        AngularVelocity velocityLeft;
-        AngularVelocity velocityRight;
+        public boolean hasCoral;
+        public boolean inFrontReef;
+        public AngularVelocity velocityLeft;
+        public AngularVelocity velocityRight;
 
     }
     CoralHeadInputsAutoLogged getSensors();

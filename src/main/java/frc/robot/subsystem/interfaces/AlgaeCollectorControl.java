@@ -1,21 +1,23 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.interfaces;
 
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.MOESubsystem;
+import frc.robot.subsystem.interfaces.AlgaeCollectorInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface AlgaeCollectorControl extends Subsystem {
     @AutoLog
     public class AlgaeCollectorInputs{
-         Voltage wheelAppliedVolts;
-         AngularVelocity wheelVelocity;
-         Voltage algaeArmAppliedVolts;
-         Angle algaeArmAngle;
-         boolean hasAlgae;
-         boolean inStartPosition;
-         boolean inCollectPosition;
-         WheelState wheelState;
+         public Voltage wheelAppliedVolts;
+         public AngularVelocity wheelVelocity;
+         public Voltage algaeArmAppliedVolts;
+         public Angle algaeArmAngle;
+         public boolean hasAlgae;
+         public boolean inStartPosition;
+         public boolean inCollectPosition;
+         public WheelState wheelState;
+         public AngularVelocity algaeArmVelocity;
 
     }
     AlgaeCollectorInputsAutoLogged getSensors();

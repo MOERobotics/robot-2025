@@ -2,21 +2,20 @@ package frc.robot.subsystem;
 
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.MOESubsystem;
+import frc.robot.subsystem.interfaces.ClimberControl;
+import frc.robot.subsystem.interfaces.ClimberInputsAutoLogged;
 
 import static edu.wpi.first.units.Units.*;
 
 public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> implements ClimberControl {
 
-    SparkMax climbMotor;
+    public SparkMax climbMotor;
 
-    CANcoder climbEncoder;
+    public CANcoder climbEncoder;
 
 
 
@@ -29,10 +28,11 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
 
 
     public SubMOErineClimber(
-            SparkMax climbMotor,
-            CANcoder climbEncoder
+        SparkMax climbMotor,
+        CANcoder climbEncoder,
+        String name
     ) {
-        this.setSensors(new ClimberInputsAutoLogged());
+        super(new ClimberInputsAutoLogged(), name);
         this.climbMotor = climbMotor;
         this.climbEncoder = climbEncoder;
 

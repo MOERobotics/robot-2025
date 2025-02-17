@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystem.CoralHeadControl;
+import frc.robot.subsystem.interfaces.CoralHeadControl;
 
 import static edu.wpi.first.units.Units.*;
 

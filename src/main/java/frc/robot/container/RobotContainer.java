@@ -5,6 +5,10 @@
 package frc.robot.container;
 
 import frc.robot.subsystem.*;
+import frc.robot.subsystem.interfaces.AlgaeCollectorControl;
+import frc.robot.subsystem.interfaces.CoralHeadControl;
+import frc.robot.subsystem.interfaces.ElevatorControl;
+import frc.robot.subsystem.interfaces.SwerveDriveControl;
 import lombok.Data;
 
 
