@@ -7,6 +7,8 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.LidarTest;
 import frc.robot.subsystem.FakeElevator;
 import frc.robot.subsystem.FakeCoralCollector;
 import frc.robot.subsystem.SwerveDrive;
@@ -22,6 +24,10 @@ public class SwerveBotContainer extends RobotContainer {
         double pivotkI = 0;
         double pivotkD = 0;
         double pivotkIMax = 2;
+        double driveP = 7.0e-5;
+        double driveI = 0.0;
+        double driveD = 1.0e-4;
+        //double driveFF = 1.76182e-4;
         PIDController pivotControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
         PIDController pivotControllerFR = new PIDController(pivotkP, pivotkI, pivotkD);
@@ -30,6 +36,11 @@ public class SwerveBotContainer extends RobotContainer {
         pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
         PIDController pivotControllerBL = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerBL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        PIDController driveControllerFL = new PIDController(driveD, driveI, driveD);
+        PIDController driveControllerFR = new PIDController(driveD, driveI, driveD);
+        PIDController driveControllerBL = new PIDController(driveD, driveI, driveD);
+        PIDController driveControllerBR = new PIDController(driveD, driveI, driveD);
+        SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(0,1.76182e-4,0);
 
         this.setSwerveDrive(
                 new SwerveDrive(
@@ -40,7 +51,9 @@ public class SwerveBotContainer extends RobotContainer {
                                 Inches.of(14),
                                 Inches.of(14),
                                 Degrees.of(45),
-                                pivotControllerFL
+                                pivotControllerFL,
+                                driveControllerFL,
+                                driveFF
                         ),
                         new SwerveModule(//FR
                                 new SparkMax(9, SparkLowLevel.MotorType.kBrushless),
@@ -49,7 +62,9 @@ public class SwerveBotContainer extends RobotContainer {
                                 Inches.of(14),
                                 Inches.of(-14),
                                 Degrees.of(-45),
-                                pivotControllerFR
+                                pivotControllerFR,
+                                driveControllerFR,
+                                driveFF
                         ),
                         new SwerveModule(//BR
                                 new SparkMax( 1, SparkLowLevel.MotorType.kBrushless),
@@ -58,7 +73,9 @@ public class SwerveBotContainer extends RobotContainer {
                                 Inches.of(-14),
                                 Inches.of(-14),
                                 Degrees.of(-135),
-                                pivotControllerBR
+                                pivotControllerBR,
+                                driveControllerBR,
+                                driveFF
                         ),
                         new SwerveModule(//BL
                                 new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
@@ -67,7 +84,9 @@ public class SwerveBotContainer extends RobotContainer {
                                 Inches.of(-14),
                                 Inches.of(14),
                                 Degrees.of(135),
-                                pivotControllerBL
+                                pivotControllerBL,
+                                driveControllerBL,
+                                driveFF
                         ),
                         new Pigeon2(0)
 

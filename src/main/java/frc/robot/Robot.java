@@ -13,8 +13,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.LidarTest;
+import frc.robot.container.FortissiMOEContainer;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
+import frc.robot.container.SwerveBotContainer;
 import org.littletonrobotics.junction.LoggedRobot;
 
 import static edu.wpi.first.units.Units.*;
@@ -28,16 +31,18 @@ public class Robot extends LoggedRobot {
     CommandScheduler scheduler;
 
 
-    RobotContainer robot = new SubMOErine();
+    RobotContainer robot = new SwerveBotContainer();
 
 
 
     Command autoCommand = Commands.none();
 
-    TimeOfFlight tof_sensor_center = new TimeOfFlight(41);
-    TimeOfFlight tof_sensor_right = new TimeOfFlight(42);
-    TimeOfFlight tof_sensor_left = new TimeOfFlight(40);
 
+    double center_dist;
+    double right_dist;
+    double left_dist;
+
+    TimeOfFlight tof_center = new TimeOfFlight(42);
     @Override
     public void robotInit() {
 
@@ -48,17 +53,13 @@ public class Robot extends LoggedRobot {
 
         scheduler = CommandScheduler.getInstance();
         //robot.getDrive().setDefaultCommand(Commands.none());
-        tof_sensor_center.setRangingMode(TimeOfFlight.RangingMode.Short, 24);
-        tof_sensor_left.setRangingMode(TimeOfFlight.RangingMode.Short, 24);
-        tof_sensor_right.setRangingMode(TimeOfFlight.RangingMode.Short, 24);
+
     }
 
     @Override
     public void robotPeriodic() {
-        scheduler.run();
-        SmartDashboard.putNumber("TOF Sensor CENTER", tof_sensor_center.getRange());
-        SmartDashboard.putNumber("TOF Sensor RIGHT", tof_sensor_right.getRange());
-        SmartDashboard.putNumber("TOF Sensor LEFT", tof_sensor_left.getRange());
+
+        CommandScheduler.getInstance().run();
 
 
 //        if (tof_sensor_center.getRange() < 500 && tof_sensor_left.getRange() > 40 &&){
@@ -74,6 +75,7 @@ public class Robot extends LoggedRobot {
             // else {
             //     Serial.println("NONONONO");
             // }
+
 
     }
 
@@ -97,6 +99,8 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
+
+        SmartDashboard.putData("lidar test", new LidarTest(robot.getSwerveDrive()));
     }
 
     @Override
@@ -113,17 +117,15 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testInit() {
+        CommandScheduler.getInstance().cancelAll();
     }
 
     @Override
-    public void testPeriodic() {
-    }
+    public void testPeriodic() {}
 
     @Override
-    public void simulationInit() {
-    }
+    public void simulationInit() {}
 
     @Override
-    public void simulationPeriodic() {
-    }
+    public void simulationPeriodic() {}
 }

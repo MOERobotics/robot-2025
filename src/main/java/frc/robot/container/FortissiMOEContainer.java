@@ -30,6 +30,11 @@ public class FortissiMOEContainer extends RobotContainer {
         pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
         PIDController pivotControllerBL = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerBL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        PIDController driveControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
+        PIDController driveControllerFR = new PIDController(pivotkP, pivotkI, pivotkD);
+        PIDController driveControllerBL = new PIDController(pivotkP, pivotkI, pivotkD);
+        PIDController driveControllerBR = new PIDController(pivotkP, pivotkI, pivotkD);
+        SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(0, 0.25, 0);
 
         this.setSwerveDrive(
                 new SwerveDrive(
@@ -40,7 +45,9 @@ public class FortissiMOEContainer extends RobotContainer {
                                 Inches.of(14),
                                 Inches.of(14),
                                 Degrees.of(45),
-                                pivotControllerFL
+                                pivotControllerFL,
+                                driveControllerFL,
+                                driveFF
                         ),
                         new SwerveModule(//FR
                                 new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
@@ -49,7 +56,9 @@ public class FortissiMOEContainer extends RobotContainer {
                                 Inches.of(14),
                                 Inches.of(-14),
                                 Degrees.of(-45),
-                                pivotControllerFR
+                                pivotControllerFR,
+                                driveControllerFR,
+                                driveFF
                         ),
                         new SwerveModule(//BR
                                 new SparkMax( 1, SparkLowLevel.MotorType.kBrushless),
@@ -58,7 +67,9 @@ public class FortissiMOEContainer extends RobotContainer {
                                 Inches.of(-14),
                                 Inches.of(-14),
                                 Degrees.of(-135),
-                                pivotControllerBR
+                                pivotControllerBR,
+                                driveControllerBR,
+                                driveFF
                         ),
                         new SwerveModule(//BL
                                 new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
@@ -67,7 +78,9 @@ public class FortissiMOEContainer extends RobotContainer {
                                 Inches.of(-14),
                                 Inches.of(14),
                                 Degrees.of(135),
-                                pivotControllerBL
+                                pivotControllerBL,
+                                driveControllerBL,
+                                driveFF
                         ),
                         new Pigeon2(0)
 

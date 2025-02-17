@@ -23,11 +23,13 @@ public class SwerveModule {
 
     public SimpleMotorFeedforward driveFF;
 
-    public PIDController drivePID;
+    public PIDController driveController;
     public CANcoder compass;
     public Distance xPos;
     public Distance yPos;
     public Angle heading;
+
+    public double velocityConversionFactor;
     SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
 
     @AutoLog
@@ -38,26 +40,6 @@ public class SwerveModule {
         public double error, integral;
 
     }
-    public SwerveModule(
-            SparkMax driveMotor,
-            SparkMax pivotMotor,
-            CANcoder compass,
-            Distance xPos,
-            Distance yPos,
-            Angle heading,
-            PIDController pivotController
-    ) {
-        this(
-                driveMotor,
-                pivotMotor,
-                compass,
-                xPos,
-                yPos,
-                heading,
-                pivotController,
-                new PIDController(0,0,0)
-        );
-    }
 
     public SwerveModule(
             SparkMax driveMotor,
@@ -67,16 +49,18 @@ public class SwerveModule {
             Distance yPos,
             Angle heading,
             PIDController pivotController,
-            PIDController drivePID
+            PIDController driveController,
+            SimpleMotorFeedforward driveFF
     ) {
         this.compass = compass;
         this.pivotMotor = pivotMotor;
         this.driveMotor = driveMotor;
         this.pivotController = pivotController;
+        this.driveController = driveController;
         this.xPos = xPos;
         this.yPos = yPos;
         this.heading = heading;
-
+        this.driveFF = driveFF;
     }
 
     public Angle getHeading() {
@@ -97,8 +81,16 @@ public class SwerveModule {
         return inputs;
     }
 
-    public void drive(double power) {
-        driveMotor.set(power/4);
+    public double getDriveVelocity(){
+        return driveMotor.getEncoder().getVelocity()/velocityConversionFactor;
+    }
+
+    public void drive(double target_power) {
+        double currentVelocity =  getDriveVelocity();
+        double power = driveController.calculate(currentVelocity, target_power);
+        power = power + driveFF.calculate(target_power);
+        inputs.integral = driveController.getAccumulatedError();
+        driveMotor.set(power);
     }
 
     public void pivot(Angle targetHeading) {
