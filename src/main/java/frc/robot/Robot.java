@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -116,6 +117,9 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
+        if(driverJoystick.getRawButton(1)){
+            robot.getSwerveDrive().resetPose(new Pose2d());
+        }
         double joyX =  -driverJoystick.getRawAxis(1);
         if(Math.abs(joyX) < 0.05 ) joyX=0;
 
@@ -123,7 +127,7 @@ public class Robot extends LoggedRobot {
         double joyY = -driverJoystick.getRawAxis(0);
         if(Math.abs(joyY) < 0.05 ) joyY=0;
 
-        double joyZ = driverJoystick.getRawAxis(2);
+        double joyZ = -driverJoystick.getRawAxis(2);
         if(Math.abs(joyZ) < 0.05 ) joyZ=0;
 
         robot.getSwerveDrive().drive(

@@ -31,11 +31,14 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         super(new ElevatorInputsAutoLogged());
         this.elevatorExtensionMotor = elevatorExtensionMotor;
         SparkMaxConfig extensionMotorConfig = new SparkMaxConfig();
+        SparkMaxConfig pivotMotorConfig = new SparkMaxConfig();
         this.elevatorPivotMotor = elevatorPivotMotor;
         this.tiltEncoder = tiltEncoder;
         this.extensionSensor = extensionSensor;
         extensionMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
         extensionMotorConfig.limitSwitch.reverseLimitSwitchEnabled(false);
+        pivotMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
+        elevatorPivotMotor.configure(pivotMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         elevatorExtensionMotor.configure(extensionMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     }
 

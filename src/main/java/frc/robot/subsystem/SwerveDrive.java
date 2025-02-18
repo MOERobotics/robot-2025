@@ -152,6 +152,11 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
       */
 
     @Override
+    public void drive(double xSpeed, double ySpeed, double rotation) {
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed,ySpeed,rotation,getPose().getRotation()));
+    }
+
+    @Override
     public void drive(ChassisSpeeds speeds) {
         SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
         this.getSensors().driveDesiredStates = moduleStates;
@@ -166,17 +171,13 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
          */
 
 
-        swerveModuleFL.drive(moduleStates[0].speedMetersPerSecond);
-        swerveModuleFL.pivot(moduleStates[0].angle.getMeasure());
+        swerveModuleFL.setModuleState(moduleStates[0]);
 
-        swerveModuleFR.drive(moduleStates[1].speedMetersPerSecond);
-        swerveModuleFR.pivot(moduleStates[1].angle.getMeasure());
+        swerveModuleFR.setModuleState(moduleStates[1]);
 
-        swerveModuleBR.drive(moduleStates[2].speedMetersPerSecond);
-        swerveModuleBR.pivot(moduleStates[2].angle.getMeasure());
+        swerveModuleBR.setModuleState(moduleStates[2]);
 
-        swerveModuleBL.drive(moduleStates[3].speedMetersPerSecond);
-        swerveModuleBL.pivot(moduleStates[3].angle.getMeasure());
+        swerveModuleBL.setModuleState(moduleStates[3]);
 
 
 
