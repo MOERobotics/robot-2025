@@ -1,10 +1,12 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.interfaces;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystem.interfaces.SwerveDriveInputsAutoLogged;
+import frc.robot.subsystem.interfaces.SwerveModuleInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface SwerveDriveControl extends Subsystem {
@@ -32,19 +34,22 @@ public interface SwerveDriveControl extends Subsystem {
 
     edu.wpi.first.math.kinematics.SwerveDriveKinematics getKinematics();
 
-    edu.wpi.first.math.kinematics.SwerveDriveOdometry getOdometry();
+
+
+
+        edu.wpi.first.math.kinematics.SwerveDriveOdometry getOdometry();
 
     @AutoLog
     public static class SwerveDriveInputs {
-        double currentRotationRadians;
-        Pose2d pose;
-        SwerveModuleState[] moduleStates;
-        SwerveModuleState[] driveDesiredStates;
-        SwerveModulePosition[] modulePositions;
-        SwerveModuleInputsAutoLogged swerveModuleFL;
-        SwerveModuleInputsAutoLogged swerveModuleFR;
-        SwerveModuleInputsAutoLogged swerveModuleBR;
-        SwerveModuleInputsAutoLogged swerveModuleBL;
-        ChassisSpeeds robotRelativeSpeeds;
+        public double currentRotationRadians;
+        public Pose2d pose;
+        public SwerveModuleState[] moduleStates;
+        public SwerveModuleState[] driveDesiredStates;
+        public SwerveModulePosition[] modulePositions;
+        public SwerveModuleInputsAutoLogged swerveModuleFL;
+        public SwerveModuleInputsAutoLogged swerveModuleFR;
+        public SwerveModuleInputsAutoLogged swerveModuleBR;
+        public SwerveModuleInputsAutoLogged swerveModuleBL;
+        public ChassisSpeeds robotRelativeSpeeds;
     }
 }

@@ -2,28 +2,15 @@ package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.MOESubsystem;
 import lombok.Getter;
-
-import java.util.ArrayList;
 
 import static edu.wpi.first.units.Units.Meters;
 
@@ -37,7 +24,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public @Getter SwerveDriveOdometry odometry;
     public SwerveDrivePoseEstimator poseEstimator;
     public Pigeon2 pigeon;
-    public final Field2d field = new Field2d();
 
     public SwerveDrive(
         SwerveModule SwerveModuleFL,
@@ -170,24 +156,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         swerveModuleBL.pivot(moduleStates[3].angle.getMeasure());
     }
 
-
-
-    public void setModuleStates(SwerveModuleState[] moduleStates) {
-        this.getSensors().driveDesiredStates = moduleStates;
-        swerveModuleFL.drive(moduleStates[0].speedMetersPerSecond);
-        swerveModuleFL.pivot(moduleStates[0].angle.getMeasure());
-
-        swerveModuleFR.drive(moduleStates[1].speedMetersPerSecond);
-        swerveModuleFR.pivot(moduleStates[1].angle.getMeasure());
-
-        swerveModuleBR.drive(moduleStates[2].speedMetersPerSecond);
-        swerveModuleBR.pivot(moduleStates[2].angle.getMeasure());
-
-        swerveModuleBL.drive(moduleStates[3].speedMetersPerSecond);
-        swerveModuleBL.pivot(moduleStates[3].angle.getMeasure());
-    }
-
-
     /**
      * Drives an individual swerve module of the swerve drive
      *
@@ -200,42 +168,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         this.getSensors().driveDesiredStates = moduleStates;
         swerveModules[index].drive(moduleStates[index].speedMetersPerSecond);
         swerveModules[index].pivot(moduleStates[index].angle.getMeasure());
-    }
-
-    public Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints, double startVelocityMetersPerSecond, double endVelocityMetersPerSecond){
-        TrajectoryConfig config = new TrajectoryConfig(0.2,0.2);
-        config.setEndVelocity(endVelocityMetersPerSecond);
-        config.setStartVelocity(startVelocityMetersPerSecond);
-        var trajectory = TrajectoryGenerator.generateTrajectory(
-                start,
-                internalPoints,
-                end,
-                config
-        );
-        SmartDashboard.putNumber("Time",trajectory.getTotalTimeSeconds());
-        SmartDashboard.putNumber("trajEndRotation", trajectory.sample(trajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees());
-        SmartDashboard.putNumber("desiredEndRot", end.getRotation().getDegrees());
-        PIDController xController = new PIDController(1, 0, 0);
-        PIDController yController = new PIDController(1, 0, 0);
-        ProfiledPIDController thetaController = new ProfiledPIDController(.04, 0, 0, new TrapezoidProfile.Constraints(2, 0.5));
-
-        SwerveControllerCommand trajCommand = new SwerveControllerCommand(
-                trajectory,
-//                vision::getRobotPosition,
-//		        this::getEstimatedPose,
-                this::getPose,
-                kinematics,
-                xController,
-                yController,
-                thetaController,
-
-                this::setModuleStates,
-                this
-        );
-        return Commands.parallel(
-                Commands.runOnce(() -> field.getObject("traj").setTrajectory(trajectory)),
-                trajCommand
-        );
     }
 
 }

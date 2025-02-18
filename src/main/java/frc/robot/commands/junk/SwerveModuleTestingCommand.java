@@ -1,19 +1,19 @@
-package frc.robot.commands;
+package frc.robot.commands.junk;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.SwerveDrive;
-import frc.robot.subsystem.SwerveDriveControl;
+import frc.robot.subsystem.interfaces.SwerveDriveControl;
 import frc.robot.subsystem.SwerveModule;
 
-public class SwerveModuleCommand extends Command {
+public class SwerveModuleTestingCommand extends Command {
     SwerveDriveControl swerveDrive;
     SendableChooser<Integer> Chooser = new SendableChooser<>();
     Joystick driverJoystick;
 
-    public SwerveModuleCommand(SwerveDriveControl swerveDrive, Joystick driverJoystick){
+    public SwerveModuleTestingCommand(SwerveDriveControl swerveDrive, Joystick driverJoystick){
         this.swerveDrive = swerveDrive;
         this.driverJoystick = driverJoystick;
         addRequirements(swerveDrive);

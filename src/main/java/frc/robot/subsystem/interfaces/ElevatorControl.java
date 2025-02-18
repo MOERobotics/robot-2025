@@ -1,7 +1,8 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.interfaces;
 
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystem.interfaces.ElevatorInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLog;
 
 import static edu.wpi.first.units.Units.Inches;
@@ -15,6 +16,13 @@ public interface ElevatorControl extends Subsystem {
         public Angle angle;
         public AngularVelocity horizontalSpeed;
         public LinearVelocity extensionSpeed;
+
+        public Angle extensionMotorPosition;
+
+        public double elevatorVoltage;
+        public String elevatorVoltageFromADC;
+
+        public boolean canGoDown;
     }
 
     public ElevatorInputsAutoLogged getSensors();
@@ -25,6 +33,9 @@ public interface ElevatorControl extends Subsystem {
 
     default Distance getExtension() {
         return this.getSensors().extension;
+    }
+    default boolean canGoDown() {
+        return this.getSensors().canGoDown;
     }
 
     public Distance getPivotHeight();

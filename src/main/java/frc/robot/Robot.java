@@ -7,9 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,15 +14,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.SwerveModuleCommand;
-import frc.robot.commands.driveToPosition;
 import frc.robot.commands.standardDeviation;
 import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
-import frc.robot.subsystem.LimelightHelpers;
-import frc.robot.subsystem.SwerveDrive;
 import org.littletonrobotics.junction.LoggedRobot;
-
-import java.nio.file.Paths;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -130,10 +122,6 @@ public class Robot extends LoggedRobot {
         Command commandSD = new standardDeviation();
         SmartDashboard.putData("Standard Deviation", commandSD);
         commandSD.schedule();
-
-
-        Command driveCommand = new driveToPosition((SwerveDrive) robot.getSwerveDrive(), new Pose2d(2, 7, Rotation2d.fromRadians(0)), robot.getSwerveDrive().getPose());
-        driveCommand.schedule();
     }
 
     @Override

@@ -1,6 +1,8 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.fakes;
 
 import edu.wpi.first.units.measure.AngularVelocity;
+import frc.robot.subsystem.interfaces.AlgaeCollectorInputsAutoLogged;
+import frc.robot.subsystem.interfaces.AlgaeCollectorControl;
 
 public class AlgaeCollectorControlFake implements AlgaeCollectorControl {
 

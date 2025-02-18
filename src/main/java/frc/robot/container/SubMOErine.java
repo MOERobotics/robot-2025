@@ -2,27 +2,31 @@ package frc.robot.container;
 
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Joystick;
-import frc.robot.commands.ElevatorTeleopCommand;
+import edu.wpi.first.wpilibj.AnalogInput;
+import frc.robot.subsystem.*;
 import frc.robot.subsystem.SubMOErineElevator;
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.*;
 
 public class SubMOErine extends RobotContainer{
-    ElevatorTeleopCommand elevatorTeleopCommand;
     public SubMOErine(){
-        double pivotkP = 0.01;
-        double pivotkI = 0.3;
-        double pivotkD = 0;
-        double pivotkIMax = 2;
+        double pivotkP = 0.15;
+        double pivotkI = 0.001;
+        double pivotkD =0.003;;
+        double pivotkIMax = 1;
+
+
         PIDController pivotControllerFL = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerFL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerFL.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleFL = new SwerveModule(
                 new SparkMax(1, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(20, SparkLowLevel.MotorType.kBrushless),
@@ -34,6 +38,7 @@ public class SubMOErine extends RobotContainer{
         );
         PIDController pivotControllerFR = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerFR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerFR.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleFR = new SwerveModule(
                 new SparkMax(3, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(2, SparkLowLevel.MotorType.kBrushless),
@@ -45,6 +50,7 @@ public class SubMOErine extends RobotContainer{
         );
         PIDController pivotControllerBR = new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerBR.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerBR.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleBR = new SwerveModule(
                 new SparkMax(17, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(16, SparkLowLevel.MotorType.kBrushless),
@@ -56,16 +62,18 @@ public class SubMOErine extends RobotContainer{
         );
         PIDController pivotControllerBL= new PIDController(pivotkP, pivotkI, pivotkD);
         pivotControllerBL.setIntegratorRange(-pivotkIMax, pivotkIMax);
+        pivotControllerBL.enableContinuousInput(-Math.PI,Math.PI);
         SwerveModule swerveModuleBL = new SwerveModule(
                 new SparkMax(19, SparkLowLevel.MotorType.kBrushless),
                 new SparkMax(18, SparkLowLevel.MotorType.kBrushless),
                 new CANcoder(34),
                 Inches.of(-14.5),
-                Inches.of(-14.5),
-                Degrees.of(-135),
+                Inches.of(14.5),
+                Degrees.of(135),
                 pivotControllerBL
         );
         Pigeon2 pigeon2 = new Pigeon2(0);
+
         SwerveDrive swerveDrive = new SwerveDrive(
                 swerveModuleFL,
                 swerveModuleFR,
@@ -74,18 +82,69 @@ public class SubMOErine extends RobotContainer{
                 pigeon2
         );
 
-        SparkMax height = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
-        SparkMax pivot = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
+
+        SparkMax extensionMotor = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
+        SparkMax pivotMotor = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
         CANcoder tilt = new CANcoder(35);
+
+
+
+        AnalogInput extensionSensor = new AnalogInput(1);
+
+        SparkMax algaeWheel = new SparkMax(11, SparkLowLevel.MotorType.kBrushless);
+        SparkMax algaeArm = new SparkMax(10, SparkLowLevel.MotorType.kBrushless);
 
         this.setSwerveDrive(swerveDrive);
         this.setElevator(new SubMOErineElevator(
-                height,
-                pivot,
-                tilt
+                extensionMotor,
+                pivotMotor,
+                tilt,
+                extensionSensor
         ));
-        elevatorTeleopCommand = new ElevatorTeleopCommand(this.getElevator(),new Joystick(0));
-        this.getElevator().setDefaultCommand(elevatorTeleopCommand);
+
+        SparkMax leftMotor = new SparkMax(13, SparkLowLevel.MotorType.kBrushless);
+        SparkMax rightMotor = new SparkMax(12, SparkLowLevel.MotorType.kBrushless);
+
+        SparkMaxConfig leftMotorConfig = new SparkMaxConfig();
+        leftMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+        leftMotorConfig.limitSwitch.forwardLimitSwitchEnabled(false);
+
+        SparkMaxConfig rightMotorConfig = new SparkMaxConfig();
+        rightMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+
+        leftMotor.configure(leftMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        rightMotor.configure(rightMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+        this.setCoralCollector(new CoralHead(leftMotor,rightMotor));
+        this.setAlgaeCollector(new AlgaeCollector(algaeWheel,algaeArm, Degrees.of(0), Degrees.of(0), Degrees.of(0)));
+        SparkMax rear = new SparkMax(8, SparkLowLevel.MotorType.kBrushless);
+        SparkMax mid = new SparkMax(7, SparkLowLevel.MotorType.kBrushless);
+
+        SparkMaxConfig rearConfig = new SparkMaxConfig();
+        rearConfig.inverted(false);
+        rear.configure(rearConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+
+        SparkMaxConfig midConfig = new SparkMaxConfig();
+        midConfig.inverted(true);
+        mid.configure(midConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+
+        this.setClimberRear(new SubMOErineClimber(
+             rear,
+            new CANcoder(38),
+                "Rear Climber"
+        ));
+
+
+        this.setClimberMid(new SubMOErineClimber(
+                mid,
+                new CANcoder(39),
+                "Mid Climber"
+                ));
+
+
+
     }
 }
 
