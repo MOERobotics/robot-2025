@@ -44,12 +44,12 @@ public class CoralHeadTeleopCommand extends Command {
            hasCoral = false;
            stopCoral = false;
            // when at L1 we need to eject differently because the coral must be sideways
-           if (elevator.getHeight().lt(Inches.of(30))){
+           if (elevator.getHeight().lt(Inches.of(45))){
                coralWheelRVelocity = RPM.of(1.00);
                coralWheelLVelocity = RPM.of(0.30);
            } else {
-               coralWheelRVelocity = RPM.of(1.00);
-               coralWheelLVelocity = RPM.of(1.00);
+               coralWheelRVelocity = RPM.of(0.80);
+               coralWheelLVelocity = RPM.of(0.80);
            }
         }
         //intake the coral

@@ -32,11 +32,6 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         //leftMotor.setInverted(true);
     }
 
-    @Override
-    public boolean hasCoral() {
-        return leftMotor.getReverseLimitSwitch().isPressed();
-    }
-
 
     @Override
     public boolean inFrontReef() {
@@ -46,7 +41,7 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
 
     @Override
     public void readSensors(CoralHeadInputsAutoLogged sensors) {
-        sensors.hasCoral = leftMotor.getReverseLimitSwitch().isPressed();
+        sensors.hasCoral = leftMotor.getForwardLimitSwitch().isPressed();
         sensors.inFrontReef = false;
         sensors.velocityLeft = RPM.of(leftMotor.getEncoder().getVelocity());
         sensors.velocityRight = RPM.of(rightMotor.getEncoder().getVelocity());

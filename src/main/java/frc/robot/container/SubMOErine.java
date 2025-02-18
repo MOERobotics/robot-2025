@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -101,7 +102,20 @@ public class SubMOErine extends RobotContainer{
                 extensionSensor
         ));
 
-        this.setCoralCollector(new CoralHead(new SparkMax(13, SparkLowLevel.MotorType.kBrushless), new SparkMax(12,  SparkLowLevel.MotorType.kBrushless)));
+        SparkMax leftMotor = new SparkMax(13, SparkLowLevel.MotorType.kBrushless);
+        SparkMax rightMotor = new SparkMax(12, SparkLowLevel.MotorType.kBrushless);
+
+        SparkMaxConfig leftMotorConfig = new SparkMaxConfig();
+        leftMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+        leftMotorConfig.limitSwitch.forwardLimitSwitchEnabled(false);
+
+        SparkMaxConfig rightMotorConfig = new SparkMaxConfig();
+        rightMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
+
+        leftMotor.configure(leftMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        rightMotor.configure(rightMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+        this.setCoralCollector(new CoralHead(leftMotor,rightMotor));
         this.setAlgaeCollector(new AlgaeCollector(algaeWheel,algaeArm, Degrees.of(0), Degrees.of(0), Degrees.of(0)));
         SparkMax rear = new SparkMax(8, SparkLowLevel.MotorType.kBrushless);
         SparkMax mid = new SparkMax(7, SparkLowLevel.MotorType.kBrushless);

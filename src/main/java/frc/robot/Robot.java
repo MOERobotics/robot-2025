@@ -96,10 +96,12 @@ public class Robot extends LoggedRobot {
             robot.getElevator(),
             functionJoystick.getHID()
         ).schedule();
-        new AlgaeCollectorTeleopCommand(
+        /*new AlgaeCollectorTeleopCommand(
             robot.getAlgaeCollector(),
             functionJoystick.getHID()
         ).schedule();
+
+         */
         new CoralHeadTeleopCommand(
             robot.getCoralCollector(),
             functionJoystick.getHID(),

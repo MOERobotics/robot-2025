@@ -1,6 +1,8 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -29,11 +31,28 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         SwerveModule SwerveModuleBL,
         Pigeon2 pigeon
     ) {
+
         super(new SwerveDriveInputsAutoLogged());
         this.swerveModuleBR = SwerveModuleBR;
         this.swerveModuleBL = SwerveModuleBL;
         this.swerveModuleFR = SwerveModuleFR;
         this.swerveModuleFL = SwerveModuleFL;
+
+        SparkMaxConfig FLConfig = new SparkMaxConfig();
+        SparkMaxConfig FRConfig = new SparkMaxConfig();
+        SparkMaxConfig BRConfig = new SparkMaxConfig();
+        SparkMaxConfig BLConfig = new SparkMaxConfig();
+
+        FLConfig.inverted(true);
+        FRConfig.inverted(true);
+        BRConfig.inverted(true);
+        BLConfig.inverted(true);
+
+        SwerveModuleFL.driveMotor.configure(FLConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        SwerveModuleFR.driveMotor.configure(FRConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        SwerveModuleBR.driveMotor.configure(BRConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        SwerveModuleBL.driveMotor.configure(BLConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
         this.swerveModules = new SwerveModule[]{swerveModuleFL,SwerveModuleFR,swerveModuleBR,swerveModuleBL};
         this.pigeon = pigeon;
         kinematics = new SwerveDriveKinematics(

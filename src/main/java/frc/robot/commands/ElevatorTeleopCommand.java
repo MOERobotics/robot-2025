@@ -17,8 +17,8 @@ public class ElevatorTeleopCommand extends Command {
     Joystick joystick;
     LinearVelocity verticalVelocity = InchesPerSecond.of(0);
     AngularVelocity angularVelocity;
-    Distance[] Ls = {Inches.of(25.88), Inches.of(39.72), Inches.of(55.59), Inches.of(71.87), Inches.of(8)};
-    private final PIDController pid = new PIDController(0.1, 0.3 ,0);
+    Distance[] Ls = {Inches.of(33), Inches.of(40), Inches.of(55.59), Inches.of(82.8), Inches.of(26)};
+    private final PIDController pid = new PIDController(0.2, 0.2 ,0);
     Distance targetheight;
 
 
@@ -31,8 +31,8 @@ public class ElevatorTeleopCommand extends Command {
     @Override
     public void initialize() {
         pid.reset();
-        pid.setIntegratorRange(-1, 1);
-        pid.setIZone(1);
+        pid.setIntegratorRange(-0.5, 0.5);
+        pid.setIZone(1.5);
         targetheight = elevator.getHeight();
         verticalVelocity = MetersPerSecond.zero();
         angularVelocity = RadiansPerSecond.zero();
@@ -58,8 +58,8 @@ public class ElevatorTeleopCommand extends Command {
         Distance error = elevator.getHeight().minus(targetheight);
         double pidOutput = pid.calculate(error.in(Inches));
         pidOutput = MathUtil.clamp(pidOutput, -1, 1);
-        verticalVelocity = InchesPerSecond.of(2).times(pidOutput);
-        angularVelocity = DegreesPerSecond.of(2).times(
+        verticalVelocity = InchesPerSecond.of(6).times(pidOutput);
+        angularVelocity = DegreesPerSecond.of(0).times(
                 MathUtil.applyDeadband(joystick.getRawAxis(0), 0.1)
         );
         elevator.moveVertically(verticalVelocity);
