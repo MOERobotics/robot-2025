@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.*;
@@ -44,7 +45,7 @@ public class Robot extends LoggedRobot {
     RobotContainer robot = new SwerveBotContainer();
     Autos autos;
     Command autoCommand = Commands.none();
-//    TimeOfFlight tof_sensor_center = new TimeOfFlight(42);
+    TimeOfFlight tof_sensor_center = new TimeOfFlight(42);
 
 
     SendableChooser<SwerveDriveControl.CommandType> chooser = new SendableChooser<>();
@@ -117,6 +118,12 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         scheduler.run();
+        if (tof_sensor_center.getRange() < 254){
+            SmartDashboard.putString("DROP", "YES");
+        }
+        else {
+            SmartDashboard.putString("DROP", "NO");
+        }
     }
 
     @Override
