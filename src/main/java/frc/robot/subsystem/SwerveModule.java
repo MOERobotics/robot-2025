@@ -11,16 +11,19 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
+import frc.robot.MOESubsystem;
+import frc.robot.subsystem.interfaces.SwerveModuleControl;
+import frc.robot.subsystem.interfaces.SwerveModuleInputsAutoLogged;
 import frc.robot.utils.FeedforwardConstants;
 import frc.robot.utils.PIDConstants;
 import org.littletonrobotics.junction.Logger;
 
-import static edu.wpi.first.math.util.Units.inchesToMeters;
 import static edu.wpi.first.units.Units.*;
 
-public class SwerveModule implements SwerveModuleControl{
+public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> implements SwerveModuleControl {
     public SparkMax driveMotor;
     public SparkMax pivotMotor;
     public PIDController pivotController;
@@ -28,7 +31,7 @@ public class SwerveModule implements SwerveModuleControl{
     public CANcoder pivotEncoder;
     public Distance xPos;
     public Distance yPos;
-    public Angle offset;
+    public Angle moduleOffset;
     public Angle targetHeading;
     SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
     public SimpleMotorFeedforward driveFeedforward;
@@ -41,11 +44,12 @@ public class SwerveModule implements SwerveModuleControl{
         CANcoder pivotEncoder,
         Distance xPos,
         Distance yPos,
-        Angle offset,
+        Angle moduleOffset,
         PIDConstants pivotFeedback,
         PIDConstants driveFeedback,
         FeedforwardConstants driveFeedforward
     ) {
+        super(new SwerveModuleInputsAutoLogged());
         this.pivotEncoder = pivotEncoder;
         this.pivotMotor = pivotMotor;
         this.driveMotor = driveMotor;
@@ -61,13 +65,15 @@ public class SwerveModule implements SwerveModuleControl{
 
         this.xPos = xPos;
         this.yPos = yPos;
-        this.offset = offset;
-        driveMotor.configure(driveConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-        pivotMotor.configure(pivotConfig, SparkBase.ResetMode.kResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        this.moduleOffset = moduleOffset;
+        driveMotor.configure(driveConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        pivotMotor.configure(pivotConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+
     }
 
     public Angle getHeading() {
-        Angle heading = this.pivotEncoder.getAbsolutePosition().getValue().plus(offset);
+        Angle heading = this.pivotEncoder.getAbsolutePosition().getValue().plus(moduleOffset);
         heading = Radians.of(MathUtil.angleModulus(heading.in(Radians)));
 //        while (heading.gt(Rotations.of(.5))) {
 //            heading = heading.minus(Rotations.of(1));
@@ -79,19 +85,20 @@ public class SwerveModule implements SwerveModuleControl{
     }
 
     @Override
-    public SwerveModuleInputsAutoLogged readSensors() {
-        inputs.currentRotationDegrees = getHeading();
-        inputs.pivotPower = pivotMotor.get();
-        inputs.drivePower = driveMotor.get();
-        inputs.targetHeading = targetHeading;
-        inputs.currentRotationDegreesNotWrapped = Rotations.of(pivotMotor.getEncoder().getPosition());
-        inputs.pivotVelocity = RPM.of(pivotMotor.getEncoder().getVelocity());
-        inputs.pivotVolts = Volts.of(pivotMotor.getAppliedOutput() * pivotMotor.getBusVoltage());
-        inputs.driveVolts = Volts.of(driveMotor.getAppliedOutput() * driveMotor.getBusVoltage());
-        inputs.drivePosition = Rotations.of(driveMotor.getEncoder().getPosition());
-        inputs.driveVelocity = RPM.of(driveMotor.getEncoder().getVelocity());
-
-        return inputs;
+    public void readSensors(SwerveModuleInputsAutoLogged sensors) {
+        sensors.currentRotationDegrees = getHeading();
+        sensors.pivotPower = pivotMotor.get();
+        sensors.drivePower = driveMotor.get();
+        sensors.targetHeading = targetHeading;
+        sensors.pivotPower = pivotMotor.get();
+        sensors.drivePower = driveMotor.get();
+        sensors.targetHeading = targetHeading;
+        sensors.currentRotationDegreesNotWrapped = Rotations.of(pivotMotor.getEncoder().getPosition());
+        sensors.pivotVelocity = RPM.of(pivotMotor.getEncoder().getVelocity());
+        sensors.pivotVolts = Volts.of(pivotMotor.getAppliedOutput() * pivotMotor.getBusVoltage());
+        sensors.driveVolts = Volts.of(driveMotor.getAppliedOutput() * driveMotor.getBusVoltage());
+        sensors.drivePosition = Rotations.of(driveMotor.getEncoder().getPosition());
+        sensors.driveVelocity = RPM.of(driveMotor.getEncoder().getVelocity());
     }
 
 
@@ -115,10 +122,10 @@ public class SwerveModule implements SwerveModuleControl{
     }
 
     @Override
-    public void setModuleState(SwerveModuleState state) {
-        state.optimize(new Rotation2d(getHeading()));
-        drive(state.speedMetersPerSecond);
-        pivot(state.angle.getMeasure());
+    public void setModuleState(SwerveModuleState moduleState) {
+        moduleState.optimize(new Rotation2d(getHeading()));
+        drive(moduleState.speedMetersPerSecond);
+        pivot(moduleState.angle.getMeasure());
     }
 
     public void pivotVolts(double volts) {
@@ -128,16 +135,16 @@ public class SwerveModule implements SwerveModuleControl{
     @Override
     public SwerveModuleState getModuleState() {
         return new SwerveModuleState(
-            driveMotor.getEncoder().getVelocity(),
-            new Rotation2d(getHeading())
+                driveMotor.getEncoder().getVelocity(),
+                new Rotation2d(getHeading())
         );
     }
 
     @Override
     public SwerveModulePosition getModulePosition() {
         SwerveModulePosition position = new SwerveModulePosition(
-            inchesToMeters(driveMotor.getEncoder().getPosition() * (4 * Math.PI / 6.75)),
-            new Rotation2d(getHeading())
+                Units.Inches.of(driveMotor.getEncoder().getPosition()).in(Units.Meters),
+                new Rotation2d(getHeading())
         );
         return position;
     }

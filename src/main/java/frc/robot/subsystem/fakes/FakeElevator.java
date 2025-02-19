@@ -1,12 +1,16 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.fakes;
 
 import edu.wpi.first.units.measure.*;
 import frc.robot.MOESubsystem;
+import frc.robot.subsystem.interfaces.ElevatorInputsAutoLogged;
+import frc.robot.subsystem.interfaces.ElevatorControl;
+
+import static edu.wpi.first.units.Units.*;
 
 public class FakeElevator extends MOESubsystem<ElevatorInputsAutoLogged> implements ElevatorControl {
 
     public FakeElevator(){
-        this.setSensors(new ElevatorInputsAutoLogged());
+        super(new ElevatorInputsAutoLogged());
     }
 
     @Override
@@ -24,6 +28,11 @@ public class FakeElevator extends MOESubsystem<ElevatorInputsAutoLogged> impleme
     @Override
     public void moveHorizontally(AngularVelocity power) {
 
+    }
+
+    @Override
+    public Distance getPivotHeight() {
+        return Inches.of(0);
     }
 
 }

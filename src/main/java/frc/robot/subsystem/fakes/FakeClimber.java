@@ -1,13 +1,15 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.fakes;
 
-import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.MOESubsystem;
-
-import static edu.wpi.first.units.Units.RPM;
+import frc.robot.subsystem.interfaces.ClimberInputsAutoLogged;
+import frc.robot.subsystem.interfaces.ClimberControl;
 
 public class FakeClimber extends MOESubsystem<ClimberInputsAutoLogged> implements ClimberControl {
+
+    public FakeClimber(ClimberInputsAutoLogged sensors) {
+        super(new ClimberInputsAutoLogged());
+    }
 
     @Override
     public void setClimberVelocity(AngularVelocity power) {

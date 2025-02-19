@@ -1,7 +1,8 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
-import edu.wpi.first.math.Matrix;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -13,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import frc.robot.MOESubsystem;
+import frc.robot.subsystem.interfaces.SwerveDriveControl;
+import frc.robot.subsystem.interfaces.SwerveDriveInputsAutoLogged;
 import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 
@@ -24,6 +27,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public SwerveModule swerveModuleBL;
     public SwerveModule swerveModuleBR;
     public SwerveModule[] swerveModules;
+
     public @Getter SwerveDriveKinematics kinematics;
     public @Getter SwerveDriveOdometry odometry;
     public SwerveDrivePoseEstimator poseEstimator;
@@ -97,7 +101,8 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
             SwerveModule SwerveModuleBL,
             Pigeon2 pigeon
     ) {
-        this.setSensors(new SwerveDriveInputsAutoLogged());
+
+        super(new SwerveDriveInputsAutoLogged());
         this.swerveModuleBR = SwerveModuleBR;
         this.swerveModuleBL = SwerveModuleBL;
         this.swerveModuleFR = SwerveModuleFR;
@@ -136,10 +141,10 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         getSensors().moduleStates = new SwerveModuleState[4];
         getSensors().modulePositions = new SwerveModulePosition[4];
 
-        getSensors().swerveModuleFL = swerveModuleFL.readSensors();
-        getSensors().swerveModuleFR = swerveModuleFR.readSensors();
-        getSensors().swerveModuleBR = swerveModuleBR.readSensors();
-        getSensors().swerveModuleBL = swerveModuleBL.readSensors();
+        getSensors().swerveModuleFL = swerveModuleFL.getSensors();
+        getSensors().swerveModuleFR = swerveModuleFR.getSensors();
+        getSensors().swerveModuleBR = swerveModuleBR.getSensors();
+        getSensors().swerveModuleBL = swerveModuleBL.getSensors();
     }
     // public Pose2d visionMeasurement(){
     // Pose2d robotVisionPosition = swerveDrivePoseEstimator.addVisionMeasurement(null);
@@ -216,7 +221,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
     @Override
     public void drive(double xSpeed, double ySpeed, double rotation) {
-        drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed,ySpeed,rotation,pigeon.getRotation2d()));
+        drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed,ySpeed,rotation,getPose().getRotation()));
     }
 
     @Override
@@ -228,18 +233,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         swerveModuleFR.setModuleState(moduleStates[1]);
         swerveModuleBR.setModuleState(moduleStates[2]);
         swerveModuleBL.setModuleState(moduleStates[3]);
-
-        /*swerveModuleFL.drive(moduleStates[0].speedMetersPerSecond);
-        swerveModuleFL.pivot(moduleStates[0].angle.getMeasure());
-
-        swerveModuleFR.drive(moduleStates[1].speedMetersPerSecond);
-        swerveModuleFR.pivot(moduleStates[1].angle.getMeasure());
-
-        swerveModuleBR.drive(moduleStates[2].speedMetersPerSecond);
-        swerveModuleBR.pivot(moduleStates[2].angle.getMeasure());
-
-        swerveModuleBL.drive(moduleStates[3].speedMetersPerSecond);
-        swerveModuleBL.pivot(moduleStates[3].angle.getMeasure());*/
 
     }
 

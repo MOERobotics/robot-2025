@@ -9,10 +9,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import frc.robot.subsystem.FakeCoralCollector;
-import frc.robot.subsystem.FakeElevator;
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
+import frc.robot.subsystem.fakes.FakeCoralHead;
+import frc.robot.subsystem.fakes.FakeElevator;
 import frc.robot.utils.FeedforwardConstants;
 import frc.robot.utils.PIDConstants;
 
@@ -99,7 +99,7 @@ public class SwerveBotContainer extends RobotContainer {
                 ));
         this.setElevator(new FakeElevator());
 
-        this.setCoralCollector(new FakeCoralCollector());
+        this.setCoralHead(new FakeCoralHead());
     }
 
 }

@@ -2,47 +2,39 @@ package frc.robot.subsystem;
 
 
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig;
-import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.MOESubsystem;
+import frc.robot.subsystem.interfaces.ClimberControl;
+import frc.robot.subsystem.interfaces.ClimberInputsAutoLogged;
 
 import static edu.wpi.first.units.Units.*;
 
 public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> implements ClimberControl {
 
-    SparkMax climbMotor;
+    public SparkMax climbMotor;
 
-    CANcoder climbEncoder;
+    public CANcoder climbEncoder;
 
 
 
-    public final double maxEncoderValue = 0;
+    public final double maxEncoderValue = 72;
     public final double minEncoderValue = 0;
 
 
-    public double tolerance =5;
+    public double tolerance = 5;
 
 
 
     public SubMOErineClimber(
-            SparkMax climbMotor,
-            CANcoder climbEncoder
+        SparkMax climbMotor,
+        CANcoder climbEncoder,
+        String name
     ) {
-        this.setSensors(new ClimberInputsAutoLogged());
+        super(new ClimberInputsAutoLogged(), name);
         this.climbMotor = climbMotor;
         this.climbEncoder = climbEncoder;
-        SparkMaxConfig climberTopConfig = new SparkMaxConfig();
-        climberTopConfig.inverted(false).idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
-        climbMotor.configure(climberTopConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-
-
-        SparkMaxConfig climberBottomConfig = new SparkMaxConfig();
-        climberBottomConfig.inverted(false).idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
-
 
     }
 
@@ -54,19 +46,17 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
         sensors.motorVelocity = getMotorVelocity();
 
 
+
     }
     @Override
     public boolean canGoUp() {
-        return !(getPosition().in(Degree) + tolerance> maxEncoderValue);
+        return (getPosition().in(Degree) > minEncoderValue);
     }
 
     @Override
     public boolean canGoDown() {
-        return !(getPosition().in(Degree) + tolerance < minEncoderValue);
+        return (getPosition().in(Degree) < maxEncoderValue);
     }
-
-
-
 
     @Override
     public Angle getPosition(){ return climbEncoder.getAbsolutePosition().getValue(); }
@@ -77,20 +67,23 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
         return RPM.of(climbMotor.getEncoder().getVelocity());
     }
 
-
-
+    public void setTestClimberVelocity(AngularVelocity power) {
+            climbMotor.set(power.in(RPM));
+    }
     @Override
-    public void setClimberVelocity(AngularVelocity power) {
-       if (power.in(RPM)> 0 && canGoUp()) {
-           climbMotor.set(power.in(RPM));
+    public void setClimberVelocity(AngularVelocity power){
+            if (power.in(RPM) > 0 && canGoUp()) {
+                climbMotor.set(power.in(RPM));
 
-       } else if(power.in(RPM) < 0 && canGoDown()){
-           climbMotor.set(power.in(RPM));
-       }
+            } else if (power.in(RPM) < 0 && canGoDown()) {
+                climbMotor.set(power.in(RPM));
+            } else{
+               climbMotor.set(0);
+            }
+
+        }
 
 
-
-}
 
 
 

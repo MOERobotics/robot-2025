@@ -4,8 +4,10 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import frc.robot.subsystem.FakeCoralCollector;
-import frc.robot.subsystem.FakeElevator;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.controller.PIDController;
+import frc.robot.subsystem.fakes.FakeCoralHead;
+import frc.robot.subsystem.fakes.FakeElevator;
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
 import frc.robot.utils.FeedforwardConstants;
@@ -94,7 +96,10 @@ public class FortissiMOEContainer extends RobotContainer {
             ));
         this.setElevator(new FakeElevator());
 
-        this.setCoralCollector(new FakeCoralCollector());
+
+
+        this.setCoralHead(new FakeCoralHead());
+
     }
 
 }

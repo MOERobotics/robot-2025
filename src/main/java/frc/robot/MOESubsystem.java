@@ -10,17 +10,21 @@ public abstract class MOESubsystem<SensorType extends LoggableInputs> extends Su
 
     @Getter @Setter
     private SensorType sensors;
+    public String inputsKey;
 
-    public MOESubsystem() {
+    public MOESubsystem(SensorType sensors) {
+        this(sensors, sensors.getClass().getName());
+    }
+    public MOESubsystem(SensorType sensors, String inputsKey) {
+        this.sensors = sensors;
+        this.inputsKey = inputsKey;
         System.out.println("Constructed Subsystem type: " + getClass());
     }
 
     @Override
     public void periodic() {
         this.readSensors(this.sensors);
-        Logger.processInputs(getName()/*sensors.getClass().getSimpleName()*/, sensors);
-     //   this.visionMeasurement();
-       // Logger.processInputs("Vision Pose",visionMeasurement());
+        Logger.processInputs(inputsKey, sensors);
     }
 
     public void readSensors(SensorType sensors) {}

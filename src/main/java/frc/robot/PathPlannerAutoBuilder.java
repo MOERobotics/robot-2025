@@ -5,7 +5,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.subsystem.SwerveDriveControl;
+import frc.robot.subsystem.interfaces.SwerveDriveControl;
 
 public class PathPlannerAutoBuilder {
     public static void configure(SwerveDriveControl drive) {

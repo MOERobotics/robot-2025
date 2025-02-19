@@ -1,20 +1,19 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.interfaces;
 
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystem.interfaces.ClimberInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ClimberControl extends Subsystem {
 
     @AutoLog
      class ClimberInputs{
-        boolean canGoUp;
-        boolean canGoDown;
-
-        AngularVelocity motorVelocity;
-
-        Angle position;
+        public boolean canGoUp;
+        public boolean canGoDown;
+        public AngularVelocity motorVelocity;
+        public Angle position;
     }
 
 

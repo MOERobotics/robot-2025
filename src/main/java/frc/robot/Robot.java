@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -14,20 +16,23 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.container.*;
-import frc.robot.commands.CoralHeadTeleopCommand;
-import frc.robot.commands.SwerveModuleCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import frc.robot.commands.*;
+import frc.robot.container.SubMOErine;
+import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.*;
+import frc.robot.subsystem.interfaces.SwerveDriveControl;
+import frc.robot.subsystem.simulations.*;
 import org.littletonrobotics.junction.LoggedRobot;
+import frc.robot.commands.junk.SwerveModuleTestingCommand;
 
 import java.util.Set;
 
@@ -38,7 +43,7 @@ public class Robot extends LoggedRobot {
 
 
     CommandJoystick driverJoystick = new CommandJoystick(0);
-    Joystick functionJoystick = new Joystick(1);
+    CommandJoystick functionJoystick = new CommandJoystick(1);
     CommandScheduler scheduler;
 
 
@@ -54,7 +59,7 @@ public class Robot extends LoggedRobot {
     SendableChooser<Command> pathChooser = new SendableChooser<>();
     Field2d field = new Field2d();
 
-    SwerveModuleSim swerveModuleSimFL, swerveModuleSimFR, swerveModuleSimBR, swerveModuleSimBL;
+    SwerveModuleSim swerveModuleSimFL,swerveModuleSimFR,swerveModuleSimBR,swerveModuleSimBL;
     RobotElevatorSim elevatorSim;
     AlgaeCollectorSim algaeCollectorSim;
     CoralCollectorSim coralCollectorSim;
@@ -152,6 +157,24 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopInit() {
         autoCommand.cancel();
+        new ElevatorTeleopCommand(
+            robot.getElevator(),
+            functionJoystick.getHID()
+        ).schedule();
+        new AlgaeCollectorTeleopCommand(
+            robot.getAlgaeCollector(),
+            functionJoystick.getHID()
+        ).schedule();
+        new CoralHeadTeleopCommand(
+            robot.getCoralHead(),
+            functionJoystick.getHID(),
+            robot.getElevator()
+        ).schedule();
+        new ClimberTeleopCommand(
+            robot.getClimberRear(),
+            robot.getClimberMid(),
+            driverJoystick.getHID()
+        ).schedule();
         var driveOneSecond = robot.getSwerveDrive().run(() ->
         {
             robot.getSwerveDrive().drive(1, 0, 0);
@@ -193,97 +216,13 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
-        SmartDashboard.putNumber("Drive-x",driverJoystick.getRawAxis(1));
-
-
-
-        /*double elevatorVertPower = 0;
-
-        if (driverJoystick.getHID().getRawButton(1)) {
-            elevatorVertPower = 0.5;
-        }
-
-        if (driverJoystick.getHID().getRawButton(2)) {
-            elevatorVertPower = -0.5;
-        }
-
-
-        robot.getElevator().moveVertically(InchesPerSecond.of(elevatorVertPower));
-
-
-        double climberPowerMid = 0;
-
-        if (driverJoystick.getHID().getRawButton(1)) {
-            climberPowerMid = 0.5;
-        }
-
-
-        if (driverJoystick.getHID().getRawButton(2)) {
-            climberPowerMid = -0.5;
-        }
-
-        robot.getClimberMid().setClimberVelocity(RPM.of(climberPowerMid));
-
-        double climberPowerRear = 0;
-
-        if (driverJoystick.getHID().getRawButton(1)) {
-            climberPowerRear = 0.5;
-        }
-
-
-        if (driverJoystick.getHID().getRawButton(2)) {
-            climberPowerRear = -0.5;
-        }
-
-        robot.getClimberRear().setClimberVelocity(RPM.of(climberPowerMid));
-
-
-        double elevatorHorizontalPower = 0;
-
-        if (driverJoystick.getHID().getRawButton(3)) {
-            elevatorHorizontalPower = 0.5;
-        }
-
-        if (driverJoystick.getHID().getRawButton(4)) {
-            elevatorHorizontalPower = -0.5;
-        }
-
-        robot.getElevator().moveHorizontally(DegreesPerSecond.of(elevatorHorizontalPower));
-
-
-        double algaeCollectorPower = 0;
-
-
-        if (driverJoystick.getHID().getRawButton(7)) {
-            algaeCollectorPower = 0.5;
-        }
-
-        if (driverJoystick.getHID().getRawButton(8)) {
-            algaeCollectorPower = -0.5;
-        }
-
-        robot.getAlgaeCollector().setArmVelocity(RPM.of(algaeCollectorPower));
-
-
-        double algaeWheelPower = 0;
-
-
-        if (driverJoystick.getHID().getRawButton(9)) {
-            algaeWheelPower = 0.5;
-        }
-
-        if (driverJoystick.getHID().getRawButton(10)) {
-            algaeWheelPower = -0.5;
-        }
-
-        robot.getAlgaeCollector().setWheelVelocity(RPM.of(algaeWheelPower));*/
 
     }
 
     @Override
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
-        robot.getSwerveDrive().setDefaultCommand(new SwerveModuleCommand(robot.getSwerveDrive(), driverJoystick.getHID()));
+        robot.getSwerveDrive().setDefaultCommand(new SwerveModuleTestingCommand(robot.getSwerveDrive(), driverJoystick.getHID()));
 
     }
 
@@ -294,27 +233,29 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationInit() {
+
+        Command commandSD = new standardDeviation();
+        SmartDashboard.putData("Standard Deviation", commandSD);
+        commandSD.schedule();
         if (!(robot.getSwerveDrive() instanceof SwerveDrive)
             || !(robot.getElevator() instanceof SubMOErineElevator)
             || !(robot.getAlgaeCollector() instanceof AlgaeCollector)
-            || !(robot.getCoralCollector() instanceof CoralCollector)
-            || !(robot.getClimberRear() instanceof  SubMOErineClimber)
+            || !(robot.getCoralHead() instanceof CoralHead)
+            || !(robot.getClimberRear() instanceof SubMOErineClimber)
             || !(robot.getClimberMid() instanceof SubMOErineClimber)) return;
         SwerveDrive swerveDrive = (SwerveDrive) robot.getSwerveDrive();
         SubMOErineElevator elevator = (SubMOErineElevator) robot.getElevator();
-        AlgaeCollector algaeCollector = (AlgaeCollector) robot.getAlgaeCollector();
-        CoralCollector coralCollector = (CoralCollector) robot.getCoralCollector();
-        SubMOErineClimber climberMid = (SubMOErineClimber) robot.getClimberMid();
-        SubMOErineClimber climberRear = (SubMOErineClimber) robot.getClimberRear();
-        swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.offset, swerveDrive.swerveModuleFL.driveMotor, swerveDrive.swerveModuleFL.pivotMotor, swerveDrive.swerveModuleFL.pivotEncoder);
-        swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.offset, swerveDrive.swerveModuleFR.driveMotor, swerveDrive.swerveModuleFR.pivotMotor, swerveDrive.swerveModuleFR.pivotEncoder);
-        swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.offset, swerveDrive.swerveModuleBR.driveMotor, swerveDrive.swerveModuleBR.pivotMotor, swerveDrive.swerveModuleBR.pivotEncoder);
-        swerveModuleSimBL = new SwerveModuleSim(swerveDrive.swerveModuleBL.offset, swerveDrive.swerveModuleBL.driveMotor, swerveDrive.swerveModuleBL.pivotMotor, swerveDrive.swerveModuleBL.pivotEncoder);
+        swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.moduleOffset,swerveDrive.swerveModuleFL.driveMotor,swerveDrive.swerveModuleFL.pivotMotor,swerveDrive.swerveModuleFL.pivotEncoder);
+        swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.moduleOffset,swerveDrive.swerveModuleFR.driveMotor,swerveDrive.swerveModuleFR.pivotMotor,swerveDrive.swerveModuleFR.pivotEncoder);
+        swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.moduleOffset,swerveDrive.swerveModuleBR.driveMotor,swerveDrive.swerveModuleBR.pivotMotor,swerveDrive.swerveModuleBR.pivotEncoder);
+        swerveModuleSimBL = new SwerveModuleSim(swerveDrive.swerveModuleBL.moduleOffset,swerveDrive.swerveModuleBL.driveMotor,swerveDrive.swerveModuleBL.pivotMotor,swerveDrive.swerveModuleBL.pivotEncoder);
         elevatorSim = new RobotElevatorSim(elevator);
-        algaeCollectorSim = new AlgaeCollectorSim(algaeCollector);
-        coralCollectorSim = new CoralCollectorSim(coralCollector);
-        climberMidSim = new ClimberSim(climberMid);
-        climberRearSim = new ClimberSim(climberRear);
+        algaeCollectorSim = new AlgaeCollectorSim((AlgaeCollector)robot.getAlgaeCollector());
+        coralCollectorSim = new CoralCollectorSim((CoralHead)robot.getCoralHead());
+        climberMidSim = new ClimberSim(robot.getClimberMid());
+        climberRearSim = new ClimberSim(robot.getClimberRear());
+
+
     }
 
     @Override

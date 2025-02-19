@@ -1,4 +1,4 @@
-package frc.robot.subsystem;
+package frc.robot.subsystem.interfaces;
 
 
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -7,6 +7,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.units.measure.Voltage;
+import frc.robot.subsystem.interfaces.SwerveModuleInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface SwerveModuleControl {
@@ -27,16 +28,17 @@ public interface SwerveModuleControl {
         public AngularVelocity driveVelocity;
         public Angle targetHeading;
     }
-    SwerveModuleInputsAutoLogged readSensors();
+    SwerveModuleInputsAutoLogged getSensors();
 
     void drive(double power);
 
     void pivot(Angle heading);
 
-    void setModuleState(SwerveModuleState moduleState);
-
     SwerveModulePosition getModulePosition();
 
     SwerveModuleState getModuleState();
+
+    void setModuleState(SwerveModuleState moduleState) ;
+
 
 }
