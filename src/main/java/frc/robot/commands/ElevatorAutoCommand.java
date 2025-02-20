@@ -17,7 +17,7 @@ public class ElevatorAutoCommand extends Command {
     private PIDController pid = new PIDController(0.1, 0 ,0);
     private boolean isHold;
     private LinearVelocity pidSpeed = InchesPerSecond.of(0);
-    private Distance[] Ls = {Inches.of(17.88), Inches.of(31.72), Inches.of(47.59), Inches.of(71.87)};
+    Distance[] Ls = {Inches.of(33), Inches.of(40), Inches.of(55.59), Inches.of(81.2), Inches.of(24)};
     private int L;
     private Distance targetheight = Inches.of(0);
 
@@ -28,7 +28,7 @@ public class ElevatorAutoCommand extends Command {
             boolean isHold
     ){
         this.elevator = elevator;
-        this.L = L;
+        this.L = L-1;
         this.maxExtensionSpeed = maxExtensionSpeed;
         addRequirements(elevator);
     }

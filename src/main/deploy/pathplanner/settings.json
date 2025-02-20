@@ -1,28 +1,30 @@
 {
-  "robotWidth": 0.9,
-  "robotLength": 0.9,
+  "robotWidth": 0.88,
+  "robotLength": 0.88,
   "holonomicMode": true,
   "pathFolders": [
-    "Start1 Reef Points BLUE",
+    "Start4 BLUE",
     "Test Paths"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "TestAutos"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
-  "robotMass": 54.43,
-  "robotMOI": 6.883,
+  "robotMass": 45.3592,
+  "robotMOI": 3.824,
   "robotTrackwidth": 0.546,
-  "driveWheelRadius": 0.048,
-  "driveGearing": 5.143,
-  "maxDriveSpeed": 5.45,
+  "driveWheelRadius": 0.051,
+  "driveGearing": 6.75,
+  "maxDriveSpeed": 4.60248,
   "driveMotorType": "NEO",
   "driveCurrentLimit": 40.0,
   "wheelCOF": 1.2,
-  "flModuleX": 0.356,
-  "flModuleY": 0.356,
+  "flModuleX": 0.3556,
+  "flModuleY": 0.3556,
   "frModuleX": 0.356,
   "frModuleY": -0.356,
   "blModuleX": -0.356,
@@ -31,5 +33,7 @@
   "brModuleY": -0.356,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.3,\"y\":0.2},\"size\":{\"width\":0.25,\"length\":0.25},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
+  ]
 }
