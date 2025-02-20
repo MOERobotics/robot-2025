@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.autos.start4_place_coral_station;
 import frc.robot.container.*;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.commands.*;
@@ -105,6 +106,8 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putData("Scheduler", scheduler);
 
         autos = new Autos(robot);
+
+        this.autoCommand = start4_place_coral_station.buildS4IL4Command(robot);
         /*try {
             PathPlannerPath path1 = PathPlannerPath.fromPathFile("Test-Forward 5 Ft");
             PathPlannerPath path2 = PathPlannerPath.fromPathFile("Test-Forward-Left 5 Ft");
@@ -143,7 +146,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
-        /*var swerveDrive = robot.getSwerveDrive();
+        var swerveDrive = robot.getSwerveDrive();
         Command stopCommand = swerveDrive.run(()-> { swerveDrive.drive(0,0,0);});
         stopCommand.setName("SwerveStop");
         swerveDrive.setDefaultCommand(stopCommand);
