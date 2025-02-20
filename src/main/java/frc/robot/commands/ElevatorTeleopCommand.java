@@ -11,14 +11,15 @@ import frc.robot.subsystem.interfaces.ElevatorControl;
 import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.*;
+import static frc.robot.subsystem.interfaces.ElevatorControl.*;
 
 public class ElevatorTeleopCommand extends Command {
     ElevatorControl elevator;
     Joystick joystick;
-    LinearVelocity verticalVelocity = InchesPerSecond.of(0);
+//    LinearVelocity verticalVelocity = InchesPerSecond.of(0);
     AngularVelocity angularVelocity;
-    Distance[] Ls = {Inches.of(33), Inches.of(40), Inches.of(55.59), Inches.of(81.2), Inches.of(24)};
-    private final PIDController pid = new PIDController(0.2, 0.2 ,0);
+//    Distance[] Ls = {Inches.of(33), Inches.of(40), Inches.of(55.59), Inches.of(81.2), Inches.of(24)};
+//    private final PIDController pid = new PIDController(0.2, 0.2 ,0);
     Distance targetheight;
 
 
@@ -30,43 +31,42 @@ public class ElevatorTeleopCommand extends Command {
 
     @Override
     public void initialize() {
-        pid.reset();
-        pid.setIntegratorRange(-0.5, 0.5);
-        pid.setIZone(1.5);
+
         targetheight = elevator.getHeight();
-        verticalVelocity = MetersPerSecond.zero();
+//        verticalVelocity = MetersPerSecond.zero();
         angularVelocity = RadiansPerSecond.zero();
     }
 
     @Override
     public void execute() {//TODO update magic numbers for velocities
         if(joystick.getPOV(0) == 0){
-            targetheight = Ls[0];
+            targetheight = heightL1;
         }
         if(joystick.getPOV(0) == 90){
-            targetheight = Ls[1];
+            targetheight = heightL2;
         }
         if(joystick.getPOV(0) == 180){
-            targetheight = Ls[2];
+            targetheight = heightL3;
         }
         if(joystick.getPOV(0) == 270){
-            targetheight = Ls[3];
+            targetheight = heightL4;
         }
         if(joystick.getRawButton(8)){
-            targetheight = Ls[4];
+            targetheight = heightChute;
         }
-        Distance error = elevator.getHeight().minus(targetheight);
-        double pidOutput = pid.calculate(error.in(Inches));
-        pidOutput = MathUtil.clamp(pidOutput, -1, 1);
-        verticalVelocity = InchesPerSecond.of(6).times(pidOutput);
+        elevator.setTargetHeight(targetheight);
+//        Distance error = elevator.getHeight().minus(targetheight);
+//        double pidOutput = pid.calculate(error.in(Inches));
+//        pidOutput = MathUtil.clamp(pidOutput, -1, 1);
+//        verticalVelocity = InchesPerSecond.of(6).times(pidOutput);
         angularVelocity = DegreesPerSecond.of(0).times(
                 MathUtil.applyDeadband(joystick.getRawAxis(0), 0.1)
         );
-        elevator.moveVertically(verticalVelocity);
+//        elevator.moveVertically(verticalVelocity);
         elevator.moveHorizontally(angularVelocity);
-        Logger.recordOutput("verticalspeed", verticalVelocity.in(InchesPerSecond));
+//        Logger.recordOutput("verticalspeed", verticalVelocity.in(InchesPerSecond));
         Logger.recordOutput("targetheight", targetheight.in(Inches));
-        Logger.recordOutput("pidoutput", pidOutput);
+//        Logger.recordOutput("pidoutput", pidOutput);
         Logger.recordOutput("heightininches", elevator.getHeight().in(Inches));
     }
 

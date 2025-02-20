@@ -25,7 +25,15 @@ public interface ElevatorControl extends Subsystem {
         public boolean canGoDown;
     }
 
+    Distance heightL1 = Inches.of(33);
+    Distance heightL2 = Inches.of(40);
+    Distance heightL3 = Inches.of(55.59);
+    Distance heightL4 = Inches.of(81.2);
+    Distance heightChute = Inches.of(24);
+
     public ElevatorInputsAutoLogged getSensors();
+
+    public void setTargetHeight(Distance targetHeight);
 
     public void moveVertically(LinearVelocity speed);
 

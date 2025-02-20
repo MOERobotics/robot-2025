@@ -37,6 +37,7 @@ import frc.robot.commands.junk.SwerveModuleTestingCommand;
 import java.util.Set;
 
 import static edu.wpi.first.units.Units.*;
+import static frc.robot.subsystem.interfaces.ElevatorControl.*;
 
 
 public class Robot extends LoggedRobot {
@@ -47,7 +48,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler scheduler;
 
 
-    RobotContainer robot = new SwerveBotContainer();
+    RobotContainer robot = new SubMOErine();
     Autos autos;
     Command autoCommand = Commands.none();
     TimeOfFlight tof_sensor_center = new TimeOfFlight(42);
@@ -142,12 +143,19 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
-        var swerveDrive = robot.getSwerveDrive();
+        /*var swerveDrive = robot.getSwerveDrive();
         Command stopCommand = swerveDrive.run(()-> { swerveDrive.drive(0,0,0);});
         stopCommand.setName("SwerveStop");
         swerveDrive.setDefaultCommand(stopCommand);
         autoCommand = autos.getSelectedAuto();
         autoCommand.schedule();
+
+         */
+        new ElevatorAutoCommand(
+                robot.getElevator(),
+                heightL2,
+                false
+        ).schedule();
     }
 
     @Override
