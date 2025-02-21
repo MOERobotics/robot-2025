@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,11 +28,11 @@ public class AlgaeCollectorTeleopCommand extends Command {
 
     @Override
     public void execute() {
-     //   algaeArmVelocity = RadiansPerSecond.of(joystick.getRawAxis(0));
+        algaeArmVelocity = RPM.of(-0.5*MathUtil.applyDeadband(joystick.getRawAxis(5),0.05));
 
-        if (joystick.getRawButton(5)){
+        if (joystick.getRawButton(6)){
             algaeWheelVelocity = RPM.of(1);
-        }else if(joystick.getRawButton(6)){
+        }else if(joystick.getRawButton(5)){
             algaeWheelVelocity = RPM.of(-1);
         }else {
             algaeWheelVelocity = RPM.zero();

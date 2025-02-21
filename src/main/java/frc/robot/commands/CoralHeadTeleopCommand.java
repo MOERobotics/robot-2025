@@ -40,7 +40,7 @@ public class CoralHeadTeleopCommand extends Command {
         }
         AngularVelocity coralWheelRVelocity, coralWheelLVelocity;
         //eject the coral
-        if (joystick.getRawButton(2)){
+        if (joystick.getRawAxis(3)>0.5){
            hasCoral = false;
            stopCoral = false;
            // when at L1 we need to eject differently because the coral must be sideways
@@ -54,10 +54,13 @@ public class CoralHeadTeleopCommand extends Command {
         }
         //intake the coral
         else if(joystick.getRawButton(1) && !stopCoral) {
-            coralWheelLVelocity = RPM.of(0.20);
-            coralWheelRVelocity = RPM.of(0.20);
+            coralWheelLVelocity = RPM.of(0.40);
+            coralWheelRVelocity = RPM.of(0.40);
         }
-        else {
+        else if(joystick.getRawAxis(2)>0.5){
+            coralWheelRVelocity = RPM.of(-0.80);
+            coralWheelLVelocity = RPM.of(-0.80);
+        }else {
             coralWheelRVelocity = RPM.zero();
             coralWheelLVelocity = RPM.zero();
         }

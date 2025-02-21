@@ -99,7 +99,7 @@ public class SubMOErine extends RobotContainer{
 
         SparkMax extensionMotor = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
         SparkMax pivotMotor = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
-        CANcoder tilt = new CANcoder(35);
+//        CANcoder tilt = new CANcoder(35);
 
 
 
@@ -112,7 +112,6 @@ public class SubMOErine extends RobotContainer{
         this.setElevator(new SubMOErineElevator(
                 extensionMotor,
                 pivotMotor,
-                tilt,
                 extensionSensor
         ));
 
