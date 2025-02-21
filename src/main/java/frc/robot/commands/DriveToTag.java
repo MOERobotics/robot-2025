@@ -17,9 +17,9 @@ public class DriveToTag extends Command {
 
 
     static ArrayList<Pose2d> poses = new ArrayList<>() {{
-        Rotation2d targetRotation = new Rotation2d(0);
+        Rotation2d targetRotation = new Rotation2d(Math.toRadians(60));
        // Pose2d targetPose1 = new Pose2d(50, 50, targetRotation);
-        Pose2d targetPose1 = new Pose2d(3.6576, 4.0132, targetRotation);
+        Pose2d targetPose1 = new Pose2d(4.0739, 3.3063, targetRotation);
         Pose2d targetPose6 = new Pose2d(1, 4, targetRotation);
         Pose2d targetPose2 = new Pose2d(1, 7, targetRotation);
         Pose2d targetPose3 = new Pose2d(1, 11, targetRotation);

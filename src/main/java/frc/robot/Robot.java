@@ -174,8 +174,8 @@ public class Robot extends LoggedRobot {
         }, Set.of(robot.getSwerveDrive())));
         driverJoystick.button(5).whileTrue(driveOneSecond);
         robot.getSwerveDrive().setDefaultCommand(robot.getSwerveDrive().run(() -> {
-            double driveX =  -driverJoystick.getRawAxis(1);
-            double driveY = -driverJoystick.getRawAxis(0);
+            double driveX =  -driverJoystick.getRawAxis(0 );
+            double driveY = driverJoystick.getRawAxis(1);
             double driveTheta = -driverJoystick.getRawAxis(2);
             driveTheta = MathUtil.applyDeadband(driveTheta, 0.2, 1);
             driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
@@ -193,8 +193,9 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
-        SmartDashboard.putNumber("Drive-x",driverJoystick.getRawAxis(1));
-
+        if(driverJoystick.getHID().getRawButton(1)){
+            robot.getSwerveDrive().resetPose(new Pose2d());
+        }
 
 
         /*double elevatorVertPower = 0;
