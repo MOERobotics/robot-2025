@@ -5,7 +5,10 @@ import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.units.measure.*;
+import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.MOESubsystem;
@@ -30,9 +33,9 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     ) {
         super(new ElevatorInputsAutoLogged());
         this.elevatorExtensionMotor = elevatorExtensionMotor;
+        this.elevatorPivotMotor = elevatorPivotMotor;
         SparkMaxConfig extensionMotorConfig = new SparkMaxConfig();
         SparkMaxConfig pivotMotorConfig = new SparkMaxConfig();
-        this.elevatorPivotMotor = elevatorPivotMotor;
         this.tiltEncoder = tiltEncoder;
         this.extensionSensor = extensionSensor;
         extensionMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
@@ -49,13 +52,13 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         sensors.angle = Degrees.of(elevatorPivotMotor.getAbsoluteEncoder().getPosition() * -0.173 + 5.78).minus(Radians.of(0.1));
         sensors.horizontalSpeed = RPM.of(elevatorPivotMotor.getEncoder().getVelocity());
         sensors.extensionSpeed = InchesPerSecond.of(elevatorExtensionMotor.getEncoder().getVelocity());
-        sensors.elevatorVoltage =extensionSensor.getVoltage() / .3 ; //Todo: WHYYYYYYYY
+        sensors.elevatorVoltage = Volts.of(extensionSensor.getVoltage());
         sensors.elevatorVoltageFromADC = String.format("%04x", extensionSensor.getValue());
         sensors.extension = getExtension();
         sensors.canGoDown = canGoDown();
         sensors.extensionMotorPosition = Rotations.of(elevatorExtensionMotor.getEncoder().getPosition());
-        SmartDashboard.putNumber("ExtensionDistance",getExtension().in(Centimeters));
-        SmartDashboard.putNumber("ElevatorAngleDegrees",getSensors().angle.in(Degrees) * -0.173 + 5.78);
+        SmartDashboard.putNumber("ExtensionDistance", getExtension().in(Centimeters));
+        SmartDashboard.putNumber("ElevatorAngleDegrees", getSensors().angle.in(Degrees) * -0.173 + 5.78);
 
     }
 
@@ -66,18 +69,16 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public Distance getExtension() {
-        return Centimeters.of((getSensors().elevatorVoltage*41.59222)+13.11311);
+        return Centimeters.of((getSensors().elevatorVoltage.in(Volts) * 41.59222) + 13.11311);
     }
 
-
-
     public boolean canGoDown() {
-        return  elevatorExtensionMotor.getReverseLimitSwitch().isPressed();
+        return elevatorExtensionMotor.getReverseLimitSwitch().isPressed();
     }
 
 
     public boolean canGoUp() {
-        return Volts.of(getSensors().elevatorVoltage).lt(Volts.of(4.248));
+        return getSensors().elevatorVoltage.lt(Volts.of(4.248));
     }
 
     public boolean canGoRight() {
@@ -87,12 +88,11 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     public boolean canGoLeft() {
         return getSensors().angle.in(Degrees) < 52.42;
     }
+
     @Override
     public Angle getAngle() {
         return tiltEncoder.getAbsolutePosition().getValue();
     }
-
-
 
     @Override
     public void moveHorizontally(AngularVelocity speed) {

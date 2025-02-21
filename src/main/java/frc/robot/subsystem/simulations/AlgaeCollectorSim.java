@@ -1,7 +1,6 @@
 package frc.robot.subsystem.simulations;
 
 
-import com.ctre.phoenix6.sim.CANcoderSimState;
 import com.revrobotics.sim.SparkAbsoluteEncoderSim;
 import com.revrobotics.sim.SparkLimitSwitchSim;
 import com.revrobotics.sim.SparkMaxSim;
@@ -16,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystem.AlgaeCollector;
 
 import static edu.wpi.first.units.Units.*;
-import static frc.robot.subsystem.SimulationHelpers.*;
+import static frc.robot.subsystem.simulations.SimulationHelpers.*;
 
 public class AlgaeCollectorSim {
     private final double armDecelerationCoef = 50;

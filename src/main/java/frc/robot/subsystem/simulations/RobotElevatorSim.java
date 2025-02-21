@@ -1,6 +1,5 @@
 package frc.robot.subsystem.simulations;
 
-import com.ctre.phoenix6.sim.CANcoderSimState;
 import com.revrobotics.sim.SparkAbsoluteEncoderSim;
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkMax;
@@ -14,7 +13,7 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import frc.robot.subsystem.SubMOErineElevator;
 
 import static edu.wpi.first.units.Units.*;
-import static frc.robot.subsystem.SimulationHelpers.*;
+import static frc.robot.subsystem.simulations.SimulationHelpers.*;
 
 public class RobotElevatorSim {//TODO: Fix constants
     private final double decelerationCoefPivot = 30;

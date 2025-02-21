@@ -10,7 +10,7 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static frc.robot.subsystem.SimulationHelpers.decelerate;
+import static frc.robot.subsystem.simulations.SimulationHelpers.decelerate;
 
 public class SwerveModuleSim {
     private final double pivotReduction = 1;

@@ -237,41 +237,14 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationInit() {
-
         Command commandSD = new standardDeviation();
         SmartDashboard.putData("Standard Deviation", commandSD);
         commandSD.schedule();
-        if (!(robot.getSwerveDrive() instanceof SwerveDrive)
-            || !(robot.getElevator() instanceof SubMOErineElevator)
-            || !(robot.getAlgaeCollector() instanceof AlgaeCollector)
-            || !(robot.getCoralHead() instanceof CoralHead)
-            || !(robot.getClimberRear() instanceof SubMOErineClimber)
-            || !(robot.getClimberMid() instanceof SubMOErineClimber)) return;
-        SwerveDrive swerveDrive = (SwerveDrive) robot.getSwerveDrive();
-        SubMOErineElevator elevator = (SubMOErineElevator) robot.getElevator();
-        swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.moduleOffset,swerveDrive.swerveModuleFL.driveMotor,swerveDrive.swerveModuleFL.pivotMotor,swerveDrive.swerveModuleFL.pivotEncoder);
-        swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.moduleOffset,swerveDrive.swerveModuleFR.driveMotor,swerveDrive.swerveModuleFR.pivotMotor,swerveDrive.swerveModuleFR.pivotEncoder);
-        swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.moduleOffset,swerveDrive.swerveModuleBR.driveMotor,swerveDrive.swerveModuleBR.pivotMotor,swerveDrive.swerveModuleBR.pivotEncoder);
-        swerveModuleSimBL = new SwerveModuleSim(swerveDrive.swerveModuleBL.moduleOffset,swerveDrive.swerveModuleBL.driveMotor,swerveDrive.swerveModuleBL.pivotMotor,swerveDrive.swerveModuleBL.pivotEncoder);
-        elevatorSim = new RobotElevatorSim(elevator);
-        algaeCollectorSim = new AlgaeCollectorSim((AlgaeCollector)robot.getAlgaeCollector());
-        coralCollectorSim = new CoralCollectorSim((CoralHead)robot.getCoralHead());
-        climberMidSim = new ClimberSim(robot.getClimberMid());
-        climberRearSim = new ClimberSim(robot.getClimberRear());
-
-
+        SimulationHelpers.setUpSim(robot);
     }
 
     @Override
     public void simulationPeriodic() {
-        swerveModuleSimFL.updateSimState();
-        swerveModuleSimFR.updateSimState();
-        swerveModuleSimBR.updateSimState();
-        swerveModuleSimBL.updateSimState();
-        elevatorSim.updteSimState();
-        algaeCollectorSim.updateSimState();
-        coralCollectorSim.updateSimState();
-        climberMidSim.updateSimState();
-        climberRearSim.updateSimState();
+        SimulationHelpers.updateSimState();
     }
 }

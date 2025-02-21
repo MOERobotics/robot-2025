@@ -1,20 +1,28 @@
 package frc.robot.subsystem.interfaces;
 
-import com.fasterxml.jackson.databind.introspect.Annotated;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystem.interfaces.SwerveDriveInputsAutoLogged;
-import frc.robot.subsystem.interfaces.SwerveModuleInputsAutoLogged;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface SwerveDriveControl extends Subsystem {
+    @AutoLog
+    class SwerveDriveInputs {
+        public double currentRotationRadians;
+        public Pose2d pose;
+        public SwerveModuleState[] moduleStates;
+        public SwerveModuleState[] driveDesiredStates;
+        public SwerveModulePosition[] modulePositions;
+        public SwerveModuleInputsAutoLogged swerveModuleFL;
+        public SwerveModuleInputsAutoLogged swerveModuleFR;
+        public SwerveModuleInputsAutoLogged swerveModuleBR;
+        public SwerveModuleInputsAutoLogged swerveModuleBL;
+        public ChassisSpeeds robotRelativeSpeeds;
+    }
+
     default Pose2d getPose() {
         return this.getSensors().pose;
     }
@@ -31,49 +39,36 @@ public interface SwerveDriveControl extends Subsystem {
         drive(new ChassisSpeeds(xSpeed, ySpeed, rotation));
     }
 
-    public static enum CommandType {
+    enum CommandType {
         QuasistaticForward, QuasistaticReverse, DynamicForward, DynamicReverse
     }
-    public static enum ModuleType {
+
+    enum ModuleType {
         modFL, modFR, modBL, modBR, allMods
     }
-    public static enum DriveOrPivot {
+
+    enum DriveOrPivot {
         setDrive, setPivot,
     }
 
-    default public Command sysIDCommandsPivot(CommandType commandType, ModuleType moduleType){
-       return Commands.none();
-    }
-    default public Command sysIDCommandsDrive(CommandType commandType){
+    default public Command sysIDCommandsPivot(CommandType commandType, ModuleType moduleType) {
         return Commands.none();
     }
 
-    void driveSingleModule (int index, double xSpeed, double ySpeed, double rotation);
+    default public Command sysIDCommandsDrive(CommandType commandType) {
+        return Commands.none();
+    }
+
+    void driveSingleModule(int index, double xSpeed, double ySpeed, double rotation);
 
     default ChassisSpeeds getRobotRelativeSpeeds() {
         return this.getSensors().robotRelativeSpeeds;
     }
 
-    edu.wpi.first.math.kinematics.SwerveDriveKinematics getKinematics();
+    SwerveDriveKinematics getKinematics();
 
 
+    SwerveDriveOdometry getOdometry();
 
-
-        edu.wpi.first.math.kinematics.SwerveDriveOdometry getOdometry();
-
-    public void pivotAngle(Angle angle);
-
-    @AutoLog
-    public static class SwerveDriveInputs {
-        public double currentRotationRadians;
-        public Pose2d pose;
-        public SwerveModuleState[] moduleStates;
-        public SwerveModuleState[] driveDesiredStates;
-        public SwerveModulePosition[] modulePositions;
-        public SwerveModuleInputsAutoLogged swerveModuleFL;
-        public SwerveModuleInputsAutoLogged swerveModuleFR;
-        public SwerveModuleInputsAutoLogged swerveModuleBR;
-        public SwerveModuleInputsAutoLogged swerveModuleBL;
-        public ChassisSpeeds robotRelativeSpeeds;
-    }
+    void pivotAngle(Angle angle);
 }

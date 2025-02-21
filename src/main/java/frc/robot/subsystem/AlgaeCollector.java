@@ -1,6 +1,9 @@
 package frc.robot.subsystem;
 
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.MOESubsystem;
@@ -18,9 +21,15 @@ public class AlgaeCollector extends MOESubsystem<AlgaeCollectorInputsAutoLogged>
         super(new AlgaeCollectorInputsAutoLogged());
         this.algaeWheel = algaeWheel;
         this.algaeArm = algaeArm;
+        SparkMaxConfig wheelConfig = new SparkMaxConfig();
+        SparkMaxConfig armConfig = new SparkMaxConfig();
+        wheelConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
+        armConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
         this.startAngle = startAngle;
         this.collectAngle = collectAngle;
         this.tolerance = tolerance;
+        algaeWheel.configure(wheelConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+        algaeArm.configure(armConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
     }
 
     @Override

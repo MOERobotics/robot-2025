@@ -19,8 +19,8 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
 
 
 
-    public final double maxEncoderValue = 72;
-    public final double minEncoderValue = 0;
+    public final Angle maxEncoderValue = Degrees.of(72);
+    public final Angle minEncoderValue = Degrees.of(0);
 
 
     public double tolerance = 5;
@@ -35,7 +35,6 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
         super(new ClimberInputsAutoLogged(), name);
         this.climbMotor = climbMotor;
         this.climbEncoder = climbEncoder;
-
     }
 
     @Override
@@ -50,16 +49,18 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
     }
     @Override
     public boolean canGoUp() {
-        return (getPosition().in(Degree) > minEncoderValue);
+        return getPosition().gt(minEncoderValue);
     }
 
     @Override
     public boolean canGoDown() {
-        return (getPosition().in(Degree) < maxEncoderValue);
+        return getPosition().lt(maxEncoderValue);
     }
 
     @Override
-    public Angle getPosition(){ return climbEncoder.getAbsolutePosition().getValue(); }
+    public Angle getPosition(){
+        return climbEncoder.getAbsolutePosition().getValue();
+    }
 
 
     @Override

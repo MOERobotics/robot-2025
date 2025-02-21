@@ -12,6 +12,7 @@ import frc.robot.commands.ElevatorTeleopCommand;
 import frc.robot.container.RobotContainer;
 import lombok.SneakyThrows;
 
+import java.io.FileNotFoundException;
 import java.util.Set;
 
 import static edu.wpi.first.units.Units.InchesPerSecond;
@@ -24,9 +25,10 @@ public class start4_place_coral_station {
     }
     @SneakyThrows
     public static Command generateAutos(RobotContainer robot, String path1, String path2 ){
-        PathPlannerPath plannerPath1 = PathPlannerPath.fromPathFile(path1);
-        PathPlannerPath plannerPath2 = PathPlannerPath.fromPathFile(path2);
-        return Commands.sequence(
+        try {
+            PathPlannerPath plannerPath1 = PathPlannerPath.fromPathFile(path1);
+            PathPlannerPath plannerPath2 = PathPlannerPath.fromPathFile(path2);
+            return Commands.sequence(
                 Commands.run(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingDifferentialPose())),
             /*    Commands.parallel(
                         AutoBuilder.followPath(plannerPath1),
@@ -36,6 +38,10 @@ public class start4_place_coral_station {
                 new ElevatorAutoCommand(robot.getElevator(),5,InchesPerSecond.of(8),true),
                 */
                 AutoBuilder.followPath(plannerPath2)
-        );
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Commands.none();
+        }
     }
 }

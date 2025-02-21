@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystem.CoralHead;
 
 import static edu.wpi.first.units.Units.*;
-import static frc.robot.subsystem.SimulationHelpers.*;
+import static frc.robot.subsystem.simulations.SimulationHelpers.*;
 
 public class CoralCollectorSim {
     private final double decelerationCoef = 10;

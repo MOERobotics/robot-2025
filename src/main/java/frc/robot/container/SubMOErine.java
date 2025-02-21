@@ -5,21 +5,20 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.AnalogInput;
 import frc.robot.subsystem.*;
 import frc.robot.utils.FeedforwardConstants;
 import frc.robot.utils.PIDConstants;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Inches;
 
-public class SubMOErine extends RobotContainer{
-    public SubMOErine(){
+public class SubMOErine extends RobotContainer {
+    public SubMOErine() {
         double pivotkP = 0.15;
         double pivotkI = 0.001;
-        double pivotkD =0.003;;
+        double pivotkD = 0.003;
         double pivotkIMax = 1;
 
         double drivekP = 1e-3;
@@ -89,18 +88,17 @@ public class SubMOErine extends RobotContainer{
         Pigeon2 pigeon2 = new Pigeon2(0);
 
         SwerveDrive swerveDrive = new SwerveDrive(
-                swerveModuleFL,
-                swerveModuleFR,
-                swerveModuleBR,
-                swerveModuleBL,
-                pigeon2
+            swerveModuleFL,
+            swerveModuleFR,
+            swerveModuleBR,
+            swerveModuleBL,
+            pigeon2
         );
 
 
         SparkMax extensionMotor = new SparkMax(5, SparkLowLevel.MotorType.kBrushless);
         SparkMax pivotMotor = new SparkMax(6, SparkLowLevel.MotorType.kBrushless);
         CANcoder tilt = new CANcoder(35);
-
 
 
         AnalogInput extensionSensor = new AnalogInput(1);
@@ -110,27 +108,17 @@ public class SubMOErine extends RobotContainer{
 
         this.setSwerveDrive(swerveDrive);
         this.setElevator(new SubMOErineElevator(
-                extensionMotor,
-                pivotMotor,
-                tilt,
-                extensionSensor
+            extensionMotor,
+            pivotMotor,
+            tilt,
+            extensionSensor
         ));
 
         SparkMax leftMotor = new SparkMax(13, SparkLowLevel.MotorType.kBrushless);
         SparkMax rightMotor = new SparkMax(12, SparkLowLevel.MotorType.kBrushless);
 
-        SparkMaxConfig leftMotorConfig = new SparkMaxConfig();
-        leftMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-        leftMotorConfig.limitSwitch.forwardLimitSwitchEnabled(false);
-
-        SparkMaxConfig rightMotorConfig = new SparkMaxConfig();
-        rightMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
-
-        leftMotor.configure(leftMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-        rightMotor.configure(rightMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-
-        this.setCoralHead(new CoralHead(leftMotor,rightMotor));
-        this.setAlgaeCollector(new AlgaeCollector(algaeWheel,algaeArm, Degrees.of(0), Degrees.of(0), Degrees.of(0)));
+        this.setCoralHead(new CoralHead(leftMotor, rightMotor));
+        this.setAlgaeCollector(new AlgaeCollector(algaeWheel, algaeArm, Degrees.of(0), Degrees.of(0), Degrees.of(0)));
         SparkMax rear = new SparkMax(8, SparkLowLevel.MotorType.kBrushless);
         SparkMax mid = new SparkMax(7, SparkLowLevel.MotorType.kBrushless);
 
@@ -145,18 +133,17 @@ public class SubMOErine extends RobotContainer{
 
 
         this.setClimberRear(new SubMOErineClimber(
-             rear,
+            rear,
             new CANcoder(38),
-                "Rear Climber"
+            "Rear Climber"
         ));
 
 
         this.setClimberMid(new SubMOErineClimber(
-                mid,
-                new CANcoder(39),
-                "Mid Climber"
-                ));
-
+            mid,
+            new CANcoder(39),
+            "Mid Climber"
+        ));
 
 
     }

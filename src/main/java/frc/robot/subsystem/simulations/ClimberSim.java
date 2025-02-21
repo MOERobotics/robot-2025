@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.subsystem.SubMOErineClimber;
 
 import static edu.wpi.first.units.Units.*;
-import static frc.robot.subsystem.SimulationHelpers.*;
+import static frc.robot.subsystem.simulations.SimulationHelpers.*;
 
 public class ClimberSim {
     private final double decelerationCoef = 1;
