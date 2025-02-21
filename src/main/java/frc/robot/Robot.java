@@ -23,6 +23,7 @@ import frc.robot.commands.driveToPosition;
 import frc.robot.container.*;
 import frc.robot.commands.*;
 import frc.robot.container.RobotContainer;
+import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.simulations.*;
 import org.littletonrobotics.junction.LoggedRobot;
 import frc.robot.commands.junk.SwerveModuleTestingCommand;
@@ -102,6 +103,8 @@ public class Robot extends LoggedRobot {
         robot.getSwerveDrive().setDefaultCommand(
             new SwerveControllerCommand(robot.getSwerveDrive(), driverJoystick.getHID())
         );
+        Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive());
+        SmartDashboard.putData(Drive);
     }
 
     @Override
