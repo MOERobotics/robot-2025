@@ -1,6 +1,5 @@
 package frc.robot.subsystem;
 
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -24,9 +23,7 @@ import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 import java.util.ArrayList;
 
-
 import static edu.wpi.first.units.Units.*;
-
 
 public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> implements SwerveDriveControl {
     public SwerveModule swerveModuleFL;
@@ -43,9 +40,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public PIDController xController = new PIDController(5.0, 0.0, 0.0);
     public PIDController yController = new PIDController(5.0, 0.0, 0.0);
     public ProfiledPIDController thetaController = new ProfiledPIDController(5.0, 0.0, 0e-4,  new TrapezoidProfile.Constraints(0.5, 0.5));
-
-
-
 
     public SysIdRoutine sysIdRoutinePivotFL = new SysIdRoutine(
             new SysIdRoutine.Config(

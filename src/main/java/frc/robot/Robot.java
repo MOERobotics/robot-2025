@@ -42,7 +42,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler scheduler;
 
 
-    RobotContainer robot = new SwerveBotContainer();
+    RobotContainer robot = new FortissiMOEContainer();
     Autos autos;
     Command autoCommand = Commands.none();
 
@@ -61,16 +61,16 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotInit() {
-//        SmartDashboard.putData(field);
-//        PathPlannerLogging.setLogActivePathCallback(path -> {
-//            field.getObject("traj").setPoses(path);
-//        });
-//        PathPlannerLogging.setLogCurrentPoseCallback(path -> {
-//            field.getRobotObject().setPose(path);
-//        });
-//        PathPlannerLogging.setLogTargetPoseCallback(path -> {
-//            field.getObject("target").setPose(path);
-//        });
+        SmartDashboard.putData(field);
+        PathPlannerLogging.setLogActivePathCallback(path -> {
+            field.getObject("traj").setPoses(path);
+        });
+        PathPlannerLogging.setLogCurrentPoseCallback(path -> {
+            field.getRobotObject().setPose(path);
+        });
+        PathPlannerLogging.setLogTargetPoseCallback(path -> {
+            field.getObject("target").setPose(path);
+        });
 
         if (isSimulation())
             DriverStation.silenceJoystickConnectionWarning(true);
