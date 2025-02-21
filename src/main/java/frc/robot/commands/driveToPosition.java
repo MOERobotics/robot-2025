@@ -27,6 +27,7 @@ public class driveToPosition extends Command {
         targetPose = DriveToTag.getClosestTarget(currentPose);
         currentPose = LimelightHelpers.getBotPose2d("");
         ArrayList<Translation2d> internalPoints = new ArrayList<Translation2d>();
+        internalPoints.add(new Translation2d(1,1));
         generateTrajectory = swerveDrive.generateTrajectory(currentPose, targetPose, internalPoints, 0, 0);
         generateTrajectory.initialize();
     }
