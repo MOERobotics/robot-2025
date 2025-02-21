@@ -1,6 +1,5 @@
 package frc.robot.subsystem;
 
-
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.controller.PIDController;
@@ -28,9 +27,7 @@ import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 import java.util.ArrayList;
 
-
 import static edu.wpi.first.units.Units.*;
-
 
 public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> implements SwerveDriveControl {
     public SwerveModule swerveModuleFL;
