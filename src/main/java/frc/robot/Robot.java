@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -46,12 +46,14 @@ public class Robot extends LoggedRobot {
     CommandJoystick driverJoystick = new CommandJoystick(0);
     CommandJoystick functionJoystick = new CommandJoystick(1);
     CommandScheduler scheduler;
+    AddressableLED m_led = new AddressableLED(9);
+    AddressableLEDBuffer m_ledBuffer = new AddressableLEDBuffer(2);
 
 
-    RobotContainer robot = new FortissiMOEContainer();
+    RobotContainer robot = new SubMOErine();
     Autos autos;
     Command autoCommand = Commands.none();
-    TimeOfFlight tof_sensor_center = new TimeOfFlight(42);
+    TimeOfFlight tof_sensor_center = new TimeOfFlight(41);
 
 
     SendableChooser<SwerveDriveControl.CommandType> chooser = new SendableChooser<>();
@@ -65,10 +67,12 @@ public class Robot extends LoggedRobot {
     AlgaeCollectorSim algaeCollectorSim;
     CoralCollectorSim coralCollectorSim;
     ClimberSim climberMidSim, climberRearSim;
+    PowerDistribution pdh = new PowerDistribution(23, PowerDistribution.ModuleType.kRev);
 
     @Override
     public void robotInit() {
         SmartDashboard.putData(field);
+        tof_sensor_center.setRangeOfInterest(8,8,10,10);
         PathPlannerLogging.setLogActivePathCallback(path -> {
             field.getObject("traj").setPoses(path);
         });
@@ -125,12 +129,18 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotPeriodic() {
+        SmartDashboard.putNumber("Distance:", tof_sensor_center.getRange());
         scheduler.run();
-        if (tof_sensor_center.getRange() < 254){
-            SmartDashboard.putString("DROP", "YES");
+        functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
+        if (tof_sensor_center.getRange() < 300){
+            SmartDashboard.putBoolean("DROP", true);
+            pdh.setSwitchableChannel(true);
+            //functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,1);
         }
         else {
-            SmartDashboard.putString("DROP", "NO");
+            SmartDashboard.putBoolean("DROP", false);
+            pdh.setSwitchableChannel(false);
+            //functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
         }
     }
 
@@ -160,7 +170,9 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopInit() {
-        autoCommand.cancel();
+//        autoCommand.cancel();
+
+        SmartDashboard.putData("Drive Lidar Command",  Commands.run(()->robot.getSwerveDrive().drive(0,0.2,0) ).until(()->tof_sensor_center.getRange() < 300).withTimeout(5));
         new ElevatorTeleopCommand(
             robot.getElevator(),
             functionJoystick.getHID()
@@ -208,10 +220,11 @@ public class Robot extends LoggedRobot {
             driveTheta = MathUtil.applyDeadband(driveTheta, 0.2, 1);
             driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
             driveY = MathUtil.applyDeadband(driveY, 0.1, 1);
+            double div = driverJoystick.getHID().getRawButton(7)?2:1;
             robot.getSwerveDrive().drive(
-                    2*driveX,
-                    2*driveY,
-                    Math.PI*driveTheta //TODO: REVERT
+                    2.5*driveX/div,
+                    2.5*driveY/div,
+                    1.25*Math.PI*driveTheta/div //TODO: REVERT
             );
         }));
 
@@ -220,6 +233,25 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void teleopPeriodic() {
+        if(driverJoystick.getHID().getRawButton(1)){
+            robot.getSwerveDrive().resetPose(new Pose2d());
+        }
+
+
+        scheduler.run();
+        if (tof_sensor_center.getRange() < 300){
+
+
+            functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,1);
+        }
+        else {
+
+
+            functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
+        }
+
+        //robot.getSwerveDrive().setDefaultCommand(robot.getSwerveDrive().drive(0,0.2,0);
+//        robot.getElevator().moveVertically(FeetPerSecond.of(MathUtil.applyDeadband(functionJoystick.getRawAxis(1),0.05)*-0.5));
 
     }
 

@@ -1,6 +1,7 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
@@ -21,14 +22,13 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     public SparkMax elevatorExtensionMotor;
     public SparkMax elevatorPivotMotor;
-    public CANcoder tiltEncoder;
+    public SparkAbsoluteEncoder tiltEncoder;
 
     public AnalogInput extensionSensor;
 
     public SubMOErineElevator(
         SparkMax elevatorExtensionMotor,
         SparkMax elevatorPivotMotor,
-        CANcoder tiltEncoder,
         AnalogInput extensionSensor
     ) {
         super(new ElevatorInputsAutoLogged());
@@ -36,7 +36,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         this.elevatorPivotMotor = elevatorPivotMotor;
         SparkMaxConfig extensionMotorConfig = new SparkMaxConfig();
         SparkMaxConfig pivotMotorConfig = new SparkMaxConfig();
-        this.tiltEncoder = tiltEncoder;
+        this.tiltEncoder = elevatorPivotMotor.getAbsoluteEncoder();
         this.extensionSensor = extensionSensor;
         extensionMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
         extensionMotorConfig.limitSwitch.reverseLimitSwitchEnabled(false);
@@ -47,7 +47,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public void readSensors(ElevatorInputsAutoLogged sensors) {
-        sensors.angle = tiltEncoder.getAbsolutePosition().getValue();
+        sensors.angle = Rotations.of(tiltEncoder.getPosition());
         sensors.height = getHeight();
         sensors.angle = Degrees.of(elevatorPivotMotor.getAbsoluteEncoder().getPosition() * -0.173 + 5.78).minus(Radians.of(0.1));
         sensors.horizontalSpeed = RPM.of(elevatorPivotMotor.getEncoder().getVelocity());
@@ -69,7 +69,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public Distance getExtension() {
-        return Centimeters.of((getSensors().elevatorVoltage.in(Volts) * 41.59222) + 13.11311);
+        return Centimeters.of((getSensors().elevatorVoltage.in(Volts)*35.84153)+31.5174);
     }
 
     public boolean canGoDown() {
@@ -91,7 +91,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public Angle getAngle() {
-        return tiltEncoder.getAbsolutePosition().getValue();
+        return Rotations.of(tiltEncoder.getPosition());
     }
 
     @Override

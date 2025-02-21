@@ -13,13 +13,14 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static frc.robot.subsystem.simulations.SimulationHelpers.decelerate;
 
 public class SwerveModuleSim {
-    private final double pivotReduction = 1;
-    private final double decelerationCoef = 30;
+    private final double pivotReduction = 150.0/7.0;
+    private final double driveReduction = 6.75;
+    private final double decelerationCoef = 60;
     private final SparkMaxSim driveMotorSim, pivotMotorSim;
     private final SparkMax driveMotor, pivotMotor;
     private final CANcoderSimState pivotEncoderSim;
-    private final DCMotorSim driveMotorSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.005, 1.0), DCMotor.getNEO(1));
-    private final DCMotorSim pivotMotorSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.01, 1.0), DCMotor.getNEO(1));
+    private final DCMotorSim driveMotorSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.005, driveReduction), DCMotor.getNEO(1));
+    private final DCMotorSim pivotMotorSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 0.005, pivotReduction), DCMotor.getNEO(1));
     private final Angle offset;
 
     public SwerveModuleSim(Angle offset, SparkMax driveMotor, SparkMax pivotMotor, CANcoder pivotEncoder) {
@@ -33,18 +34,18 @@ public class SwerveModuleSim {
 
     public void updateSimState() {
         driveMotorSystem.setInputVoltage(driveMotor.getBusVoltage() * driveMotor.getAppliedOutput());
-//        driveMotorSystem.setAngularVelocity(decelerate(driveMotorSystem.getAngularVelocity()).in(RadiansPerSecond));
-        pivotMotorSystem.setInputVoltage(pivotMotor.getBusVoltage() * pivotMotor.getAppliedOutput());
+        driveMotorSystem.setAngularVelocity(decelerate(driveMotorSystem.getAngularVelocity(),decelerationCoef).in(RadiansPerSecond));
+        pivotMotorSystem.setInputVoltage(-pivotMotor.getBusVoltage() * pivotMotor.getAppliedOutput());
         pivotMotorSystem.setAngularVelocity(decelerate(pivotMotorSystem.getAngularVelocity(),decelerationCoef).in(RadiansPerSecond));
 
         driveMotorSystem.update(.02);
         pivotMotorSystem.update(.02);
 
-        driveMotorSim.iterate(driveMotorSystem.getAngularVelocityRPM(), 12.0, 0.02);
-        pivotMotorSim.iterate(pivotMotorSystem.getAngularVelocityRPM(), 12.0, 0.02);
-        pivotMotorSim.getAlternateEncoderSim().iterate(pivotMotorSystem.getAngularVelocityRPM(), .02);
-        pivotEncoderSim.setRawPosition(pivotMotorSystem.getAngularPosition().div(pivotReduction).unaryMinus().plus(offset));
-        pivotEncoderSim.setVelocity(pivotMotorSystem.getAngularVelocity().div(pivotReduction).unaryMinus());
+        driveMotorSim.iterate(driveMotorSystem.getAngularVelocityRPM()*driveReduction, 12.0, 0.02);
+        pivotMotorSim.iterate(-pivotMotorSystem.getAngularVelocityRPM()*pivotReduction, 12.0, 0.02);
+        pivotMotorSim.getAlternateEncoderSim().iterate(pivotMotorSystem.getAngularVelocityRPM()*pivotReduction, .02);
+        pivotEncoderSim.setRawPosition(pivotMotorSystem.getAngularPosition().unaryMinus().minus(offset));
+        pivotEncoderSim.setVelocity(pivotMotorSystem.getAngularVelocity().unaryMinus());
     }
 
 

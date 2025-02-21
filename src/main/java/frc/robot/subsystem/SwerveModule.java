@@ -11,7 +11,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.Units;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Distance;
 import frc.robot.MOESubsystem;
@@ -34,7 +33,6 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     public Distance yPos;
     public Angle moduleOffset;
     public Angle targetHeading;
-    SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
     public SimpleMotorFeedforward driveFeedforward;
 
     public SwerveModule(
@@ -76,25 +74,15 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     public Angle getHeading() {
         Angle heading = this.pivotEncoder.getAbsolutePosition().getValue().plus(moduleOffset);
         heading = Radians.of(MathUtil.angleModulus(heading.in(Radians)));
-//        while (heading.gt(Rotations.of(.5))) {
-//            heading = heading.minus(Rotations.of(1));
-//        }
-//        while (heading.lt(Rotations.of(-.5))) {
-//            heading = heading.plus(Rotations.of(1));
-//        }
+        getSensors().currentRotationDegrees = heading;
         return heading;
     }
 
     @Override
     public void readSensors(SwerveModuleInputsAutoLogged sensors) {
-        sensors.currentRotationDegrees = getHeading();
         sensors.pivotPower = pivotMotor.get();
         sensors.drivePower = driveMotor.get();
-        sensors.targetHeading = targetHeading;
-        sensors.pivotPower = pivotMotor.get();
-        sensors.drivePower = driveMotor.get();
-        sensors.targetHeading = targetHeading;
-        sensors.currentRotationDegreesNotWrapped = Rotations.of(pivotMotor.getEncoder().getPosition());
+        sensors.currentRotationDegreesNotWrapped = pivotEncoder.getAbsolutePosition().getValue();
         sensors.pivotVelocity = RPM.of(pivotMotor.getEncoder().getVelocity());
         sensors.pivotVolts = Volts.of(pivotMotor.getAppliedOutput() * pivotMotor.getBusVoltage());
         sensors.driveVolts = Volts.of(driveMotor.getAppliedOutput() * driveMotor.getBusVoltage());
@@ -105,21 +93,21 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
 
     @Override
     public void drive(double speedMetersPerSec) {
-        inputs.driveSpeedDesired = MetersPerSecond.of(speedMetersPerSec);
+        getSensors().driveSpeedDesired = MetersPerSecond.of(speedMetersPerSec);
         double motorPower = driveFeedforward.calculate(speedMetersPerSec * 39.37 / 1.413);
-        motorPower += velocityDriveController.calculate(inputs.driveVelocity.in(RPM), speedMetersPerSec * 39.37 / 1.413);
+        motorPower += velocityDriveController.calculate(getSensors().driveVelocity.in(RPM), speedMetersPerSec * 39.37 / 1.413);
         driveMotor.setVoltage(motorPower);
         Logger.recordOutput("VelocityError", velocityDriveController.getError());
     }
 
     @Override
     public void pivot(Angle targetHeading) {
-        this.targetHeading = targetHeading;
+        getSensors().targetHeading= targetHeading;
         Angle currentHeading = getHeading();
-        Angle error = currentHeading.minus(targetHeading);
-        double power = pivotController.calculate(this.inputs.error = error.in(Radians));
-        this.inputs.integral = pivotController.getAccumulatedError();
-        pivotMotor.set(power);
+        getSensors().error = currentHeading.minus(targetHeading).in(Radians);
+        double power = pivotController.calculate(currentHeading.in(Radians),targetHeading.in(Radians));
+        getSensors().integral = pivotController.getAccumulatedError();
+        pivotMotor.set(MathUtil.clamp(power,-1,1));
     }
 
     @Override
