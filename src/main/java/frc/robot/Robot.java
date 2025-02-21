@@ -11,7 +11,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
-import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.*;
@@ -23,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.driveToPosition;
 import frc.robot.container.*;
 import frc.robot.commands.CoralHeadTeleopCommand;
 import frc.robot.commands.SwerveModuleCommand;
@@ -45,7 +45,6 @@ public class Robot extends LoggedRobot {
     RobotContainer robot = new SwerveBotContainer();
     Autos autos;
     Command autoCommand = Commands.none();
-    TimeOfFlight tof_sensor_center = new TimeOfFlight(42);
 
 
     SendableChooser<SwerveDriveControl.CommandType> chooser = new SendableChooser<>();
@@ -62,16 +61,16 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotInit() {
-        SmartDashboard.putData(field);
-        PathPlannerLogging.setLogActivePathCallback(path -> {
-            field.getObject("traj").setPoses(path);
-        });
-        PathPlannerLogging.setLogCurrentPoseCallback(path -> {
-            field.getRobotObject().setPose(path);
-        });
-        PathPlannerLogging.setLogTargetPoseCallback(path -> {
-            field.getObject("target").setPose(path);
-        });
+//        SmartDashboard.putData(field);
+//        PathPlannerLogging.setLogActivePathCallback(path -> {
+//            field.getObject("traj").setPoses(path);
+//        });
+//        PathPlannerLogging.setLogCurrentPoseCallback(path -> {
+//            field.getRobotObject().setPose(path);
+//        });
+//        PathPlannerLogging.setLogTargetPoseCallback(path -> {
+//            field.getObject("target").setPose(path);
+//        });
 
         if (isSimulation())
             DriverStation.silenceJoystickConnectionWarning(true);
@@ -118,12 +117,12 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         scheduler.run();
-        if (tof_sensor_center.getRange() < 254){
-            SmartDashboard.putString("DROP", "YES");
-        }
-        else {
-            SmartDashboard.putString("DROP", "NO");
-        }
+//        if (tof_sensor_center.getRange() < 254){
+//            SmartDashboard.putString("DROP", "YES");
+//        }
+//        else {
+//            SmartDashboard.putString("DROP", "NO");
+//        }
     }
 
     @Override
@@ -284,6 +283,8 @@ public class Robot extends LoggedRobot {
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
         robot.getSwerveDrive().setDefaultCommand(new SwerveModuleCommand(robot.getSwerveDrive(), driverJoystick.getHID()));
+        Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive());
+        SmartDashboard.putData(Drive);
 
     }
 
@@ -319,7 +320,8 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationPeriodic() {
-        swerveModuleSimFL.updateSimState();
+        return;
+        /*swerveModuleSimFL.updateSimState();
         swerveModuleSimFR.updateSimState();
         swerveModuleSimBR.updateSimState();
         swerveModuleSimBL.updateSimState();
@@ -327,6 +329,6 @@ public class Robot extends LoggedRobot {
         algaeCollectorSim.updateSimState();
         coralCollectorSim.updateSimState();
         climberMidSim.updateSimState();
-        climberRearSim.updateSimState();
+        climberRearSim.updateSimState();*/
     }
 }

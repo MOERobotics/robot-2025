@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystem.LimeLights;
-import frc.robot.subsystem.LimelightHelpers;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystem.SwerveDrive;
 import edu.wpi.first.math.geometry.*;
 
@@ -15,32 +14,34 @@ public class driveToPosition extends Command {
     private final SwerveDrive swerveDrive;
     private Pose2d targetPose;
     private Pose2d currentPose;
+    private Command generateTrajectory;
 
-    public driveToPosition(SwerveDrive swerveDrive, Pose2d targetPose, Pose2d currentPose) {
+    public driveToPosition(SwerveDrive swerveDrive) {
         this.swerveDrive = swerveDrive;
-        this.currentPose = currentPose;
     }
 
     @Override
     public void initialize() {
         // targetPose = targetPose.transformBy(currentPose.minus(targetPose));
+        currentPose = swerveDrive.getPose();
+        targetPose = DriveToTag.getClosestTarget(currentPose);
         currentPose = LimelightHelpers.getBotPose2d("");
+        ArrayList<Translation2d> internalPoints = new ArrayList<Translation2d>();
+        generateTrajectory = swerveDrive.generateTrajectory(currentPose, targetPose, internalPoints, 0, 0);
+        generateTrajectory.initialize();
     }
 
     public void execute() {
-        ArrayList<Translation2d> internalPoints = new ArrayList<Translation2d>();
-
-        swerveDrive.generateTrajectory(currentPose, targetPose, internalPoints, 0, 0);
+        generateTrajectory.execute();
     }
 
     @Override
     public void end(boolean interrupted) {
-
+        generateTrajectory.end(false);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+       return generateTrajectory.isFinished();
     }
 }
-
