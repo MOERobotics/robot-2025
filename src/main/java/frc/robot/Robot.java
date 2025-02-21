@@ -11,6 +11,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.*;
@@ -22,12 +23,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.container.Autos;
+import frc.robot.container.*;
 import frc.robot.commands.CoralHeadTeleopCommand;
 import frc.robot.commands.SwerveModuleCommand;
-import frc.robot.container.FortissiMOEContainer;
-import frc.robot.container.RobotContainer;
-import frc.robot.container.SubMOErine;
 import frc.robot.subsystem.*;
 import org.littletonrobotics.junction.LoggedRobot;
 
@@ -39,15 +37,15 @@ import static edu.wpi.first.units.Units.*;
 public class Robot extends LoggedRobot {
 
 
-    CommandJoystick driverJoystick = new CommandJoystick(1);
+    CommandJoystick driverJoystick = new CommandJoystick(0);
     Joystick functionJoystick = new Joystick(1);
     CommandScheduler scheduler;
 
 
-    RobotContainer robot = new FortissiMOEContainer();
+    RobotContainer robot = new SwerveBotContainer();
     Autos autos;
     Command autoCommand = Commands.none();
-//    TimeOfFlight tof_sensor_center = new TimeOfFlight(42);
+    TimeOfFlight tof_sensor_center = new TimeOfFlight(42);
 
 
     SendableChooser<SwerveDriveControl.CommandType> chooser = new SendableChooser<>();
@@ -120,6 +118,12 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
         scheduler.run();
+        if (tof_sensor_center.getRange() < 254){
+            SmartDashboard.putString("DROP", "YES");
+        }
+        else {
+            SmartDashboard.putString("DROP", "NO");
+        }
     }
 
     @Override
