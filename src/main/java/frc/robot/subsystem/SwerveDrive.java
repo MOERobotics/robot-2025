@@ -351,7 +351,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
 
     public Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints, double startVelocityMetersPerSecond, double endVelocityMetersPerSecond) {
-        TrajectoryConfig config = new TrajectoryConfig(0.1, 0.1);
+        TrajectoryConfig config = new TrajectoryConfig(0.075, 0.075);
         config.setEndVelocity(endVelocityMetersPerSecond);
         config.setStartVelocity(startVelocityMetersPerSecond);
         var trajectory = TrajectoryGenerator.generateTrajectory(
