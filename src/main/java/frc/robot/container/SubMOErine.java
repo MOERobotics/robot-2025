@@ -11,8 +11,7 @@ import frc.robot.subsystem.*;
 import frc.robot.utils.FeedforwardConstants;
 import frc.robot.utils.PIDConstants;
 
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.*;
 
 public class SubMOErine extends RobotContainer {
     public SubMOErine() {

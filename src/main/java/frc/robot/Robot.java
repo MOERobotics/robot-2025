@@ -142,6 +142,7 @@ public class Robot extends LoggedRobot {
             pdh.setSwitchableChannel(false);
             //functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
         }
+
     }
 
     @Override
