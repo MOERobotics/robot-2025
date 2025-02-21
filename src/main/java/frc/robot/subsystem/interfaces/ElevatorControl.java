@@ -5,17 +5,16 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystem.interfaces.ElevatorInputsAutoLogged;
 import org.littletonrobotics.junction.AutoLog;
 
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.*;
 
 public interface ElevatorControl extends Subsystem {
     @AutoLog
     class ElevatorInputs{
-        public Distance extension;
-        public Distance height;
-        public Angle angle;
-        public AngularVelocity horizontalSpeed;
-        public LinearVelocity extensionSpeed;
+        public Distance extension  = Inches.of(0);;
+        public Distance height = Inches.of(0);
+        public Angle angle  = Radians.of(0);;
+        public AngularVelocity horizontalSpeed  = RadiansPerSecond.of(0);;
+        public LinearVelocity extensionSpeed = InchesPerSecond.of(0);;
 
         public Angle extensionMotorPosition;
 
