@@ -18,7 +18,8 @@ public class DriveToTag extends Command {
 
     static ArrayList<Pose2d> poses = new ArrayList<>() {{
         Rotation2d targetRotation = new Rotation2d(0);
-        Pose2d targetPose1 = new Pose2d(1, 1, targetRotation);
+       // Pose2d targetPose1 = new Pose2d(50, 50, targetRotation);
+        Pose2d targetPose1 = new Pose2d(3.6576, 4.0132, targetRotation);
         Pose2d targetPose6 = new Pose2d(1, 4, targetRotation);
         Pose2d targetPose2 = new Pose2d(1, 7, targetRotation);
         Pose2d targetPose3 = new Pose2d(1, 11, targetRotation);
@@ -76,7 +77,7 @@ public class DriveToTag extends Command {
          */
     }};
     public static Pose2d getClosestTarget(Pose2d current) {
-        return current.nearest(poses);
+        return poses.get(0);
     }
 
 
