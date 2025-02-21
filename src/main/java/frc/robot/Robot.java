@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.autos.Autos;
 import frc.robot.autos.ReefToSource;
 import frc.robot.autos.ReefToSourceToReef;
+import frc.robot.commands.driveToPosition;
 import frc.robot.container.*;
 import frc.robot.commands.*;
 import frc.robot.container.RobotContainer;
@@ -115,6 +116,8 @@ public class Robot extends LoggedRobot {
     public void testInit() {
         scheduler.cancelAll();
         robot.getSwerveDrive().setDefaultCommand(new SwerveModuleTestingCommand(robot.getSwerveDrive(), driverJoystick.getHID()));
+        Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive());
+        SmartDashboard.putData(Drive);
 
     }
 
