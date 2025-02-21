@@ -186,7 +186,8 @@ public class Robot extends LoggedRobot {
                     Math.PI*driveTheta //TODO: REVERT
             );
         }));
-
+        Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive());
+        SmartDashboard.putData(Drive);
 //        ((SwerveDrive)robot.getSwerveDrive()).sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kReverse).schedule();
     }
 
@@ -283,8 +284,6 @@ public class Robot extends LoggedRobot {
     public void testInit() {
         CommandScheduler.getInstance().cancelAll();
         robot.getSwerveDrive().setDefaultCommand(new SwerveModuleCommand(robot.getSwerveDrive(), driverJoystick.getHID()));
-        Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive());
-        SmartDashboard.putData(Drive);
 
     }
 
