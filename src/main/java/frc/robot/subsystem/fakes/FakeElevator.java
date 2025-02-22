@@ -21,11 +21,6 @@ public class FakeElevator extends MOESubsystem<ElevatorInputsAutoLogged> impleme
     }
 
     @Override
-    public void setTargetHeight(Distance targetHeight) {
-
-    }
-
-    @Override
     public void moveVertically(LinearVelocity power) {
 
     }

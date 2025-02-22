@@ -21,11 +21,8 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     public SparkMax elevatorExtensionMotor;
     public SparkMax elevatorPivotMotor;
     public CANcoder tiltEncoder;
-    public Distance targetHeight;
     public AnalogInput extensionSensor;
 
-    public LinearVelocity maxExtensionSpeed = InchesPerSecond.of(6);
-    PIDController pid = new PIDController(0.2, 0.2, 0);
 
     public SubMOErineElevator(
         SparkMax elevatorExtensionMotor,
@@ -34,8 +31,6 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         AnalogInput extensionSensor
     ) {
         super(new ElevatorInputsAutoLogged());
-        pid.setIntegratorRange(-0.5, 0.5);
-        pid.setIZone(1.5);
         this.elevatorExtensionMotor = elevatorExtensionMotor;
         SparkMaxConfig extensionMotorConfig = new SparkMaxConfig();
         SparkMaxConfig pivotMotorConfig = new SparkMaxConfig();
@@ -67,30 +62,12 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public void periodic() {
-        if(targetHeight != null) {
-            Distance error = targetHeight.minus(this.getHeight());
-            double pidOutput = pid.calculate(error.in(Inches));
-            pidOutput = MathUtil.clamp(pidOutput, -1, 1);
-            LinearVelocity pidSpeed = maxExtensionSpeed.times(-pidOutput);
-            this.moveVerticallyInner(pidSpeed);
-        } else {
-            targetHeight = this.getHeight();
-        }
-    }
-
-    @Override
-    public void setTargetHeight(Distance targetHeight) {
-        this.targetHeight = targetHeight;
-    }
-
-    private void moveVerticallyInner(LinearVelocity speed){
-        elevatorExtensionMotor.set(speed.in(FeetPerSecond));
+        super.periodic();
     }
 
     @Override
     public void moveVertically(LinearVelocity speed) {
-        moveVerticallyInner(speed);
-        this.targetHeight = null;
+        elevatorExtensionMotor.set(speed.in(FeetPerSecond));
     }
 
     @Override

@@ -33,8 +33,6 @@ public interface ElevatorControl extends Subsystem {
 
     public ElevatorInputsAutoLogged getSensors();
 
-    public void setTargetHeight(Distance targetHeight);
-
     public void moveVertically(LinearVelocity speed);
 
     public void moveHorizontally(AngularVelocity speed);

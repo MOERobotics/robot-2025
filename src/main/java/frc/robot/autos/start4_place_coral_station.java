@@ -14,8 +14,9 @@ import lombok.SneakyThrows;
 
 import java.util.Set;
 
-import static edu.wpi.first.units.Units.InchesPerSecond;
-import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.*;
+import static frc.robot.subsystem.interfaces.ElevatorControl.heightChute;
+import static frc.robot.subsystem.interfaces.ElevatorControl.heightL4;
 
 public class start4_place_coral_station {
 
@@ -30,10 +31,10 @@ public class start4_place_coral_station {
                 Commands.run(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingDifferentialPose())),
                 Commands.parallel(
                         AutoBuilder.followPath(plannerPath1),
-                        new ElevatorAutoCommand(robot.getElevator(), 4, InchesPerSecond.of(9),true)
+                        new ElevatorAutoCommand(robot.getElevator(), heightL4, InchesPerSecond.of(9),true)
                 ),
-                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(2),
-                new ElevatorAutoCommand(robot.getElevator(),5,InchesPerSecond.of(8),true),
+                new CoralHeadAutoCommand(robot.getCoralHead(), true, robot.getElevator()).withTimeout(2),
+                new ElevatorAutoCommand(robot.getElevator(), heightChute, InchesPerSecond.of(6), false),
                 AutoBuilder.followPath(plannerPath2)
         );
     }

@@ -8,6 +8,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.PS5Controller;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -153,10 +155,11 @@ public class Robot extends LoggedRobot {
         autoCommand = autos.getSelectedAuto();
         autoCommand.schedule();
 
-         */
+
         new ElevatorAutoCommand(
                 robot.getElevator(),
                 heightL2,
+                InchesPerSecond.of(6),
                 false
         ).schedule();
     }
@@ -170,7 +173,8 @@ public class Robot extends LoggedRobot {
         autoCommand.cancel();
         new ElevatorTeleopCommand(
             robot.getElevator(),
-            functionJoystick.getHID()
+            functionJoystick.getHID(),
+              InchesPerSecond.of(6)
         ).schedule();
         new AlgaeCollectorTeleopCommand(
             robot.getAlgaeCollector(),

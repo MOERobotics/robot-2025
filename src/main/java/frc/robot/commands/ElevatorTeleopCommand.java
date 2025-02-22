@@ -21,11 +21,14 @@ public class ElevatorTeleopCommand extends Command {
 //    Distance[] Ls = {Inches.of(33), Inches.of(40), Inches.of(55.59), Inches.of(81.2), Inches.of(24)};
 //    private final PIDController pid = new PIDController(0.2, 0.2 ,0);
     Distance targetheight;
+    PIDController pid = new PIDController(0.2, 0.2, 0);
+    LinearVelocity maxExtensionSpeed;
 
 
-    public ElevatorTeleopCommand(ElevatorControl elevator, Joystick joystick) {
+    public ElevatorTeleopCommand(ElevatorControl elevator, Joystick joystick, LinearVelocity maxExtensionSpeed) {
         this.elevator = elevator;
         this.joystick = joystick;
+        this.maxExtensionSpeed = maxExtensionSpeed;
         addRequirements(elevator);
     }
 
@@ -54,19 +57,24 @@ public class ElevatorTeleopCommand extends Command {
         if(joystick.getRawButton(8)){
             targetheight = heightChute;
         }
-        elevator.setTargetHeight(targetheight);
-//        Distance error = elevator.getHeight().minus(targetheight);
-//        double pidOutput = pid.calculate(error.in(Inches));
-//        pidOutput = MathUtil.clamp(pidOutput, -1, 1);
-//        verticalVelocity = InchesPerSecond.of(6).times(pidOutput);
+
+        LinearVelocity maxExtensionSpeed = InchesPerSecond.of(6);
+
+        pid.setIntegratorRange(-0.5, 0.5);
+        pid.setIZone(1.5);
+
+        Distance error = elevator.getHeight().minus(targetheight);
+        double pidOutput = pid.calculate(error.in(Inches));
+        pidOutput = MathUtil.clamp(pidOutput, -1, 1);
+        LinearVelocity verticalVelocity = maxExtensionSpeed.times(pidOutput);
         angularVelocity = DegreesPerSecond.of(0).times(
                 MathUtil.applyDeadband(joystick.getRawAxis(0), 0.1)
         );
-//        elevator.moveVertically(verticalVelocity);
+        elevator.moveVertically(verticalVelocity);
         elevator.moveHorizontally(angularVelocity);
-//        Logger.recordOutput("verticalspeed", verticalVelocity.in(InchesPerSecond));
+        Logger.recordOutput("verticalspeed", verticalVelocity.in(InchesPerSecond));
         Logger.recordOutput("targetheight", targetheight.in(Inches));
-//        Logger.recordOutput("pidoutput", pidOutput);
+        Logger.recordOutput("pidoutput", pidOutput);
         Logger.recordOutput("heightininches", elevator.getHeight().in(Inches));
     }
 

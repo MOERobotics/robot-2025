@@ -18,12 +18,16 @@ public class ElevatorAutoCommand extends Command {
 //    private Distance[] Ls = {Inches.of(33), Inches.of(40), Inches.of(55.59), Inches.of(81.2), Inches.of(24)};
     private int L;
     private Distance targetheight = Inches.of(0);
+    private LinearVelocity maxExtensionSpeed;
+    private PIDController pid = new PIDController(0.2, 0.2, 0);
 
     public ElevatorAutoCommand(
             ElevatorControl elevator,
             Distance targetheight,
+            LinearVelocity maxExtensionSpeed,
             boolean isHold
     ){
+        this.maxExtensionSpeed = maxExtensionSpeed;
         this.elevator = elevator;
         this.targetheight = targetheight;
         addRequirements(elevator);
@@ -31,19 +35,28 @@ public class ElevatorAutoCommand extends Command {
 
     @Override
     public void initialize() {
+        pid.setIntegratorRange(-0.5, 0.5);
+        pid.setIZone(1.5);
     }
 
     @Override
     public void execute() {
-        elevator.setTargetHeight(targetheight);
+        Distance error = elevator.getHeight().minus(targetheight);
+        double pidOutput = pid.calculate(error.in(Inches));
+        pidOutput = MathUtil.clamp(pidOutput, -1, 1);
+        LinearVelocity verticalVelocity = maxExtensionSpeed.times(pidOutput);
         Logger.recordOutput("targetheight", targetheight.in(Inches));
         Logger.recordOutput("height", elevator.getHeight().in(Inches));
         Logger.recordOutput("speed", pidSpeed.in(InchesPerSecond));
+        elevator.moveVertically(verticalVelocity);
     }
 
     @Override
     public boolean isFinished() {
-        if(targetheight == elevator.getHeight()) return true;
+        if(isHold) return false;
+        else{
+            if(targetheight == elevator.getHeight()) return true;
+        }
         return false;
     }
 
