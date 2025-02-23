@@ -179,42 +179,4 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         swerveModuleBL.setModuleState(moduleStates[3]);
     }
 
-
-    public Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints) {
-        return generateTrajectory(start, end, internalPoints, 0,0);
-    }
-
-
-    public Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints, double startVelocityMetersPerSecond, double endVelocityMetersPerSecond) {
-        TrajectoryConfig config = new TrajectoryConfig(0.1, 0.1);
-        config.setEndVelocity(endVelocityMetersPerSecond);
-        config.setStartVelocity(startVelocityMetersPerSecond);
-
-        var trajectory = TrajectoryGenerator.generateTrajectory(
-                start,
-                internalPoints,
-                end,
-                config
-        );
-        SmartDashboard.putNumber("Time", trajectory.getTotalTimeSeconds());
-        SmartDashboard.putNumber("trajEndRotation", trajectory.sample(trajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees());
-        SmartDashboard.putNumber("desiredEndRot", end.getRotation().getDegrees());
-        Field2d field = new Field2d();
-        SwerveControllerCommand trajCommand = new SwerveControllerCommand(
-                trajectory,
-//                vision::getRobotPosition,
-//             this::getEstimatedPose,
-                this::getPose,
-                kinematics,
-                xController,
-                yController,
-                thetaController,
-                this::setModuleStates,
-                this
-        );
-//        field.getRobotObject().setTrajectory(trajectory);
-//        SmartDashboard.putData("trajectory",field);
-        Logger.recordOutput(("trajectory"), trajectory);
-        return trajCommand;
-    }
 }
