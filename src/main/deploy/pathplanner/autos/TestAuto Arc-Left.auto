@@ -1,0 +1,19 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Test-Arc-Left 5 Ft"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "TestAutos",
+  "choreoAuto": false
+}
