@@ -51,7 +51,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler scheduler;
 
 
-    RobotContainer robot = new SubMOErine();
+    RobotContainer robot = new FortissiMOEContainer();
 
     Autos autos;
     Command autoCommand = Commands.none();
@@ -155,14 +155,6 @@ public class Robot extends LoggedRobot {
         swerveDrive.setDefaultCommand(stopCommand);
         autoCommand = autos.getSelectedAuto();
         autoCommand.schedule();
-
-
-        new ElevatorAutoCommand(
-                robot.getElevator(),
-                heightL2,
-                InchesPerSecond.of(6),
-                false
-        ).schedule();
     }
 
     @Override
@@ -268,8 +260,8 @@ public class Robot extends LoggedRobot {
         elevatorSim = new RobotElevatorSim(elevator);
         algaeCollectorSim = new AlgaeCollectorSim((AlgaeCollector)robot.getAlgaeCollector());
         coralCollectorSim = new CoralCollectorSim((CoralHead)robot.getCoralHead());
-        climberMidSim = new ClimberSim(robot.getClimberMid());
-        climberRearSim = new ClimberSim(robot.getClimberRear());
+        climberMidSim = new ClimberSim((SubMOErineClimber) robot.getClimberMid());
+        climberRearSim = new ClimberSim((SubMOErineClimber) robot.getClimberRear());
 
 
     }

@@ -6,6 +6,8 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.controller.PIDController;
+import frc.robot.subsystem.fakes.AlgaeCollectorControlFake;
+import frc.robot.subsystem.fakes.FakeClimber;
 import frc.robot.subsystem.fakes.FakeCoralHead;
 import frc.robot.subsystem.fakes.FakeElevator;
 import frc.robot.subsystem.SwerveDrive;
@@ -95,6 +97,9 @@ public class FortissiMOEContainer extends RobotContainer {
 
             ));
         this.setElevator(new FakeElevator());
+        this.setAlgaeCollector(new AlgaeCollectorControlFake());
+        this.setClimberMid(new FakeClimber());
+        this.setClimberRear(new FakeClimber());
 
 
 

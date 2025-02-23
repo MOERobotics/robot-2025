@@ -5,10 +5,7 @@
 package frc.robot.container;
 
 import frc.robot.subsystem.*;
-import frc.robot.subsystem.interfaces.AlgaeCollectorControl;
-import frc.robot.subsystem.interfaces.CoralHeadControl;
-import frc.robot.subsystem.interfaces.ElevatorControl;
-import frc.robot.subsystem.interfaces.SwerveDriveControl;
+import frc.robot.subsystem.interfaces.*;
 import lombok.Data;
 
 
@@ -17,8 +14,8 @@ public abstract @Data class RobotContainer {
 	private ElevatorControl elevator;
 	private AlgaeCollectorControl algaeCollector;
     private CoralHeadControl coralHead;
-    private SubMOErineClimber climberRear;
-    private SubMOErineClimber climberMid;
+    private ClimberControl climberRear;
+    private ClimberControl climberMid;
 
 
 

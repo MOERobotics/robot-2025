@@ -17,7 +17,7 @@ public class Autos {
 //        autoChooser.addOption("Auto3: Test Forward-Left", new PathPlannerAuto("TestAuto Forward-Left"));
 //        autoChooser.addOption("Auto4: Test Arc-Right", new PathPlannerAuto("TestAuto Arc-Right"));
 //        autoChooser.addOption("Auto4: Test Arc-Left", new PathPlannerAuto("TestAuto Arc-Left"));
-        autoChooser.addOption("Auto5: Test Start4 -> Score -> Coral Station", start4_place_coral_station.buildS4IL4Command(robot));
+        autoChooser.setDefaultOption("Auto5: Test Start4 -> Score -> Coral Station", start4_place_coral_station.buildS4IL4Command(robot));
         SmartDashboard.putData("Autos Chooser",autoChooser);
     }
     public Command getSelectedAuto () {

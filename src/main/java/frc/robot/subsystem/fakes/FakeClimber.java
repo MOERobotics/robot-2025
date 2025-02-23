@@ -7,7 +7,7 @@ import frc.robot.subsystem.interfaces.ClimberControl;
 
 public class FakeClimber extends MOESubsystem<ClimberInputsAutoLogged> implements ClimberControl {
 
-    public FakeClimber(ClimberInputsAutoLogged sensors) {
+    public FakeClimber() {
         super(new ClimberInputsAutoLogged());
     }
 
