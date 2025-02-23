@@ -95,12 +95,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
                 new Pose2d()
         );
 
-        var LimeLightPose = LimelightHelpers.getBotPose3dWithTime("limelight");
-
-        if (!LimeLightPose.pose().toPose2d().equals(Pose2d.kZero)){
-           this.poseEstimator.addVisionMeasurement(LimeLightPose.pose().toPose2d(),LimeLightPose.latency_ms());
-        }
-
 
         getSensors().moduleStates = new SwerveModuleState[4];
         getSensors().modulePositions = new SwerveModulePosition[4];
@@ -157,8 +151,23 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
                 swerveModuleFR.getModuleState(),
                 swerveModuleBR.getModuleState(),
                 swerveModuleBL.getModuleState());
-
         sensors.canClimb = !climbSensor.get();
+
+        var LimeLightPose = LimelightHelpers.getBotPose3dWithTime("limelight");
+
+        if (!LimeLightPose.pose().toPose2d().equals(Pose2d.kZero)){
+            this.poseEstimator.addVisionMeasurement(LimeLightPose.pose().toPose2d(),LimeLightPose.latency_ms());
+        }
+
+        sensors.Pose2dFromLL = LimeLightPose.pose().toPose2d();
+        sensors.NewPose2dFromLL = LimeLightPose.pose().toPose2d();
+        this.poseEstimator.getEstimatedPosition();
+
+
+    }
+   /*
+   // pose 2d, float seconds,
+   public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
 
 
     }
