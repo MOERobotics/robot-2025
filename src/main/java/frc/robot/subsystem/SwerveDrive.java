@@ -5,9 +5,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
@@ -20,10 +18,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.LimelightHelpers;
 import frc.robot.MOESubsystem;
 import frc.robot.subsystem.interfaces.SwerveDriveControl;
 import frc.robot.subsystem.interfaces.SwerveDriveInputsAutoLogged;
 import lombok.Getter;
+import org.ejml.equation.Variable;
 import org.littletonrobotics.junction.Logger;
 import java.util.ArrayList;
 
@@ -94,6 +94,12 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
                 },
                 new Pose2d()
         );
+
+        var LimeLightPose = LimelightHelpers.getBotPose3dWithTime("limelight");
+
+        if (!LimeLightPose.pose().toPose2d().equals(Pose2d.kZero)){
+           this.poseEstimator.addVisionMeasurement(LimeLightPose.pose().toPose2d(),LimeLightPose.latency_ms());
+        }
 
 
         getSensors().moduleStates = new SwerveModuleState[4];
@@ -179,4 +185,61 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         swerveModuleBL.setModuleState(moduleStates[3]);
     }
 
+    /**
+     * Drives an individual swerve module of the swerve drive
+     *
+     * @param index    the index of the swerve module 0-3 represent modules FL,FR,BR,BL
+     */
+    @Override
+    public void driveSingleModule(int index, double xSpeed, double ySpeed, double rotation) {
+        ChassisSpeeds speeds = new ChassisSpeeds(xSpeed,ySpeed,rotation);
+        SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(speeds);
+        this.getSensors().driveDesiredStates = moduleStates;
+        swerveModules[index].drive(moduleStates[index].speedMetersPerSecond);
+        swerveModules[index].pivot(moduleStates[index].angle.getMeasure());
+    }
+    @Override
+    public Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints, double startVelocityMetersPerSecond, double endVelocityMetersPerSecond) {
+        TrajectoryConfig config = new TrajectoryConfig(0.1, 0.1);
+        config.setEndVelocity(endVelocityMetersPerSecond);
+        config.setStartVelocity(startVelocityMetersPerSecond);
+
+        var trajectory = TrajectoryGenerator.generateTrajectory(
+            start,
+            internalPoints,
+            end,
+            config
+        );
+        SmartDashboard.putNumber("Time", trajectory.getTotalTimeSeconds());
+        SmartDashboard.putNumber("trajEndRotation", trajectory.sample(trajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees());
+        SmartDashboard.putNumber("desiredEndRot", end.getRotation().getDegrees());
+        Field2d field = new Field2d();
+        SwerveControllerCommand trajCommand = new SwerveControllerCommand(
+            trajectory,
+//                vision::getRobotPosition,
+//             this::getEstimatedPose,
+            this::getPose,
+            kinematics,
+            xController,
+            yController,
+            thetaController,
+            this::setModuleStates,
+            this
+        );
+//        field.getRobotObject().setTrajectory(trajectory);
+//        SmartDashboard.putData("trajectory",field);
+        Logger.recordOutput(("trajectory"), trajectory);
+        return trajCommand;
+    }
+
+
+
+
+    public void setModuleStates(SwerveModuleState[] moduleStates){
+        this.getSensors().driveDesiredStates = moduleStates;
+        swerveModuleFL.setModuleState(moduleStates[0]);
+        swerveModuleFR.setModuleState(moduleStates[1]);
+        swerveModuleBR.setModuleState(moduleStates[2]);
+        swerveModuleBL.setModuleState(moduleStates[3]);
+    }
 }
