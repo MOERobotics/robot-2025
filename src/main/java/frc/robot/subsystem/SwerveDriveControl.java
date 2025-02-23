@@ -86,6 +86,8 @@ public interface SwerveDriveControl extends Subsystem {
         SwerveModuleInputsAutoLogged swerveModuleFR;
         SwerveModuleInputsAutoLogged swerveModuleBR;
         SwerveModuleInputsAutoLogged swerveModuleBL;
+        Pose2d Pose2dFromLL = new Pose2d();
+        Pose2d NewPose2dFromLL = new Pose2d();
         ChassisSpeeds robotRelativeSpeeds;
     }
 
