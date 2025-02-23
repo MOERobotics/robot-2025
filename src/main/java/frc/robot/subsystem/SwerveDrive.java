@@ -2,8 +2,11 @@ package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import edu.wpi.first.math.MathSharedStore;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
@@ -92,7 +95,9 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
                         this.swerveModuleBR.getModulePosition(),
                         this.swerveModuleBL.getModulePosition(),
                 },
-                new Pose2d()
+                new Pose2d(),
+                VecBuilder.fill(0.05, 0.05, 0.05),
+                VecBuilder.fill(0.5, 0.5, 0.5)
         );
 
 
@@ -115,6 +120,11 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         PathPlannerLogging.setLogTargetPoseCallback(path -> {
             PathPlannerField.getObject("target").setPose(path);
         });
+    }
+
+    @Override
+    public Pose2d getFieldPose() {
+        return poseEstimator.getEstimatedPosition();
     }
 
 
@@ -156,12 +166,12 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         var LimeLightPose = LimelightHelpers.getBotPose3dWithTime("limelight");
 
         if (!LimeLightPose.pose().toPose2d().equals(Pose2d.kZero)){
-            this.poseEstimator.addVisionMeasurement(LimeLightPose.pose().toPose2d(),LimeLightPose.latency_ms());
+            this.poseEstimator.addVisionMeasurement(LimeLightPose.pose().toPose2d(), MathSharedStore.getTimestamp());
         }
 
         sensors.Pose2dFromLL = LimeLightPose.pose().toPose2d();
-        sensors.NewPose2dFromLL = LimeLightPose.pose().toPose2d();
-        this.poseEstimator.getEstimatedPosition();
+        sensors.NewPose2dFromLL = this.poseEstimator.getEstimatedPosition();
+
 
 
     }
@@ -224,16 +234,14 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         SmartDashboard.putNumber("desiredEndRot", end.getRotation().getDegrees());
         Field2d field = new Field2d();
         SwerveControllerCommand trajCommand = new SwerveControllerCommand(
-            trajectory,
-//                vision::getRobotPosition,
-//             this::getEstimatedPose,
-            this::getPose,
-            kinematics,
-            xController,
-            yController,
-            thetaController,
-            this::setModuleStates,
-            this
+                trajectory,
+                this::getFieldPose,
+                kinematics,
+                xController,
+                yController,
+                thetaController,
+                this::setModuleStates,
+                this
         );
 //        field.getRobotObject().setTrajectory(trajectory);
 //        SmartDashboard.putData("trajectory",field);
