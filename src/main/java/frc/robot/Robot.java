@@ -52,6 +52,7 @@ public class Robot extends LoggedRobot {
 
 
     RobotContainer robot = new SubMOErine();
+
     Autos autos;
     Command autoCommand = Commands.none();
     TimeOfFlight tof_sensor_center = new TimeOfFlight(42);

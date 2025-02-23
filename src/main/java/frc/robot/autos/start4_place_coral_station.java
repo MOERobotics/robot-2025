@@ -14,14 +14,13 @@ import lombok.SneakyThrows;
 
 import java.util.Set;
 
-import static edu.wpi.first.units.Units.*;
-import static frc.robot.subsystem.interfaces.ElevatorControl.heightChute;
-import static frc.robot.subsystem.interfaces.ElevatorControl.heightL4;
+import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.RPM;
 
 public class start4_place_coral_station {
 
     public  static Command buildS4IL4Command(RobotContainer robot) {
-        return generateAutos(robot, "Start4 IJ", "IJ Coral Station");
+        return generateAutos(robot, "Start2 EF", "EF Coral Station");
     }
     @SneakyThrows
     public static Command generateAutos(RobotContainer robot, String path1, String path2 ){
@@ -29,12 +28,13 @@ public class start4_place_coral_station {
         PathPlannerPath plannerPath2 = PathPlannerPath.fromPathFile(path2);
         return Commands.sequence(
                 Commands.run(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingDifferentialPose())),
-                Commands.parallel(
+            /*    Commands.parallel(
                         AutoBuilder.followPath(plannerPath1),
-                        new ElevatorAutoCommand(robot.getElevator(), heightL4, InchesPerSecond.of(9),true)
+                        new ElevatorAutoCommand(robot.getElevator(), 4, InchesPerSecond.of(9),true)
                 ),
-                new CoralHeadAutoCommand(robot.getCoralHead(), true, robot.getElevator()).withTimeout(2),
-                new ElevatorAutoCommand(robot.getElevator(), heightChute, InchesPerSecond.of(6), false),
+                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(2),
+                new ElevatorAutoCommand(robot.getElevator(),5,InchesPerSecond.of(8),true),
+                */
                 AutoBuilder.followPath(plannerPath2)
         );
     }

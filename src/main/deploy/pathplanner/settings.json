@@ -3,7 +3,12 @@
   "robotLength": 0.88,
   "holonomicMode": true,
   "pathFolders": [
-    "Start4 BLUE",
+    "Reef to Coral Station",
+    "Start1",
+    "Start2",
+    "Start3",
+    "Start4 ",
+    "Start5",
     "Test Paths"
   ],
   "autoFolders": [
