@@ -110,7 +110,6 @@ public class Robot extends LoggedRobot {
 
         autos = new Autos(robot);
 
-        this.autoCommand = start4_place_coral_station.buildS4IL4Command(robot);
         /*try {
             PathPlannerPath path1 = PathPlannerPath.fromPathFile("Test-Forward 5 Ft");
             PathPlannerPath path2 = PathPlannerPath.fromPathFile("Test-Forward-Left 5 Ft");
@@ -129,6 +128,9 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotPeriodic() {
+
+        /*
+
         SmartDashboard.putNumber("Distance:", tof_sensor_center.getRange());
         scheduler.run();
         functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
@@ -143,6 +145,8 @@ public class Robot extends LoggedRobot {
             //functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
         }
 
+         */
+
     }
 
     @Override
@@ -156,12 +160,14 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
+        this.autoCommand = start4_place_coral_station.buildS4IL4Command(robot);
         var swerveDrive = robot.getSwerveDrive();
         Command stopCommand = swerveDrive.run(()-> { swerveDrive.drive(0,0,0);});
         stopCommand.setName("SwerveStop");
         swerveDrive.setDefaultCommand(stopCommand);
         autoCommand = autos.getSelectedAuto();
         autoCommand.schedule();
+
 
     }
 
@@ -221,10 +227,10 @@ public class Robot extends LoggedRobot {
             driveTheta = MathUtil.applyDeadband(driveTheta, 0.2, 1);
             driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
             driveY = MathUtil.applyDeadband(driveY, 0.1, 1);
-            double div = driverJoystick.getHID().getRawButton(7)?2:1;
+            double div = driverJoystick.getHID().getRawButton(7)?2.5:1;
             robot.getSwerveDrive().drive(
-                    2.5*driveX/div,
-                    2.5*driveY/div,
+                    2.75*driveX/div,
+                    2.75*driveY/div,
                     1.25*Math.PI*driveTheta/div //TODO: REVERT
             );
         }));

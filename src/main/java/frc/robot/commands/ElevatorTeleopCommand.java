@@ -57,7 +57,7 @@ public class ElevatorTeleopCommand extends Command {
         Distance error = elevator.getHeight().minus(targetheight);
         double pidOutput = pid.calculate(error.in(Inches));
         pidOutput = MathUtil.clamp(pidOutput, -1, 1);
-        if(MathUtil.applyDeadband(joystick.getRawAxis(1),0.15)!=0){
+        if(MathUtil.applyDeadband(joystick.getRawAxis(1),0.5)!=0){
             pidOutput = -joystick.getRawAxis(1);
             targetheight = elevator.getHeight();
         }

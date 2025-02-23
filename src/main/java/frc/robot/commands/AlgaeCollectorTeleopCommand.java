@@ -30,9 +30,9 @@ public class AlgaeCollectorTeleopCommand extends Command {
     public void execute() {
         algaeArmVelocity = RPM.of(-0.5*MathUtil.applyDeadband(joystick.getRawAxis(5),0.05));
 
-        if (joystick.getRawButton(6)){
+        if (joystick.getRawButton(5)){
             algaeWheelVelocity = RPM.of(1);
-        }else if(joystick.getRawButton(5)){
+        }else if(joystick.getRawButton(6)){
             algaeWheelVelocity = RPM.of(-1);
         }else {
             algaeWheelVelocity = RPM.zero();

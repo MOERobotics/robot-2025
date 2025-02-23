@@ -40,31 +40,40 @@ public class CoralHeadTeleopCommand extends Command {
         }
         AngularVelocity coralWheelRVelocity, coralWheelLVelocity;
         //eject the coral
-        if (joystick.getRawAxis(3)>0.5){
+        if (joystick.getRawAxis(2)>0.5){
            hasCoral = false;
            stopCoral = false;
            // when at L1 we need to eject differently because the coral must be sideways
+
+            coralWheelRVelocity = RPM.of(0.80);
+            coralWheelLVelocity = RPM.of(-0.80);
+
+            /*
            if (elevator.getHeight().lt(Inches.of(45))){
                coralWheelRVelocity = RPM.of(1.00);
-               coralWheelLVelocity = RPM.of(0.30);
+               coralWheelLVelocity = RPM.of(-0.30);
            } else {
-               coralWheelRVelocity = RPM.of(0.80);
-               coralWheelLVelocity = RPM.of(0.80);
+
            }
+
+
+             */
         }
         //intake the coral
-        else if(joystick.getRawButton(1) && !stopCoral) {
-            coralWheelLVelocity = RPM.of(0.40);
-            coralWheelRVelocity = RPM.of(0.40);
-        }
-        else if(joystick.getRawAxis(2)>0.5){
-            coralWheelRVelocity = RPM.of(-0.80);
-            coralWheelLVelocity = RPM.of(-0.80);
-        }else {
+        else if(joystick.getRawAxis(3)> 0.5 && !stopCoral) {
+            coralWheelLVelocity = RPM.of(0.30);
+            coralWheelRVelocity = RPM.of(-0.30);
+        } else {
             coralWheelRVelocity = RPM.zero();
             coralWheelLVelocity = RPM.zero();
         }
 
+        /* else if(joystick.getRawAxis(1)>0.5){
+            coralWheelRVelocity = RPM.of(-0.80);
+            coralWheelLVelocity = RPM.of(0.80);
+
+
+        }*/
 
         coralCollector.setCoralVelocity(coralWheelRVelocity, coralWheelLVelocity);
 
