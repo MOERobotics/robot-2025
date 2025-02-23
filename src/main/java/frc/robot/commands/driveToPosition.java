@@ -46,7 +46,6 @@ public class driveToPosition extends Command {
     }
 
     public void execute() {
-
         if (chosenPose == null) {
             long heartbeat = (long)limelightAPI.getEntry("hb").getDouble(0);
             if (heartbeat == 0) {

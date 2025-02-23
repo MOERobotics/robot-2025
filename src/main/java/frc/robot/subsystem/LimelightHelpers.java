@@ -1198,7 +1198,7 @@ public class LimelightHelpers {
     }
 
     public static pose3dWithTime getBotPose3dWithTime(String limelightName) {
-        double[] poseArray = getLimelightNTDoubleArray(limelightName, "botpose");
+        double[] poseArray = getLimelightNTDoubleArray(limelightName, "botpose_wpiblue");
 
         return toPose3DWithTime(poseArray);
     }

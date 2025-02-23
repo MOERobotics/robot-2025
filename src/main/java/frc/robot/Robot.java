@@ -22,11 +22,8 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.DriveToTag;
-import frc.robot.commands.driveToPosition;
+import frc.robot.commands.*;
 import frc.robot.container.*;
-import frc.robot.commands.CoralHeadTeleopCommand;
-import frc.robot.commands.SwerveModuleCommand;
 import frc.robot.subsystem.*;
 import org.littletonrobotics.junction.LoggedRobot;
 
@@ -175,9 +172,9 @@ public class Robot extends LoggedRobot {
         }, Set.of(robot.getSwerveDrive())));
         driverJoystick.button(5).whileTrue(driveOneSecond);
         robot.getSwerveDrive().setDefaultCommand(robot.getSwerveDrive().run(() -> {
-            double driveX =  -driverJoystick.getRawAxis(0 );
+            double driveX = -driverJoystick.getRawAxis(0);
             double driveY = driverJoystick.getRawAxis(1);
-            double driveTheta = -driverJoystick.getRawAxis(2);
+            double driveTheta = -driverJoystick.getRawAxis(4);
             driveTheta = MathUtil.applyDeadband(driveTheta, 0.2, 1);
             driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
             driveY = MathUtil.applyDeadband(driveY, 0.1, 1);
@@ -187,16 +184,20 @@ public class Robot extends LoggedRobot {
                     Math.PI*driveTheta //TODO: REVERT
             );
         }));
-        Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive(), DriveToTag.getClosestTarget(robot.getSwerveDrive().getPose()));
-        SmartDashboard.putData(Drive);
+//        Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive(), DriveToTag.getClosestTarget(robot.getSwerveDrive().getPose()));
+//        SmartDashboard.putData(Drive);
+
+        Command DriveTraj = new driveToPosition2(robot.getSwerveDrive());
+        SmartDashboard.putData(DriveTraj);
 //        ((SwerveDrive)robot.getSwerveDrive()).sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kReverse).schedule();
     }
 
     @Override
     public void teleopPeriodic() {
-        if(driverJoystick.getHID().getRawButton(1)){
+        if(driverJoystick.getHID().getRawButton(2)){
             robot.getSwerveDrive().resetPose(new Pose2d());
         }
+
 
 
         /*double elevatorVertPower = 0;
