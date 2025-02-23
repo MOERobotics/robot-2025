@@ -5,13 +5,21 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.LimelightHelpers;
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
+
+import java.util.ArrayList;
 
 public interface SwerveDriveControl extends Subsystem {
     /*default Pose2d getPose() {
@@ -80,5 +88,44 @@ public interface SwerveDriveControl extends Subsystem {
         SwerveModuleInputsAutoLogged swerveModuleBR;
         SwerveModuleInputsAutoLogged swerveModuleBL;
         ChassisSpeeds robotRelativeSpeeds;
+    }
+
+
+    public default Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints) {
+        return generateTrajectory(start, end, internalPoints, 0,0);
+    }
+
+
+    public default Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints, double startVelocityMetersPerSecond, double endVelocityMetersPerSecond) {
+        TrajectoryConfig config = new TrajectoryConfig(0.1, 0.1);
+        config.setEndVelocity(endVelocityMetersPerSecond);
+        config.setStartVelocity(startVelocityMetersPerSecond);
+
+        var trajectory = TrajectoryGenerator.generateTrajectory(
+                start,
+                internalPoints,
+                end,
+                config
+        );
+        SmartDashboard.putNumber("Time", trajectory.getTotalTimeSeconds());
+        SmartDashboard.putNumber("trajEndRotation", trajectory.sample(trajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees());
+        SmartDashboard.putNumber("desiredEndRot", end.getRotation().getDegrees());
+        Field2d field = new Field2d();
+        SwerveControllerCommand trajCommand = new SwerveControllerCommand(
+                trajectory,
+//                vision::getRobotPosition,
+//             this::getEstimatedPose,
+                this::getPose,
+                kinematics,
+                xController,
+                yController,
+                thetaController,
+                this::setModuleStates,
+                this
+        );
+//        field.getRobotObject().setTrajectory(trajectory);
+//        SmartDashboard.putData("trajectory",field);
+        Logger.recordOutput(("trajectory"), trajectory);
+        return trajCommand;
     }
 }
