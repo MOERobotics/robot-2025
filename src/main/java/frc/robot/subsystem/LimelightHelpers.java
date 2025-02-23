@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -639,6 +640,22 @@ public class LimelightHelpers {
                 new Rotation3d(Units.degreesToRadians(inData[3]), Units.degreesToRadians(inData[4]),
                         Units.degreesToRadians(inData[5])));
     }
+    public static record pose3dWithTime(Pose3d pose, double latency_ms){
+
+    }
+
+    public static pose3dWithTime toPose3DWithTime(double[] inData){
+        if(inData.length < 6)
+        {
+            //System.err.println("Bad LL 3D Pose Data!");
+            return new pose3dWithTime(new Pose3d(),  0);
+        }
+
+        return new pose3dWithTime(new
+                Pose3d(new Translation3d(inData[0], inData[1], inData[2]),
+                new Rotation3d(Units.degreesToRadians(inData[3]), Units.degreesToRadians(inData[4]), Units.degreesToRadians(inData[5]))),
+                inData[6]);
+    }
 
     /**
      * Takes a 6-length array of pose data and converts it to a Pose2d object.
@@ -1178,6 +1195,12 @@ public class LimelightHelpers {
     public static Pose3d getBotPose3d(String limelightName) {
         double[] poseArray = getLimelightNTDoubleArray(limelightName, "botpose");
         return toPose3D(poseArray);
+    }
+
+    public static pose3dWithTime getBotPose3dWithTime(String limelightName) {
+        double[] poseArray = getLimelightNTDoubleArray(limelightName, "botpose");
+
+        return toPose3DWithTime(poseArray);
     }
 
     /**

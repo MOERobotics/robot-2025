@@ -79,7 +79,7 @@ public class driveToPosition extends Command {
                 zr /= found_poses.length;
 
                 Pose2d average_pose = new Pose2d(x,y,Rotation2d.fromDegrees(zr));
-                /// idfk
+                /// Set chosen pose equal to the average pose
                 chosenPose = average_pose;
             }
         }

@@ -26,13 +26,12 @@ public interface SwerveDriveControl extends Subsystem {
         return this.getSensors().pose;
     }*/
 
+
     default Pose2d getPose(){
-        Pose3d LimeLightPose = LimelightHelpers.getBotPose3d("limelight");
-        Transform2d odometryCorrection = new Transform2d(LimeLightPose.getX(), LimeLightPose.getY(), new Rotation2d(LimeLightPose.getRotation().getAngle()));
-        if (!LimeLightPose.toPose2d().equals(Pose2d.kZero)){
-            return this.getSensors().pose.transformBy(odometryCorrection);
-        }
         return this.getSensors().pose;
+    }
+    default Pose2d getFieldPose(){
+        return getPose();
     }
 
     SwerveDriveInputsAutoLogged getSensors();
@@ -97,35 +96,6 @@ public interface SwerveDriveControl extends Subsystem {
 
 
     public default Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints, double startVelocityMetersPerSecond, double endVelocityMetersPerSecond) {
-        TrajectoryConfig config = new TrajectoryConfig(0.1, 0.1);
-        config.setEndVelocity(endVelocityMetersPerSecond);
-        config.setStartVelocity(startVelocityMetersPerSecond);
-
-        var trajectory = TrajectoryGenerator.generateTrajectory(
-                start,
-                internalPoints,
-                end,
-                config
-        );
-        SmartDashboard.putNumber("Time", trajectory.getTotalTimeSeconds());
-        SmartDashboard.putNumber("trajEndRotation", trajectory.sample(trajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees());
-        SmartDashboard.putNumber("desiredEndRot", end.getRotation().getDegrees());
-        Field2d field = new Field2d();
-        SwerveControllerCommand trajCommand = new SwerveControllerCommand(
-                trajectory,
-//                vision::getRobotPosition,
-//             this::getEstimatedPose,
-                this::getPose,
-                kinematics,
-                xController,
-                yController,
-                thetaController,
-                this::setModuleStates,
-                this
-        );
-//        field.getRobotObject().setTrajectory(trajectory);
-//        SmartDashboard.putData("trajectory",field);
-        Logger.recordOutput(("trajectory"), trajectory);
-        return trajCommand;
+        return Commands.none();
     }
 }

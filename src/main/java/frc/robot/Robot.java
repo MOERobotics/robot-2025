@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.DriveToTag;
 import frc.robot.commands.driveToPosition;
 import frc.robot.container.*;
 import frc.robot.commands.CoralHeadTeleopCommand;
@@ -186,7 +187,7 @@ public class Robot extends LoggedRobot {
                     Math.PI*driveTheta //TODO: REVERT
             );
         }));
-        Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive());
+        Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive(), DriveToTag.getClosestTarget(robot.getSwerveDrive().getPose()));
         SmartDashboard.putData(Drive);
 //        ((SwerveDrive)robot.getSwerveDrive()).sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kReverse).schedule();
     }
