@@ -30,6 +30,7 @@ public class ElevatorAutoCommand extends Command {
         this.maxExtensionSpeed = maxExtensionSpeed;
         this.elevator = elevator;
         this.targetheight = targetheight;
+        this.isHold = isHold;
         addRequirements(elevator);
     }
 
