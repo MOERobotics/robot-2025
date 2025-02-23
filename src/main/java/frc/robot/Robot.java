@@ -129,7 +129,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotPeriodic() {
 
-        /*
+
 
         SmartDashboard.putNumber("Distance:", tof_sensor_center.getRange());
         scheduler.run();
@@ -145,7 +145,7 @@ public class Robot extends LoggedRobot {
             //functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
         }
 
-         */
+
 
     }
 
@@ -220,20 +220,7 @@ public class Robot extends LoggedRobot {
             return Commands.none();
         }, Set.of(robot.getSwerveDrive())));
         driverJoystick.button(5).whileTrue(driveOneSecond);
-        robot.getSwerveDrive().setDefaultCommand(robot.getSwerveDrive().run(() -> {
-            double driveX =  -driverJoystick.getRawAxis(1);
-            double driveY = -driverJoystick.getRawAxis(0);
-            double driveTheta = -driverJoystick.getRawAxis(2);
-            driveTheta = MathUtil.applyDeadband(driveTheta, 0.2, 1);
-            driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
-            driveY = MathUtil.applyDeadband(driveY, 0.1, 1);
-            double div = driverJoystick.getHID().getRawButton(7)?2.5:1;
-            robot.getSwerveDrive().drive(
-                    2.75*driveX/div,
-                    2.75*driveY/div,
-                    1.25*Math.PI*driveTheta/div //TODO: REVERT
-            );
-        }));
+        robot.getSwerveDrive().setDefaultCommand( new SwerveControllerCommand(robot.getSwerveDrive(), driverJoystick.getHID()));
 
 //        ((SwerveDrive)robot.getSwerveDrive()).sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kReverse).schedule();
     }

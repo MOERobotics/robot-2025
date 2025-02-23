@@ -3,6 +3,7 @@ package frc.robot.subsystem.interfaces;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -42,6 +43,7 @@ public interface ElevatorControl extends Subsystem {
     }
 
     default Distance getHeight() {
+        //Logger.recordOutput("aaaaaaaaa",  this.getExtension().times(Math.cos(this.getAngle().in(Radians))));
         return this.getExtension().times(Math.cos(this.getAngle().in(Radians))).plus(this.getPivotHeight());
 
 

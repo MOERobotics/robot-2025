@@ -23,7 +23,6 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
     public final Angle minEncoderValue = Degrees.of(0);
 
 
-    public double tolerance = 5;
 
 
 

@@ -47,29 +47,22 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public void readSensors(ElevatorInputsAutoLogged sensors) {
-        sensors.angle = Rotations.of(tiltEncoder.getPosition());
         sensors.height = getHeight();
         sensors.angle = Degrees.of(elevatorPivotMotor.getAbsoluteEncoder().getPosition() * -0.173 + 5.78).minus(Radians.of(0.1));
         sensors.horizontalSpeed = RPM.of(elevatorPivotMotor.getEncoder().getVelocity());
-        sensors.extensionSpeed = InchesPerSecond.of(elevatorExtensionMotor.getEncoder().getVelocity());
+        sensors.extensionSpeed = InchesPerSecond.of(elevatorExtensionMotor.get());
         sensors.elevatorVoltage = Volts.of(extensionSensor.getVoltage());
         sensors.elevatorVoltageFromADC = String.format("%04x", extensionSensor.getValue());
-        sensors.extension = getExtension();
+        sensors.extension = Centimeters.of((getSensors().elevatorVoltage.in(Volts)*35.86311)+32.17113);
         sensors.canGoDown = canGoDown();
         sensors.extensionMotorPosition = Rotations.of(elevatorExtensionMotor.getEncoder().getPosition());
-        SmartDashboard.putNumber("ExtensionDistance", getExtension().in(Centimeters));
-        SmartDashboard.putNumber("ElevatorAngleDegrees", getSensors().angle.in(Degrees) * -0.173 + 5.78);
+        SmartDashboard.putNumber("ElevatorAngleDegrees", sensors.angle.in(Degrees));
 
     }
 
     @Override
     public void moveVertically(LinearVelocity speed) {
         elevatorExtensionMotor.set(speed.in(FeetPerSecond));
-    }
-
-    @Override
-    public Distance getExtension() {
-        return Centimeters.of((getSensors().elevatorVoltage.in(Volts)*35.84153)+31.5174);
     }
 
     public boolean canGoDown() {
@@ -89,10 +82,6 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         return getSensors().angle.in(Degrees) < 52.42;
     }
 
-    @Override
-    public Angle getAngle() {
-        return Rotations.of(tiltEncoder.getPosition());
-    }
 
     @Override
     public void moveHorizontally(AngularVelocity speed) {
@@ -101,7 +90,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public Distance getPivotHeight() {
-        return Inches.of(8);
+        return Centimeters.of(8);
     }
 
 

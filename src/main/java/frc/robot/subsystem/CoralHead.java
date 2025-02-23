@@ -23,11 +23,11 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         this.leftMotor = leftMotor;
         this.rightMotor = rightMotor;
         SparkMaxConfig leftMotorConfig = new SparkMaxConfig();
-        leftMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
+        leftMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40).inverted(true);
         leftMotorConfig.limitSwitch.forwardLimitSwitchEnabled(false);
 
         SparkMaxConfig rightMotorConfig = new SparkMaxConfig();
-        rightMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40);
+        rightMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40).inverted(false);
 
         leftMotor.configure(leftMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         rightMotor.configure(rightMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);

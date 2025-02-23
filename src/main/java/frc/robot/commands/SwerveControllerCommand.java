@@ -1,13 +1,17 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.SwerveDrive;
+import frc.robot.subsystem.interfaces.SwerveDriveControl;
 
 public class SwerveControllerCommand extends Command {
-    SwerveDrive swerveDrive;
+    SwerveDriveControl swerveDrive;
 
-
-    public SwerveControllerCommand(SwerveDrive swerveDrive){
+    Joystick joystick;
+    public SwerveControllerCommand(SwerveDriveControl swerveDrive, Joystick joystick){
+        this.joystick = joystick;
         this.swerveDrive = swerveDrive;
         addRequirements(swerveDrive);
     }
@@ -18,6 +22,18 @@ public class SwerveControllerCommand extends Command {
     }
     @Override
     public void execute(){
+        double driveX =  -joystick.getRawAxis(1);
+        double driveY = -joystick.getRawAxis(0);
+        double driveTheta = -joystick.getRawAxis(2);
+        driveTheta = MathUtil.applyDeadband(driveTheta, 0.2, 1);
+        driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
+        driveY = MathUtil.applyDeadband(driveY, 0.1, 1);
+        double div = joystick.getRawButton(7)?2.5:1;
+        swerveDrive.drive(
+                2.75*driveX/div,
+                2.75*driveY/div,
+                1.25*Math.PI*driveTheta/div //TODO: REVERT
+        );
 
     }
 
