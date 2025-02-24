@@ -9,13 +9,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,11 +19,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.autos.start4_place_coral_station;
+import frc.robot.autos.start2_place_coral_station;
 import frc.robot.container.*;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.commands.*;
-import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.*;
 import frc.robot.subsystem.interfaces.SwerveDriveControl;
@@ -36,8 +30,6 @@ import org.littletonrobotics.junction.LoggedRobot;
 import frc.robot.commands.junk.SwerveModuleTestingCommand;
 
 import java.util.Set;
-
-import static edu.wpi.first.units.Units.*;
 
 
 public class Robot extends LoggedRobot {
@@ -48,7 +40,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler scheduler;
 
 
-    RobotContainer robot = new FortissiMOEContainer();
+    RobotContainer robot = new SubMOErine();
     Autos autos;
     Command autoCommand = Commands.none();
     TimeOfFlight tof_sensor_center = new TimeOfFlight(42);
@@ -106,7 +98,7 @@ public class Robot extends LoggedRobot {
 
         autos = new Autos(robot);
 
-        this.autoCommand = start4_place_coral_station.buildS4IL4Command(robot);
+        this.autoCommand = start2_place_coral_station.buildS2EL4Command(robot);
         /*try {
             PathPlannerPath path1 = PathPlannerPath.fromPathFile("Test-Forward 5 Ft");
             PathPlannerPath path2 = PathPlannerPath.fromPathFile("Test-Forward-Left 5 Ft");
@@ -145,11 +137,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
-        var swerveDrive = robot.getSwerveDrive();
-        Command stopCommand = swerveDrive.run(()-> { swerveDrive.drive(0,0,0);});
-        stopCommand.setName("SwerveStop");
-        swerveDrive.setDefaultCommand(stopCommand);
-        autoCommand = autos.getSelectedAuto();
+        scheduler.cancelAll();
         autoCommand.schedule();
 
     }

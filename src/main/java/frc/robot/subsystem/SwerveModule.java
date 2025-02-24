@@ -33,7 +33,6 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     public Distance yPos;
     public Angle moduleOffset;
     public Angle targetHeading;
-    SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
     public SimpleMotorFeedforward driveFeedforward;
 
     public SwerveModule(
@@ -104,9 +103,9 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
 
     @Override
     public void drive(double speedMetersPerSec) {
-        inputs.driveSpeedDesired = MetersPerSecond.of(speedMetersPerSec);
+        getSensors().driveSpeedDesired = MetersPerSecond.of(speedMetersPerSec);
         double motorPower = driveFeedforward.calculate(speedMetersPerSec * 39.37 / 1.413);
-        motorPower += velocityDriveController.calculate(inputs.driveVelocity.in(RPM), speedMetersPerSec * 39.37 / 1.413);
+        motorPower += velocityDriveController.calculate(getSensors().driveVelocity.in(RPM), speedMetersPerSec * 39.37 / 1.413);
         driveMotor.setVoltage(motorPower);
         Logger.recordOutput("VelocityError", velocityDriveController.getError());
     }
@@ -116,8 +115,8 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
         this.targetHeading = targetHeading;
         Angle currentHeading = getHeading();
         Angle error = currentHeading.minus(targetHeading);
-        double power = pivotController.calculate(this.inputs.error = error.in(Radians));
-        this.inputs.integral = pivotController.getAccumulatedError();
+        double power = pivotController.calculate(this.getSensors().error = error.in(Radians));
+        this.getSensors().integral = pivotController.getAccumulatedError();
         pivotMotor.set(power);
     }
 
