@@ -13,6 +13,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -190,12 +191,13 @@ public class Robot extends LoggedRobot {
         Command DriveTraj = new driveToPosition2(robot.getSwerveDrive());
         SmartDashboard.putData(DriveTraj);
 //        ((SwerveDrive)robot.getSwerveDrive()).sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kReverse).schedule();
+
     }
 
     @Override
     public void teleopPeriodic() {
         if(driverJoystick.getHID().getRawButton(2)){
-            robot.getSwerveDrive().resetPose(new Pose2d());
+            robot.getSwerveDrive().resetPose(new Pose2d(7.566, 6.135, Rotation2d.fromDegrees(180)));
         }
 
 
