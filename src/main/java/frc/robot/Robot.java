@@ -174,8 +174,8 @@ public class Robot extends LoggedRobot {
         }, Set.of(robot.getSwerveDrive())));
         driverJoystick.button(5).whileTrue(driveOneSecond);
         robot.getSwerveDrive().setDefaultCommand(robot.getSwerveDrive().run(() -> {
-            double driveX = -driverJoystick.getRawAxis(0);
-            double driveY = driverJoystick.getRawAxis(1);
+            double driveX = driverJoystick.getRawAxis(0);
+            double driveY = -driverJoystick.getRawAxis(1);
             double driveTheta = -driverJoystick.getRawAxis(4);
             driveTheta = MathUtil.applyDeadband(driveTheta, 0.2, 1);
             driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
