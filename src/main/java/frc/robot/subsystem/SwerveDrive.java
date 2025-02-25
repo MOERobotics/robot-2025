@@ -260,6 +260,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
 
     public void setModuleStates(SwerveModuleState[] moduleStates){
+        SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, 0.2);
         this.getSensors().driveDesiredStates = moduleStates;
         swerveModuleFL.setModuleState(moduleStates[0]);
         swerveModuleFR.setModuleState(moduleStates[1]);
