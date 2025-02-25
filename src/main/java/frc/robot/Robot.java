@@ -10,6 +10,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -190,6 +191,8 @@ public class Robot extends LoggedRobot {
 
         Command DriveTraj = new driveToPosition2(robot.getSwerveDrive());
         SmartDashboard.putData(DriveTraj);
+        Command DriveTraj3 = new driveToPosition3(robot.getSwerveDrive());
+        SmartDashboard.putData(DriveTraj3);
 //        ((SwerveDrive)robot.getSwerveDrive()).sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kReverse).schedule();
 
     }
@@ -197,11 +200,13 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopPeriodic() {
         if(driverJoystick.getHID().getRawButton(2)){
-            robot.getSwerveDrive().resetPose(new Pose2d(7.566, 7.135, Rotation2d.fromDegrees(180)));
+            // robot.getSwerveDrive().resetPose(new Pose2d(7.566, 7.135, Rotation2d.fromDegrees(180)));
+            robot.getSwerveDrive().resetPose(new Pose2d());
         }
 
 
 
+        /*double elevatorVertPower = 0;
         /*double elevatorVertPower = 0;
 
         if (driverJoystick.getHID().getRawButton(1)) {
