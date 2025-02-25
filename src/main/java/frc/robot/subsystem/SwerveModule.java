@@ -142,7 +142,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     @Override
     public SwerveModulePosition getModulePosition() {
         SwerveModulePosition position = new SwerveModulePosition(
-                Units.Inches.of(driveMotor.getEncoder().getPosition()).in(Units.Meters),
+                Units.Inches.of(driveMotor.getEncoder().getPosition()).in(Units.Meters) * 4 * Math.PI / 6.75,
                 new Rotation2d(getHeading())
         );
         return position;

@@ -24,15 +24,15 @@ public class start2_place_coral_station {
         return Commands.sequence(
                 Commands.runOnce(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingHolonomicPose().get())),
                 Commands.deadline(
-                        AutoBuilder.followPath(plannerPath1),
-                        new ElevatorAutoCommand(robot.getElevator(), 2, InchesPerSecond.of(9),true)
+                        AutoBuilder.followPath(plannerPath1)
+                        //new ElevatorAutoCommand(robot.getElevator(), 2, InchesPerSecond.of(9),true)
                 ),
-                new ElevatorAutoCommand(robot.getElevator(), 3, InchesPerSecond.of(9),false),
+                //new ElevatorAutoCommand(robot.getElevator(), 3, InchesPerSecond.of(9),false),
                 Commands.deadline(
-                    new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(2),
-                    new ElevatorAutoCommand(robot.getElevator(), 3, InchesPerSecond.of(9),true)
-                ),
-                new ElevatorAutoCommand(robot.getElevator(),5, InchesPerSecond.of(8),false)
+                    new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(2)
+                    //new ElevatorAutoCommand(robot.getElevator(), 3, InchesPerSecond.of(9),true)
+                )
+                //new ElevatorAutoCommand(robot.getElevator(),5, InchesPerSecond.of(8),false)
                 //, AutoBuilder.followPath(plannerPath2)
         );
     }
