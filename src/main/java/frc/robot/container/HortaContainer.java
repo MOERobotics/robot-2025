@@ -4,10 +4,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.SwerveModule;
@@ -20,9 +16,9 @@ import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Inches;
 //hello2
 
-public class SwerveBotContainer extends RobotContainer {
+public class HortaContainer extends RobotContainer {
 
-    public SwerveBotContainer (){
+    public HortaContainer(){
         double pivotkP = 8.0e-3*60;
         double pivotkI = 0;
         double pivotkD = 0;

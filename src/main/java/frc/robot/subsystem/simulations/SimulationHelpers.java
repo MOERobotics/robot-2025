@@ -31,14 +31,12 @@ public class SimulationHelpers {
 
     public static void setUpSim(RobotContainer robot) {
 
-        if (!(robot.getSwerveDrive() instanceof SwerveDrive)
-            || !(robot.getElevator() instanceof SubMOErineElevator)
+        if (!(robot.getSwerveDrive() instanceof SwerveDrive swerveDrive)
+            || !(robot.getElevator() instanceof SubMOErineElevator elevator)
             || !(robot.getAlgaeCollector() instanceof AlgaeCollector)
             || !(robot.getCoralHead() instanceof CoralHead)
             || !(robot.getClimberRear() instanceof SubMOErineClimber)
             || !(robot.getClimberMid() instanceof SubMOErineClimber)) throw new InstantiationError("Robot Container should be SubMOErine but  is actually"+robot.getClass().getSimpleName());
-        SwerveDrive swerveDrive = (SwerveDrive) robot.getSwerveDrive();
-        SubMOErineElevator elevator = (SubMOErineElevator) robot.getElevator();
         swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.moduleOffset, swerveDrive.swerveModuleFL.driveMotor, swerveDrive.swerveModuleFL.pivotMotor, swerveDrive.swerveModuleFL.pivotEncoder);
         swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.moduleOffset, swerveDrive.swerveModuleFR.driveMotor, swerveDrive.swerveModuleFR.pivotMotor, swerveDrive.swerveModuleFR.pivotEncoder);
         swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.moduleOffset, swerveDrive.swerveModuleBR.driveMotor, swerveDrive.swerveModuleBR.pivotMotor, swerveDrive.swerveModuleBR.pivotEncoder);
@@ -46,8 +44,8 @@ public class SimulationHelpers {
         elevatorSim = new RobotElevatorSim(elevator);
         algaeCollectorSim = new AlgaeCollectorSim((AlgaeCollector) robot.getAlgaeCollector());
         coralCollectorSim = new CoralCollectorSim((CoralHead) robot.getCoralHead());
-        climberMidSim = new ClimberSim(robot.getClimberMid());
-        climberRearSim = new ClimberSim(robot.getClimberRear());
+        climberMidSim = new ClimberSim((SubMOErineClimber) robot.getClimberMid());
+        climberRearSim = new ClimberSim((SubMOErineClimber) robot.getClimberRear());
     }
 
     public static void updateSimState() {

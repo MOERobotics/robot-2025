@@ -84,6 +84,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
         sensors.drivePower = driveMotor.get();
         sensors.currentRotationDegreesNotWrapped = pivotEncoder.getAbsolutePosition().getValue();
         sensors.pivotVelocity = RPM.of(pivotMotor.getEncoder().getVelocity());
+        sensors.wheelPivotVelocity = pivotEncoder.getVelocity().getValue();
         sensors.pivotVolts = Volts.of(pivotMotor.getAppliedOutput() * pivotMotor.getBusVoltage());
         sensors.driveVolts = Volts.of(driveMotor.getAppliedOutput() * driveMotor.getBusVoltage());
         sensors.drivePosition = Rotations.of(driveMotor.getEncoder().getPosition());

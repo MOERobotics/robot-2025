@@ -3,7 +3,6 @@ package frc.robot.subsystem.interfaces;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.littletonrobotics.junction.AutoLog;
-import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -18,15 +17,15 @@ public interface ElevatorControl extends Subsystem {
         public Angle extensionMotorPosition = Rotations.zero();
         public Voltage elevatorVoltage = Volts.zero();
         public String elevatorVoltageFromADC;
-        public boolean canGoDown;
+        public boolean canGoDown, canGoUp, canGoLeft, canGoRight;
         
     }
 
-    public ElevatorInputsAutoLogged getSensors();
+    ElevatorInputsAutoLogged getSensors();
 
-    public void moveVertically(LinearVelocity speed);
+    void moveVertically(LinearVelocity speed);
 
-    public void moveHorizontally(AngularVelocity speed);
+    void moveHorizontally(AngularVelocity speed);
 
     default Distance getExtension() {
         return this.getSensors().extension;
@@ -36,7 +35,19 @@ public interface ElevatorControl extends Subsystem {
         return this.getSensors().canGoDown;
     }
 
-    public Distance getPivotHeight();
+    default boolean canGoUP() {
+        return this.getSensors().canGoUp;
+    }
+
+    default boolean canGoLeft() {
+        return this.getSensors().canGoLeft;
+    }
+
+    default boolean canGoRight() {
+        return this.getSensors().canGoRight;
+    }
+
+    Distance getPivotHeight();
 
     default Angle getAngle() {
         return this.getSensors().angle;

@@ -2,9 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.measure.LinearVelocity;
+import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.interfaces.ElevatorControl;
@@ -61,7 +59,7 @@ public class ElevatorTeleopCommand extends Command {
             pidOutput = -joystick.getRawAxis(1);
             targetHeight = elevator.getHeight();
         }
-        verticalVelocity = InchesPerSecond.of(6).times(pidOutput);
+        verticalVelocity = InchesPerSecond.of(6.0/.5*.8).times(pidOutput);
         angularVelocity = DegreesPerSecond.of(0.2).times(
                 MathUtil.applyDeadband(joystick.getRawAxis(0), 0.1)
         );

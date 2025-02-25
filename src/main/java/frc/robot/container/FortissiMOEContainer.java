@@ -4,8 +4,8 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.controller.PIDController;
+import frc.robot.subsystem.fakes.FakeAlgaeCollector;
+import frc.robot.subsystem.fakes.FakeClimber;
 import frc.robot.subsystem.fakes.FakeCoralHead;
 import frc.robot.subsystem.fakes.FakeElevator;
 import frc.robot.subsystem.SwerveDrive;
@@ -36,7 +36,6 @@ public class FortissiMOEContainer extends RobotContainer {
         PIDConstants driveFeedback = new PIDConstants(drivekP, drivekI, drivekD);
         FeedforwardConstants driveFeedForward = new FeedforwardConstants(drivekS, drivekV, drivekA);
 
-        // drive.setDefaultCommand(Commands.run(() -> drive.drive(operatorInterface.getTeleopAxisX().getAsDouble(), operatorInterface.getTeleopAxisY().getAsDouble()), drive).withName("Joystick Control"));
         this.setSwerveDrive(
             new SwerveDrive(
                 new SwerveModule(//FL
@@ -95,9 +94,9 @@ public class FortissiMOEContainer extends RobotContainer {
 
             ));
         this.setElevator(new FakeElevator());
-
-
-
+        this.setAlgaeCollector(new FakeAlgaeCollector());
+        this.setClimberMid(new FakeClimber());
+        this.setClimberRear(new FakeClimber());
         this.setCoralHead(new FakeCoralHead());
 
     }

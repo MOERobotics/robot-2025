@@ -14,17 +14,10 @@ import static edu.wpi.first.units.Units.*;
 public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> implements ClimberControl {
 
     public SparkMax climbMotor;
-
     public CANcoder climbEncoder;
-
-
 
     public final Angle maxEncoderValue = Degrees.of(72);
     public final Angle minEncoderValue = Degrees.of(0);
-
-
-
-
 
     public SubMOErineClimber(
         SparkMax climbMotor,
@@ -38,44 +31,22 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
 
     @Override
     public void readSensors(ClimberInputsAutoLogged sensors) {
-        sensors.canGoDown = canGoDown();
-        sensors.canGoUp = canGoUp();
-        sensors.position = getPosition();
-        sensors.motorVelocity = getMotorVelocity();
-
-
-
-    }
-    @Override
-    public boolean canGoUp() {
-        return getPosition().gt(minEncoderValue);
+        sensors.motorPower = climbMotor.get();
+        sensors.motorAppliedVolts = Volts.of(climbMotor.getAppliedOutput()*climbMotor.getBusVoltage());
+        sensors.position = climbEncoder.getAbsolutePosition().getValue();
+        sensors.motorVelocity = RPM.of(climbMotor.getEncoder().getVelocity());
+        sensors.canGoDown = getPosition().gt(minEncoderValue);
+        sensors.canGoUp = getPosition().lt(maxEncoderValue);
     }
 
-    @Override
-    public boolean canGoDown() {
-        return getPosition().lt(maxEncoderValue);
-    }
-
-    @Override
-    public Angle getPosition(){
-        return climbEncoder.getAbsolutePosition().getValue();
-    }
-
-
-    @Override
-    public AngularVelocity getMotorVelocity() {
-        return RPM.of(climbMotor.getEncoder().getVelocity());
-    }
 
     public void setTestClimberVelocity(AngularVelocity power) {
             climbMotor.set(power.in(RPM));
     }
+
     @Override
     public void setClimberVelocity(AngularVelocity power){
-            if (power.in(RPM) > 0 && canGoUp()) {
-                climbMotor.set(power.in(RPM));
-
-            } else if (power.in(RPM) < 0 && canGoDown()) {
+            if ((power.lt(RPM.zero()) && canGoDown())||(power.gt(RPM.zero()) && canGoUp())) {
                 climbMotor.set(power.in(RPM));
             } else{
                climbMotor.set(0);

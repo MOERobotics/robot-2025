@@ -9,6 +9,8 @@ import static edu.wpi.first.units.Units.*;
 public interface AlgaeCollectorControl extends Subsystem {
     @AutoLog
     class AlgaeCollectorInputs {
+        public double wheelPower;
+        public double armPower;
         public Voltage wheelAppliedVolts = Volts.zero();
         public AngularVelocity wheelVelocity = RPM.zero();
         public Voltage algaeArmAppliedVolts = Volts.zero();
@@ -55,6 +57,6 @@ public interface AlgaeCollectorControl extends Subsystem {
         return this.getSensors().wheelState;
     }
 
-    public void setWheelState(WheelState wheelState);
+    void setWheelState(WheelState wheelState);
 
 }

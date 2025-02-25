@@ -49,6 +49,8 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
     public void readSensors(CoralHeadInputsAutoLogged sensors) {
         sensors.hasCoral = leftMotor.getForwardLimitSwitch().isPressed();
         sensors.inFrontReef = false;
+        sensors.leftPower = leftMotor.get();
+        sensors.rightPower = rightMotor.get();
         sensors.velocityLeft = RPM.of(leftMotor.getEncoder().getVelocity());
         sensors.velocityRight = RPM.of(rightMotor.getEncoder().getVelocity());
         sensors.leftAppliedVolts = Volts.of(leftMotor.getAppliedOutput() * leftMotor.getBusVoltage());

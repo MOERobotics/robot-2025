@@ -34,9 +34,10 @@ public class AlgaeCollector extends MOESubsystem<AlgaeCollectorInputsAutoLogged>
 
     @Override
     public void readSensors(AlgaeCollectorInputsAutoLogged sensors) {
+        sensors.wheelPower = algaeWheel.get();
         sensors.wheelAppliedVolts = Volts.of(algaeWheel.getAppliedOutput() * algaeArm.getBusVoltage());
         sensors.wheelVelocity = RPM.of(algaeWheel.getEncoder().getVelocity());
-
+        sensors.armPower = algaeArm.get();
         sensors.algaeArmAppliedVolts = Volts.of(algaeArm.getAppliedOutput() * algaeArm.getBusVoltage());
         sensors.algaeArmAngle = Rotations.of(algaeArm.getAbsoluteEncoder().getPosition());
         sensors.algaeArmVelocity= RPM.of(algaeArm.getEncoder().getVelocity());

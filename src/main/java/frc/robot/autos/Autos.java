@@ -1,16 +1,15 @@
-package frc.robot.container;
+package frc.robot.autos;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.PathPlannerAutoBuilder;
-import frc.robot.autos.start4_place_coral_station;
+import frc.robot.container.RobotContainer;
 
 public class Autos {
-    public SendableChooser<Command> autoChooser = new SendableChooser<>();
-    public Autos (RobotContainer robot){
+    public static SendableChooser<Command> autoChooser = new SendableChooser<>();
+    public static void setupAutos (RobotContainer robot){
         PathPlannerAutoBuilder.configure(robot.getSwerveDrive());
         autoChooser.setDefaultOption("Auto1: Start1 -> AB RED", new PathPlannerAuto("TestAuto1 RED"));
         autoChooser.addOption("Auto2: Test Forward-Right", new PathPlannerAuto("TestAuto Forward-Right"));
@@ -19,7 +18,7 @@ public class Autos {
         autoChooser.addOption("Auto4: Test Arc-Left", new PathPlannerAuto("TestAuto Arc-Left"));
         SmartDashboard.putData("Autos Chooser",autoChooser);
     }
-    public Command getSelectedAuto () {
+    public static Command getSelectedAuto () {
         return autoChooser.getSelected();
     }
 }

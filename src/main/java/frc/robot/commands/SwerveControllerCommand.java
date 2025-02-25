@@ -32,14 +32,14 @@ public class SwerveControllerCommand extends Command {
         swerveDrive.drive(
                 2.75*driveX/div,
                 2.75*driveY/div,
-                1.25*Math.PI*driveTheta/div //TODO: REVERT
+                1.25*Math.PI*driveTheta/div
         );
 
     }
 
     @Override
     public void end(boolean interrupted){
-
+        swerveDrive.drive(0,0,0);
     }
     @Override
     public boolean isFinished(){

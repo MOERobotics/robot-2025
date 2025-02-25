@@ -12,6 +12,7 @@ public interface ClimberControl extends Subsystem {
     class ClimberInputs {
         public boolean canGoUp;
         public boolean canGoDown;
+        public double motorPower;
         public AngularVelocity motorVelocity = RPM.zero();
         public Voltage motorAppliedVolts = Volts.zero();
         public Angle position = Degrees.zero();
