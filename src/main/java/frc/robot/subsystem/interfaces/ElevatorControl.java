@@ -7,6 +7,21 @@ import org.littletonrobotics.junction.AutoLog;
 import static edu.wpi.first.units.Units.*;
 
 public interface ElevatorControl extends Subsystem {
+
+    public static enum ElevatorHeight {
+        LEVEL1  (Centimeters.of(60)),
+        LEVEL2  (Centimeters.of(81)),
+        LEVEL3  (Centimeters.of(119)),
+        LEVEL4  (Centimeters.of(182)),
+        STOW    (Centimeters.of(42.5)),
+        COLLECT (Centimeters.of(42.5));
+
+        public final Distance measure;
+        ElevatorHeight(Distance measure) {
+            this.measure = measure;
+        }
+    }
+
     @AutoLog
     class ElevatorInputs {
         public Distance extension = Inches.zero();

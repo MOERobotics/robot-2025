@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 0.0,
-        "y": 0.0
+        "y": 3.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0000000000000013,
-        "y": 0.0
+        "x": 1.0,
+        "y": 3.0
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.5,
-        "y": 0.0
+        "x": 1.5425,
+        "y": 1.5430000000000001
       },
       "prevControl": {
-        "x": 0.5,
-        "y": 1.2246467991473532e-16
+        "x": 1.5425,
+        "y": 2.543
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "reversed": false,
   "folder": "Test Paths",

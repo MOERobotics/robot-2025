@@ -9,13 +9,13 @@ import frc.robot.subsystem.interfaces.ElevatorControl;
 import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.*;
+import static frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight.*;
 
 public class ElevatorTeleopCommand extends Command {
     ElevatorControl elevator;
     Joystick joystick;
     LinearVelocity verticalVelocity = InchesPerSecond.of(0);
     AngularVelocity angularVelocity;
-    Distance[] Ls = {Centimeters.of(60), Centimeters.of(81), Centimeters.of(119), Centimeters.of(182), Centimeters.of(42.5)};
     private final PIDController pid = new PIDController(0.2, 0.1 ,0);
     Distance targetHeight;
 
@@ -38,19 +38,19 @@ public class ElevatorTeleopCommand extends Command {
     @Override
     public void execute() {//TODO update magic numbers for velocities
         if(joystick.getPOV(0) == 0){
-            targetHeight = Ls[0];
+            targetHeight = LEVEL1.measure;
         }
         if(joystick.getPOV(0) == 90){
-            targetHeight = Ls[1];
+            targetHeight = LEVEL2.measure;
         }
         if(joystick.getPOV(0) == 180){
-            targetHeight = Ls[2];
+            targetHeight = LEVEL3.measure;
         }
         if(joystick.getPOV(0) == 270){
-            targetHeight = Ls[3];
+            targetHeight = LEVEL4.measure;
         }
         if(joystick.getRawButton(8)){
-            targetHeight = Ls[4];
+            targetHeight = STOW.measure;
         }
         Distance error = elevator.getHeight().minus(targetHeight);
         double pidOutput = pid.calculate(error.in(Inches));

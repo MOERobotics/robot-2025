@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 5.303740991519976,
+        "y": 5.1861471381368505
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0000000000000013,
-        "y": 0.0
+        "x": 6.163559278657164,
+        "y": 6.74462731639041
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.5,
-        "y": 0.0
+        "x": 1.561991978898833,
+        "y": 7.116625647001629
       },
       "prevControl": {
-        "x": 0.5,
-        "y": 1.2246467991473532e-16
+        "x": 2.1992143075677415,
+        "y": 6.432159896440144
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 130.54431943227627
   },
   "reversed": false,
   "folder": "Test Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -120.51988680751265
   },
   "useDefaultConstraints": true
 }

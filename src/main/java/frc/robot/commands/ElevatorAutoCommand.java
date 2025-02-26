@@ -8,34 +8,31 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.interfaces.ElevatorControl;
 import org.littletonrobotics.junction.Logger;
 
+import java.util.ArrayList;
+
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.InchesPerSecond;
 
 public class ElevatorAutoCommand extends Command {
     private final ElevatorControl elevator;
-    private LinearVelocity maxExtensionSpeed = InchesPerSecond.of(0);
-    private PIDController pid = new PIDController(0.1, 0 ,0);
-    private boolean isHold;
-    private LinearVelocity pidSpeed = InchesPerSecond.of(0);
-    Distance[] Ls = {Inches.of(33), Inches.of(40), Inches.of(55.59), Inches.of(81.2), Inches.of(24)};
-    private int L;
-    private Distance targetheight = Inches.of(0);
+    private final LinearVelocity maxExtensionSpeed;
+    private final PIDController pid = new PIDController(0.2, 0.1 ,0);
+    private final boolean isHold;
+    private final Distance targetheight;
+
+
 
     public ElevatorAutoCommand(
-            ElevatorControl elevator,
-            int L,
-            LinearVelocity maxExtensionSpeed,
-            boolean isHold
+        ElevatorControl elevator,
+        Distance targetheight,
+        LinearVelocity maxExtensionSpeed,
+        boolean isHold
     ){
         this.elevator = elevator;
-        this.L = L-1;
+        this.targetheight = targetheight;
         this.maxExtensionSpeed = maxExtensionSpeed;
+        this.isHold = isHold;
         addRequirements(elevator);
-    }
-
-    @Override
-    public void initialize() {
-        targetheight = Ls[L];
     }
 
     @Override
@@ -56,7 +53,7 @@ public class ElevatorAutoCommand extends Command {
             return false;
         }
         if (targetheight.minus(elevator.getHeight()).abs(Inches) < 2) {
-            if(Math.abs(pidSpeed.in(InchesPerSecond)) < 2) {
+            if(Math.abs(elevator.getSensors().extensionSpeed.in(InchesPerSecond)) < 2) {
                 return true;
             }
         }

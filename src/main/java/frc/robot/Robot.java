@@ -18,9 +18,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.autos.Autos;
-import frc.robot.autos.start4_place_coral_station;
+import frc.robot.autos.ReefToSource;
+import frc.robot.container.*;
 import frc.robot.commands.*;
-import frc.robot.container.SubMOErine;
 import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.simulations.*;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -29,11 +29,9 @@ import frc.robot.commands.junk.SwerveModuleTestingCommand;
 
 public class Robot extends LoggedRobot {
 
-
     CommandJoystick driverJoystick = new CommandJoystick(0);
     CommandJoystick functionJoystick = new CommandJoystick(1);
     CommandScheduler scheduler;
-
 
     RobotContainer robot = new SubMOErine();
     Command autoCommand = Commands.none();
@@ -64,6 +62,7 @@ public class Robot extends LoggedRobot {
 
         scheduler = CommandScheduler.getInstance();
         Autos.setupAutos(robot);
+        this.autoCommand = ReefToSource.S2_E3_CS(robot);
     }
 
 
@@ -84,13 +83,9 @@ public class Robot extends LoggedRobot {
     @Override
     public void autonomousInit() {
         scheduler.cancelAll();
-        this.autoCommand = start4_place_coral_station.buildS4IL4Command(robot);
-        var swerveDrive = robot.getSwerveDrive();
-        Command stopCommand = swerveDrive.run(()-> { swerveDrive.drive(0,0,0);});
-        stopCommand.setName("SwerveStop");
-        swerveDrive.setDefaultCommand(stopCommand);
         autoCommand = Autos.getSelectedAuto();
         autoCommand.schedule();
+        robot.getSwerveDrive().setDefaultCommand(Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()));
     }
 
     @Override
@@ -101,8 +96,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopInit() {
         scheduler.cancelAll();
-
-        SmartDashboard.putData("Drive Lidar Command",  Commands.run(()->robot.getSwerveDrive().drive(0,0.2,0) ).until(()->tof_sensor_center.getRange() < 300).withTimeout(5));
         new ElevatorTeleopCommand(
             robot.getElevator(),
             functionJoystick.getHID()
@@ -121,7 +114,9 @@ public class Robot extends LoggedRobot {
             robot.getClimberMid(),
             driverJoystick.getHID()
         ).schedule();
-        robot.getSwerveDrive().setDefaultCommand( new SwerveControllerCommand(robot.getSwerveDrive(), driverJoystick.getHID()));
+        robot.getSwerveDrive().setDefaultCommand(
+            new SwerveControllerCommand(robot.getSwerveDrive(), driverJoystick.getHID())
+        );
     }
 
     @Override
@@ -152,9 +147,7 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void testPeriodic() {
-
-    }
+    public void testPeriodic() {}
 
     @Override
     public void simulationInit() {

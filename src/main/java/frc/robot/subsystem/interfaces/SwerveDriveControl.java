@@ -39,36 +39,12 @@ public interface SwerveDriveControl extends Subsystem {
         drive(new ChassisSpeeds(xSpeed, ySpeed, rotation));
     }
 
-    enum CommandType {
-        QuasistaticForward, QuasistaticReverse, DynamicForward, DynamicReverse
-    }
-
-    enum ModuleType {
-        modFL, modFR, modBL, modBR, allMods
-    }
-
-    enum DriveOrPivot {
-        setDrive, setPivot,
-    }
-
-    default public Command sysIDCommandsPivot(CommandType commandType, ModuleType moduleType) {
-        return Commands.none();
-    }
-
-    default public Command sysIDCommandsDrive(CommandType commandType) {
-        return Commands.none();
-    }
-
-    void driveSingleModule(int index, double xSpeed, double ySpeed, double rotation);
-
     default ChassisSpeeds getRobotRelativeSpeeds() {
         return this.getSensors().robotRelativeSpeeds;
     }
 
     SwerveDriveKinematics getKinematics();
 
-
     SwerveDriveOdometry getOdometry();
 
-    void pivotAngle(Angle angle);
 }

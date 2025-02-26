@@ -26,7 +26,7 @@ public class CoralHeadAutoCommand extends Command {
     @Override
     public boolean isFinished() {
         if(!scoring)  return coralcollector.hasCoral();
-        else return !coralcollector.hasCoral();
+        else return false;
     }
 
     @Override

@@ -20,7 +20,7 @@ import frc.robot.utils.FeedforwardConstants;
 import frc.robot.utils.PIDConstants;
 import org.littletonrobotics.junction.Logger;
 
-import static edu.wpi.first.math.util.Units.inchesToMeters;
+import static edu.wpi.first.math.MathUtil.*;
 import static edu.wpi.first.units.Units.*;
 
 public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> implements SwerveModuleControl {
@@ -108,7 +108,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
         getSensors().error = currentHeading.minus(targetHeading).in(Radians);
         double power = pivotController.calculate(currentHeading.in(Radians),targetHeading.in(Radians));
         getSensors().integral = pivotController.getAccumulatedError();
-        pivotMotor.set(MathUtil.clamp(power,-1,1));
+        pivotMotor.set(clamp(power,-1,1));
     }
 
     @Override
@@ -133,7 +133,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     @Override
     public SwerveModulePosition getModulePosition() {
         SwerveModulePosition position = new SwerveModulePosition(
-            inchesToMeters(driveMotor.getEncoder().getPosition() * (4 * Math.PI / 6.75)),
+            Inches.of(driveMotor.getEncoder().getPosition() * (4 * Math.PI / 6.75)).in(Meters),
             new Rotation2d(getHeading())
         );
         return position;
