@@ -1,5 +1,6 @@
 package frc.robot.subsystem;
 
+import com.playingwithfusion.TimeOfFlight;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
@@ -16,6 +17,7 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
 
     public SparkMax leftMotor;
     public SparkMax rightMotor;
+    public TimeOfFlight tofCenter;
 
 
     public CoralHead(SparkMax leftMotor, SparkMax rightMotor) {
@@ -31,7 +33,8 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
 
         leftMotor.configure(leftMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         rightMotor.configure(rightMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
-
+        this.tofCenter = new TimeOfFlight(41);
+        this.tofCenter.setRangeOfInterest(8,8,10,10);
         getSensors().hasCoral = false;
         getSensors().inFrontReef = false;
         getSensors().velocityRight = RPM.zero();
@@ -40,15 +43,10 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
 
 
     @Override
-    public boolean inFrontReef() {
-        return false;
-    }
-
-
-    @Override
     public void readSensors(CoralHeadInputsAutoLogged sensors) {
         sensors.hasCoral = leftMotor.getForwardLimitSwitch().isPressed();
-        sensors.inFrontReef = false;
+        sensors.inFrontReef = tofCenter.isRangeValid()&&tofCenter.getRange()<709.6;
+        sensors.reefDistance = tofCenter.getRange();
         sensors.leftPower = leftMotor.get();
         sensors.rightPower = rightMotor.get();
         sensors.velocityLeft = RPM.of(leftMotor.getEncoder().getVelocity());

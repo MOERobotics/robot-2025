@@ -4,6 +4,7 @@
 
 package frc.robot.container;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import frc.robot.subsystem.interfaces.*;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public abstract @Data class RobotContainer {
     private CoralHeadControl coralHead;
     private ClimberControl climberRear;
     private ClimberControl climberMid;
+	private PowerDistribution pdh;
 
 
 
