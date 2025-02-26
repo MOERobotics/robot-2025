@@ -10,7 +10,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.pathplanner.lib.util.PathPlannerLogging;
-import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -37,7 +36,6 @@ public class Robot extends LoggedRobot {
 
     RobotContainer robot = new SubMOErine();
     Command autoCommand = Commands.none();
-    TimeOfFlight tof_sensor_center = new TimeOfFlight(41);
 
     Field2d field = new Field2d();
 
@@ -46,7 +44,6 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotInit() {
         SmartDashboard.putData(field);
-        tof_sensor_center.setRangeOfInterest(8,8,10,10);
         PathPlannerLogging.setLogActivePathCallback(path -> {
             field.getObject("traj").setPoses(path);
         });
@@ -102,7 +99,6 @@ public class Robot extends LoggedRobot {
     public void teleopInit() {
         scheduler.cancelAll();
 
-        SmartDashboard.putData("Drive Lidar Command",  Commands.run(()->robot.getSwerveDrive().drive(0,0.2,0) ).until(()->tof_sensor_center.getRange() < 300).withTimeout(5));
         new ElevatorTeleopCommand(
             robot.getElevator(),
             functionJoystick.getHID()
@@ -130,9 +126,8 @@ public class Robot extends LoggedRobot {
         if(driverJoystick.getHID().getRawButtonPressed(1)){
             robot.getSwerveDrive().resetPose(new Pose2d());
         }
-        SmartDashboard.putNumber("Distance:", tof_sensor_center.getRange());
         functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
-        if (tof_sensor_center.getRange() < 609.6){
+        if (robot.getCoralHead().inFrontReef()){
             SmartDashboard.putBoolean("DROP", true);
             pdh.setSwitchableChannel(true);
             functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,1);

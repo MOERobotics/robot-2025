@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -40,7 +41,7 @@ public class CoralHeadTeleopCommand extends Command {
         }
         AngularVelocity coralWheelRVelocity, coralWheelLVelocity;
         //eject the coral
-        if (joystick.getRawAxis(2)>0.5){
+        if (joystick.getRawAxis(3)>0.5){
            hasCoral = false;
            stopCoral = false;
            // when at L1 we need to eject differently because the coral must be sideways
@@ -49,28 +50,30 @@ public class CoralHeadTeleopCommand extends Command {
             coralWheelLVelocity = RPM.of(0.80);
 
 
-           if (elevator.getHeight().lt(Inches.of(45))){
+           if (elevator.getHeight().lt(Centimeters.of(70))){
                coralWheelRVelocity = RPM.of(1.00);
                coralWheelLVelocity = RPM.of(0.30);
            }
         }
         //intake the coral
-        else if(joystick.getRawAxis(3)> 0.5 && !stopCoral) {
+        else if(joystick.getRawAxis(2)> 0.5 && !stopCoral) {
             coralWheelLVelocity = RPM.of(0.30);
             coralWheelRVelocity = RPM.of(0.30);
+        } else if(joystick.getRawButton(7)){
+            coralWheelRVelocity = RPM.of(-0.80);
+            coralWheelLVelocity = RPM.of(-0.80);
         } else {
             coralWheelRVelocity = RPM.zero();
             coralWheelLVelocity = RPM.zero();
         }
 
-        /* else if(joystick.getRawAxis(1)>0.5){
-            coralWheelRVelocity = RPM.of(-0.80);
-            coralWheelLVelocity = RPM.of(-0.80);
-
-
-        }*/
-
         coralCollector.setCoralVelocity(coralWheelLVelocity, coralWheelRVelocity);
+        joystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
+        if(coralCollector.inFrontReef()){
+            joystick.setRumble(GenericHID.RumbleType.kBothRumble,1);
+        }else {
+            joystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
+        }
 
 
     }

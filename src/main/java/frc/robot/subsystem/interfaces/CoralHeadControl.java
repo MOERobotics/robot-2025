@@ -12,6 +12,7 @@ public interface CoralHeadControl extends Subsystem {
     class CoralHeadInputs {
         public boolean hasCoral;
         public boolean inFrontReef;
+        public double reefDistance;
         public double leftPower;
         public double rightPower;
         public AngularVelocity velocityLeft = RPM.zero();

@@ -52,7 +52,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         sensors.extensionSpeed = InchesPerSecond.of(elevatorExtensionMotor.get());
         sensors.elevatorVoltage = Volts.of(extensionSensor.getVoltage());
         sensors.elevatorVoltageFromADC = String.format("%04x", extensionSensor.getValue());
-        sensors.extension = Centimeters.of((getSensors().elevatorVoltage.in(Volts)*35.86311)+34.7902);
+        sensors.extension = Centimeters.of((getSensors().elevatorVoltage.in(Volts)*35.5227)+32.49861);
         sensors.canGoDown = elevatorExtensionMotor.getReverseLimitSwitch().isPressed();
         sensors.canGoUp = sensors.elevatorVoltage.lt(Volts.of(4.248));
         sensors.canGoRight = sensors.angle.gt(Degrees.of(9.55));
