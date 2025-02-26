@@ -34,6 +34,7 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         leftMotor.configure(leftMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         rightMotor.configure(rightMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         this.tofCenter = new TimeOfFlight(41);
+        this.tofCenter.setRangeOfInterest(8,8,10,10);
         getSensors().hasCoral = false;
         getSensors().inFrontReef = false;
         getSensors().velocityRight = RPM.zero();
@@ -44,7 +45,7 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
     @Override
     public void readSensors(CoralHeadInputsAutoLogged sensors) {
         sensors.hasCoral = leftMotor.getForwardLimitSwitch().isPressed();
-        sensors.inFrontReef = tofCenter.isRangeValid()&&tofCenter.getRange()<609.6;
+        sensors.inFrontReef = tofCenter.isRangeValid()&&tofCenter.getRange()<709.6;
         sensors.reefDistance = tofCenter.getRange();
         sensors.leftPower = leftMotor.get();
         sensors.rightPower = rightMotor.get();

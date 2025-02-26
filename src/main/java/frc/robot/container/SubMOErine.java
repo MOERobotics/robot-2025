@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import frc.robot.subsystem.*;
 import frc.robot.utils.FeedforwardConstants;
 import frc.robot.utils.PIDConstants;
@@ -142,7 +143,7 @@ public class SubMOErine extends RobotContainer {
             new CANcoder(39),
             "Mid Climber"
         ));
-
+        this.setPdh(new PowerDistribution(1, PowerDistribution.ModuleType.kRev));
 
     }
 }

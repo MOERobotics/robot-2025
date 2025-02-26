@@ -39,7 +39,6 @@ public class Robot extends LoggedRobot {
 
     Field2d field = new Field2d();
 
-    PowerDistribution pdh = new PowerDistribution(1, PowerDistribution.ModuleType.kRev);
 
     @Override
     public void robotInit() {
@@ -110,7 +109,8 @@ public class Robot extends LoggedRobot {
         new CoralHeadTeleopCommand(
             robot.getCoralHead(),
             functionJoystick.getHID(),
-            robot.getElevator()
+            robot.getElevator(),
+            robot.getPdh()
         ).schedule();
         new ClimberTeleopCommand(
             robot.getClimberRear(),
@@ -125,17 +125,6 @@ public class Robot extends LoggedRobot {
         scheduler.run();
         if(driverJoystick.getHID().getRawButtonPressed(1)){
             robot.getSwerveDrive().resetPose(new Pose2d());
-        }
-        functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
-        if (robot.getCoralHead().inFrontReef()){
-            SmartDashboard.putBoolean("DROP", true);
-            pdh.setSwitchableChannel(true);
-            functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,1);
-        }
-        else {
-            SmartDashboard.putBoolean("DROP", false);
-            pdh.setSwitchableChannel(false);
-            functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble, 0);
         }
     }
 
