@@ -171,6 +171,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
         sensors.Pose2dFromLL = LimeLightPose.pose().toPose2d();
         sensors.NewPose2dFromLL = this.poseEstimator.getEstimatedPosition();
+        //sensors.NewPose2dFromLL = LimeLightPose.pose().toPose2d();
 
 
 
