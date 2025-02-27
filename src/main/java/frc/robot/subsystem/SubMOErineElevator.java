@@ -69,7 +69,6 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         }else{
             elevatorExtensionMotor.set(0);
         }
-//        elevatorExtensionMotor.set(speed.in(FeetPerSecond));
     }
 
     @Override

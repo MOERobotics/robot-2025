@@ -11,6 +11,7 @@ import frc.robot.subsystem.interfaces.ElevatorControl;
 
 import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.RPM;
+import static frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight.LEVEL1;
 
 public class CoralHeadTeleopCommand extends Command {
     CoralHeadControl coralCollector;
@@ -74,14 +75,13 @@ public class CoralHeadTeleopCommand extends Command {
         }
 
         coralCollector.setCoralVelocity(coralWheelLVelocity, coralWheelRVelocity);
-        if (coralCollector.inFrontReef() && elevator.getHeight().gt(Centimeters.of(80))) {
-            SmartDashboard.putBoolean("DROP", true);
+        boolean reefLockedOn = coralCollector.inFrontReef() && elevator.getHeight().gt(LEVEL1.measure);
+        SmartDashboard.putBoolean("DROP", reefLockedOn);
+        pdh.setSwitchableChannel(reefLockedOn);
+        if (reefLockedOn) {
             joystick.setRumble(GenericHID.RumbleType.kBothRumble, 1);
-            pdh.setSwitchableChannel(true);
         } else {
-            SmartDashboard.putBoolean("DROP", false);
             joystick.setRumble(GenericHID.RumbleType.kBothRumble, 0);
-            pdh.setSwitchableChannel(false);
         }
     }
 

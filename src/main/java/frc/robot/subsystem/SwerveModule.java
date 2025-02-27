@@ -95,9 +95,9 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     @Override
     public void drive(double speedMetersPerSec) {
         getSensors().driveSpeedDesired = MetersPerSecond.of(speedMetersPerSec);
-        double motorPower = driveFeedforward.calculate(speedMetersPerSec * 39.37 / 1.413);
-        motorPower += velocityDriveController.calculate(getSensors().driveVelocity.in(RPM), speedMetersPerSec * 39.37 / 1.413);
-        driveMotor.setVoltage(motorPower);
+        double motorPower = driveFeedforward.calculate(speedMetersPerSec * 39.37 * 60 / (4*Math.PI/6.75));
+        motorPower += velocityDriveController.calculate(getSensors().driveVelocity.in(RPM), speedMetersPerSec * 39.37 * 60 / (4*Math.PI/6.75));
+        driveMotor.set(motorPower/driveMotor.getBusVoltage());
         Logger.recordOutput("VelocityError", velocityDriveController.getError());
     }
 
@@ -125,7 +125,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     @Override
     public SwerveModuleState getModuleState() {
         return new SwerveModuleState(
-                driveMotor.getEncoder().getVelocity(),
+                InchesPerSecond.of(driveMotor.getEncoder().getVelocity() * (4*Math.PI/6.75) / 60).in(MetersPerSecond),
                 new Rotation2d(getHeading())
         );
     }
