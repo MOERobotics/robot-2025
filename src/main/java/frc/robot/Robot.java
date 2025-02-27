@@ -200,8 +200,8 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopPeriodic() {
         if(driverJoystick.getHID().getRawButton(2)){
-            // robot.getSwerveDrive().resetPose(new Pose2d(7.566, 7.135, Rotation2d.fromDegrees(180)));
-            robot.getSwerveDrive().resetPose(new Pose2d());
+            robot.getSwerveDrive().resetPose(new Pose2d(7.566, 7.135, Rotation2d.fromDegrees(180)));
+            // robot.getSwerveDrive().resetPose(new Pose2d());
         }
 
 
