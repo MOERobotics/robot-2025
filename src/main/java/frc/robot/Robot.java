@@ -140,7 +140,7 @@ public class Robot extends LoggedRobot {
         Command stopCommand = swerveDrive.run(()-> { swerveDrive.drive(0,0,0);});
         stopCommand.setName("SwerveStop");
         swerveDrive.setDefaultCommand(stopCommand);
-        autoCommand = autos.getSelectedAuto();
+        autoCommand = new driveToPosition(robot.getSwerveDrive(), new Pose2d(4.905, 4.745, Rotation2d.fromDegrees(240)));
         autoCommand.schedule();
     }
 
