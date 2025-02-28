@@ -7,8 +7,10 @@ import frc.robot.LimelightHelpers;
 import frc.robot.subsystem.SwerveDrive;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.subsystem.SwerveDriveControl;
+import org.littletonrobotics.junction.Logger;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meters;
@@ -34,6 +36,7 @@ public class driveToPosition extends Command {
     public driveToPosition(SwerveDriveControl swerveDrive, Pose2d targetPose) {
         this.swerveDrive = swerveDrive;
         this.targetPose = targetPose;
+        Arrays.fill(found_poses, Pose2d.kZero);
     }
 
     @Override
@@ -46,6 +49,11 @@ public class driveToPosition extends Command {
     }
 
     public void execute() {
+        Logger.recordOutput("driveToPosition/chosenPose", chosenPose);
+        Logger.recordOutput("driveToPosition/found_poses", found_poses);
+        Logger.recordOutput("driveToPosition/last_reading", last_reading);
+        Logger.recordOutput("driveToPosition/tag_count", tag_count);
+
         if (chosenPose == null) {
             long heartbeat = (long)limelightAPI.getEntry("hb").getDouble(0);
             if (heartbeat == 0) {
@@ -60,26 +68,51 @@ public class driveToPosition extends Command {
                     );
                     found_poses[tag_count] = limelightPose;
                     tag_count += 1;
+                    last_reading = heartbeat;
                 } else {
                     // TODO: Panic if we still don't have an answer after like 3sec
                     System.out.println("Heartbeat unchanged, waiting");
                 }
                 return;
-            } else if (tag_count == 5) {
+            } else if (tag_count >= 5) {
                 // TODO: angle wrapping
-                double x=0, y=0, zr=0;
-                for (Pose2d pose : found_poses) {
-                    x  += pose.getX();
-                    y  += pose.getY();
-                    zr += pose.getRotation().getDegrees();
-                }
-                x  /= found_poses.length;
-                y  /= found_poses.length;
-                zr /= found_poses.length;
+                double bestDistance = Double.MAX_VALUE;
+                for (int i = 0; i < 3; i++) {
+                    for (int j = i+1; j < 4; j++) {
+                        for (int k = j + 1; k < 5; k++) {
+                            Pose2d
+                                pose1 = found_poses[i],
+                                pose2 = found_poses[j],
+                                pose3 = found_poses[k];
 
-                Pose2d average_pose = new Pose2d(x,y,Rotation2d.fromDegrees(zr));
-                /// Set chosen pose equal to the average pose
-                chosenPose = average_pose;
+                            double
+                                x = (pose1.getX() + pose2.getX() + pose3.getX()) / 3.0,
+                                y=0,//same
+                                zr=0; //same maybe
+
+                            Pose2d averagePose = new Pose2d(x, y, new Rotation2d(zr));
+
+                            double distance = (
+                                    (pose1.getX() - averagePose.getX()) +
+                                    (pose1.getY() - averagePose.getY()) +
+                                    // ((double)(pose1.getRotation()
+                                    // Math.toDegrees(pose1.getRotation());
+
+                                    (pose2.getX() - averagePose.getX()) +
+                                    (pose2.getY() - averagePose.getY()) +
+                                    // (pose2.getX() - averagePose.getX()) +
+
+                                    (pose3.getX() - averagePose.getX()) +
+                                    (pose3.getY() - averagePose.getY()) +
+                                    (pose3.getX() - averagePose.getX())
+                            );
+                            if (distance < bestDistance) {
+                                bestDistance = distance;
+                                chosenPose = averagePose;
+                            }
+                        }
+                    }
+                }
             }
         }
 
