@@ -9,12 +9,12 @@ import static edu.wpi.first.units.Units.*;
 public interface ElevatorControl extends Subsystem {
 
     public static enum ElevatorHeight {
-        LEVEL1  (Centimeters.of(61)),
+        LEVEL1  (Centimeters.of(64)),
         LEVEL2  (Centimeters.of(87)),
         LEVEL3  (Centimeters.of(128)),
-        LEVEL4  (Centimeters.of(182)),//TODO: Fix LEVEL 4
-        STOW    (Centimeters.of(47)),
-        COLLECT (Centimeters.of(47));
+        LEVEL4  (Centimeters.of(184)),
+        STOW    (Centimeters.of(54)),
+        COLLECT (Centimeters.of(54));
 
         public final Distance measure;
         ElevatorHeight(Distance measure) {

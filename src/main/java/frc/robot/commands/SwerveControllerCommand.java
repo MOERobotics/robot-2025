@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.interfaces.SwerveDriveControl;
 
 public class SwerveControllerCommand extends Command {
