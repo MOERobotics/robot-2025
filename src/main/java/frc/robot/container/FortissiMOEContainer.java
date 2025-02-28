@@ -19,7 +19,7 @@ import static edu.wpi.first.units.Units.Inches;
 public class FortissiMOEContainer extends RobotContainer {
 
     public FortissiMOEContainer() {
-        double pivotkP = 0.3;
+        double pivotkP = 0.25;
         double pivotkI = 0;
         double pivotkD = 0.003;
         double pivotkIMax = 1;

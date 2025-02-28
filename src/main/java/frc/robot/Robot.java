@@ -33,7 +33,7 @@ public class Robot extends LoggedRobot {
     CommandJoystick functionJoystick = new CommandJoystick(1);
     CommandScheduler scheduler;
 
-    RobotContainer robot = new SubMOErine();
+    RobotContainer robot = new FortissiMOEContainer();
     Command autoCommand = Commands.none();
     TimeOfFlight tof_sensor_center = new TimeOfFlight(41);
 
@@ -62,7 +62,7 @@ public class Robot extends LoggedRobot {
 
         scheduler = CommandScheduler.getInstance();
         Autos.setupAutos(robot);
-        this.autoCommand = ReefToSource.S2_E3_CS(robot);
+        this.autoCommand = ReefToSource.S3_G2_PRO(robot);
     }
 
 

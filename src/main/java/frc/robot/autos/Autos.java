@@ -10,8 +10,8 @@ public class Autos {
     public static SendableChooser<Command> autoChooser = new SendableChooser<>();
     public static void setupAutos (RobotContainer robot){
         PathPlannerAutoBuilder.configure(robot.getSwerveDrive());
-        autoChooser.setDefaultOption("Auto1: Start4 Auto ",  ReefToSource.S2_E3_CS(robot));
-        autoChooser.addOption("Auto2: Start 2 Auto ", ReefToSource.S2_E3_CS(robot));
+        autoChooser.setDefaultOption("Auto1: S2_E2_CS ",  ReefToSource.S2_E2_CS(robot));
+        autoChooser.addOption("Auto2: S3_G2_PRO", ReefToSource.S3_G2_PRO(robot));
         SmartDashboard.putData("Autos Chooser",autoChooser);
     }
     public static Command getSelectedAuto () {
