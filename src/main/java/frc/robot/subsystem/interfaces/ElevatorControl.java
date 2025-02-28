@@ -13,8 +13,8 @@ public interface ElevatorControl extends Subsystem {
         LEVEL2  (Centimeters.of(87)),
         LEVEL3  (Centimeters.of(128)),
         LEVEL4  (Centimeters.of(184)),
-        STOW    (Centimeters.of(54)),
-        COLLECT (Centimeters.of(54));
+        STOW    (Centimeters.of(55.5)),
+        COLLECT (Centimeters.of(55.5));
 
         public final Distance measure;
         ElevatorHeight(Distance measure) {
@@ -69,9 +69,6 @@ public interface ElevatorControl extends Subsystem {
     }
 
     default Distance getHeight() {
-        //Logger.recordOutput("aaaaaaaaa",  this.getExtension().times(Math.cos(this.getAngle().in(Radians))));
         return this.getExtension().times(Math.cos(this.getAngle().in(Radians))).plus(this.getPivotHeight());
-
-
     }
 }

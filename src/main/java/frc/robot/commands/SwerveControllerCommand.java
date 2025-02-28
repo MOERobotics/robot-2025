@@ -31,7 +31,8 @@ public class SwerveControllerCommand extends Command {
         swerveDrive.drive(
                 2.75*driveX*speedMultiplier,
                 2.75*driveY*speedMultiplier,
-                1.25*Math.PI*driveTheta*speedMultiplier
+                1.25*Math.PI*driveTheta*speedMultiplier,
+                joystick.getRawButton(8)
         );
 
     }

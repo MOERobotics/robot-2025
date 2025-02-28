@@ -116,8 +116,12 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     }
 
     @Override
-    public void drive(double xSpeed, double ySpeed, double rotation) {
-        drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed,ySpeed,rotation,getPose().getRotation()));
+    public void drive(double xSpeed, double ySpeed, double rotation, boolean robotCentric) {
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,rotation);
+        if(!robotCentric){
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds,getPose().getRotation());
+        }
+        drive(chassisSpeeds);
     }
 
     @Override
