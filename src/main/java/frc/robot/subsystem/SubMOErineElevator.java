@@ -7,6 +7,7 @@ import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.MOESubsystem;
 import frc.robot.subsystem.interfaces.ElevatorControl;
 import frc.robot.subsystem.interfaces.ElevatorInputsAutoLogged;
@@ -52,7 +53,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         sensors.extensionSpeed = InchesPerSecond.of(elevatorExtensionMotor.getEncoder().getVelocity());
         sensors.elevatorVoltage = Volts.of(extensionSensor.getVoltage());
         sensors.elevatorVoltageFromADC = String.format("%04x", extensionSensor.getValue());
-        sensors.extension = Centimeters.of((getSensors().elevatorVoltage.in(Volts)*35.5227)+32.49861);
+        sensors.extension = Centimeters.of((getSensors().elevatorVoltage.in(Volts)*36.46529)+27.36326);
         sensors.canGoDown = elevatorExtensionMotor.getReverseLimitSwitch().isPressed();
         sensors.canGoUp = sensors.elevatorVoltage.lt(Volts.of(4.248));
         sensors.canGoRight = sensors.angle.gt(Degrees.of(9.55));
@@ -60,6 +61,8 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         sensors.extensionMotorPosition = Rotations.of(elevatorExtensionMotor.getEncoder().getPosition());
         Logger.recordOutput("ElevatorAngleDegrees", sensors.angle.in(Degrees));
 
+        SmartDashboard.putBoolean("ElevtorCanGoUp",canGoUP());
+        SmartDashboard.putBoolean("ElevatorCanGoDown",canGoDown());
     }
 
     @Override
