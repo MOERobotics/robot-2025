@@ -3,18 +3,20 @@
   "robotLength": 0.88,
   "holonomicMode": true,
   "pathFolders": [
-    "Reef to Coral Station",
-    "Start1",
-    "Start2",
-    "Start3",
-    "Start4 ",
+    "Test Paths",
     "Start5",
-    "Test Paths"
+    "Start4 ",
+    "Start3",
+    "Start2",
+    "Start1",
+    "Reef to Coral Station",
+    "Coral Station To Reef"
   ],
   "autoFolders": [
-    "TestAutos"  ],
-  "defaultMaxVel": 2.0,
-  "defaultMaxAccel": 1.5,
+    "TestAutos"
+  ],
+  "defaultMaxVel": 3.0,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,

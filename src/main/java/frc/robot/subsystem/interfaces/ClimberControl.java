@@ -12,7 +12,6 @@ public interface ClimberControl extends Subsystem {
     class ClimberInputs {
         public boolean canGoUp;
         public boolean canGoDown;
-        public boolean canClimb;
         public double motorPower;
         public AngularVelocity motorVelocity = RPM.zero();
         public Voltage motorAppliedVolts = Volts.zero();
@@ -21,9 +20,6 @@ public interface ClimberControl extends Subsystem {
 
     ClimberInputsAutoLogged getSensors();
 
-    default boolean canClimb() {
-        return this.getSensors().canClimb;
-    }
 
 
     default boolean canGoUp() {

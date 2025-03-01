@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.interfaces.ElevatorControl;
 import org.littletonrobotics.junction.Logger;
 
@@ -20,8 +21,8 @@ public class ElevatorTeleopCommand extends Command {
     Distance targetHeight;
 
 
-    public ElevatorTeleopCommand(ElevatorControl elevator, Joystick joystick) {
-        this.elevator = elevator;
+    public ElevatorTeleopCommand(RobotContainer robot, Joystick joystick) {
+        this.elevator = robot.getElevator();
         this.joystick = joystick;
         addRequirements(elevator);
     }

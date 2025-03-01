@@ -82,6 +82,8 @@ public class ReefToSource {
     ) {
         PathPlannerPath plannerPath1 = PathPlannerPath.fromPathFile(path1);
         PathPlannerPath plannerPath2 = PathPlannerPath.fromPathFile(path2);
+        PathPlannerPath plannerPath3 = PathPlannerPath.fromPathFile("Coral Station To E");
+
         return Commands.sequence(
             Commands.runOnce(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingHolonomicPose().get())),
             Commands.deadline(
@@ -97,8 +99,25 @@ public class ReefToSource {
                 new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(2),
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),true)
             ),
-            new ElevatorAutoCommand(robot.getElevator(),STOW.measure, InchesPerSecond.of(8),false),
-            AutoBuilder.followPath(plannerPath2)
+           // new ElevatorAutoCommand(robot.getElevator(),STOW.measure, InchesPerSecond.of(8),false),
+            AutoBuilder.followPath(plannerPath2),
+            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0)).withTimeout(2),
+            Commands.deadline(
+                    AutoBuilder.followPath(plannerPath3).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
+                    new ElevatorAutoCommand(robot.getElevator(), LEVEL2.measure, InchesPerSecond.of(9),true)
+            ),
+            Commands.deadline(
+                    new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),false),
+                    Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
+
+            ),
+            Commands.deadline(
+                    new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(2),
+                    new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),true)
+            )
+
+
+
         );
     }
 }

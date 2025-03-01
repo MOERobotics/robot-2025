@@ -14,7 +14,7 @@ public interface ElevatorControl extends Subsystem {
         LEVEL2  (Centimeters.of(87)),
         LEVEL3  (Centimeters.of(128)),
         LEVEL4  (Centimeters.of(184)),
-        STOW    (Centimeters.of(55.5)),
+        STOW    (Centimeters.of(51.5)),
         COLLECT (Centimeters.of(55.5));
 
         public final Distance measure;

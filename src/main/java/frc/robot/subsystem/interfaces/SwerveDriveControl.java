@@ -18,6 +18,8 @@ public interface SwerveDriveControl extends Subsystem {
         public SwerveModuleInputsAutoLogged swerveModuleBR;
         public SwerveModuleInputsAutoLogged swerveModuleBL;
         public ChassisSpeeds robotRelativeSpeeds;
+
+        public boolean canClimb;
     }
 
     default Pose2d getPose() {
@@ -47,5 +49,10 @@ public interface SwerveDriveControl extends Subsystem {
     SwerveDriveKinematics getKinematics();
 
     SwerveDriveOdometry getOdometry();
+
+    default boolean canClimb() {
+        return this.getSensors().canClimb;
+    }
+
 
 }

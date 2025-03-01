@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -51,8 +52,8 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         elevatorPivotMotor.configure(pivotMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         elevatorExtensionMotor.configure(extensionMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
-        addressableLED = new AddressableLED(4);// TODO CHANGE PORT
-        addressableLEDBuffer = new AddressableLEDBuffer(63);
+        addressableLED = new AddressableLED(1);// TODO CHANGE PORT
+        addressableLEDBuffer = new AddressableLEDBuffer(2);
         addressableLED.setLength(addressableLEDBuffer.getLength());
         addressableLED.setData(addressableLEDBuffer);
         addressableLED.start();
@@ -75,8 +76,11 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         sensors.extensionMotorPosition = Rotations.of(elevatorExtensionMotor.getEncoder().getPosition());
         Logger.recordOutput("ElevatorAngleDegrees", sensors.angle.in(Degrees));
 
-        SmartDashboard.putBoolean("ElevtorCanGoUp",canGoUP());
+        SmartDashboard.putBoolean("ElevatorCanGoUp",canGoUP());
         SmartDashboard.putBoolean("ElevatorCanGoDown",canGoDown());
+
+        SmartDashboard.putNumber("Elevator Extension", sensors.extension.in(Centimeters));
+       SmartDashboard.putNumber("Elevator Angle", sensors.angle.in(Degrees));
     }
 
     @Override
@@ -110,6 +114,6 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     @Override
     public void periodic() {
         super.periodic();
-        setLEDColor(Color.kBlack);
+        setLEDColor(Color.kGreen);
     }
 }

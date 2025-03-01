@@ -47,7 +47,7 @@ public class Robot extends LoggedRobot {
 
         scheduler = CommandScheduler.getInstance();
         Autos.setupAutos(robot);
-        this.autoCommand = ReefToSource.S3_G2_PRO(robot);
+        this.autoCommand = ReefToSource.S2_E2_CS(robot);
     }
 
 
@@ -86,7 +86,7 @@ public class Robot extends LoggedRobot {
             functionJoystick.getHID()
         ).schedule();
         new AlgaeCollectorTeleopCommand(
-            robot.getAlgaeCollector(),
+            robot,
             functionJoystick.getHID()
         ).schedule();
         new CoralHeadTeleopCommand(

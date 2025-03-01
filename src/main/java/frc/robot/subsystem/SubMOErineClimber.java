@@ -5,6 +5,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.MOESubsystem;
 import frc.robot.subsystem.interfaces.ClimberControl;
 import frc.robot.subsystem.interfaces.ClimberInputsAutoLogged;
@@ -18,6 +19,8 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
 
     public final Angle maxEncoderValue = Degrees.of(72);
     public final Angle minEncoderValue = Degrees.of(0);
+
+
 
     public SubMOErineClimber(
         SparkMax climbMotor,
@@ -37,7 +40,6 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
         sensors.motorVelocity = RPM.of(climbMotor.getEncoder().getVelocity());
         sensors.canGoDown = getPosition().gt(minEncoderValue);
         sensors.canGoUp = getPosition().lt(maxEncoderValue);
-        sensors.canClimb = climbMotor.getReverseLimitSwitch().isPressed(); //TODO Check Limit Switch
     }
 
 

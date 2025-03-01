@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.interfaces.AlgaeCollectorControl;
 import org.littletonrobotics.junction.Logger;
 
@@ -14,8 +15,8 @@ public class AlgaeCollectorTeleopCommand extends Command {
     Joystick joystick;
     AngularVelocity algaeArmVelocity, algaeWheelVelocity;
 
-    public AlgaeCollectorTeleopCommand(AlgaeCollectorControl algaeCollectorControl, Joystick joystick) {
-        this.algaeCollectorControl = algaeCollectorControl;
+    public AlgaeCollectorTeleopCommand(RobotContainer robot, Joystick joystick) {
+        this.algaeCollectorControl = robot.getAlgaeCollector();
         this.joystick = joystick;
         addRequirements(algaeCollectorControl);
     }

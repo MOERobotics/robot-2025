@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,6 +32,9 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public @Getter SwerveDriveOdometry odometry;
     public Pigeon2 pigeon;
     public Field2d PathPlannerField = new Field2d();
+
+    public DigitalInput climbSensor = new DigitalInput(3);
+
 
     public SwerveDrive(
             SwerveModule SwerveModuleFL,
@@ -113,6 +117,9 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
                 swerveModuleBR.getModuleState(),
                 swerveModuleBL.getModuleState());
 
+        sensors.canClimb = !climbSensor.get();
+
+
     }
 
     @Override
@@ -134,6 +141,8 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         swerveModuleBR.setModuleState(moduleStates[2]);
         swerveModuleBL.setModuleState(moduleStates[3]);
     }
+
+
 
 
 }
