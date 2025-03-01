@@ -6,8 +6,12 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.MOESubsystem;
 import frc.robot.subsystem.interfaces.ElevatorControl;
 import frc.robot.subsystem.interfaces.ElevatorInputsAutoLogged;
@@ -20,8 +24,11 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     public SparkMax elevatorExtensionMotor;
     public SparkMax elevatorPivotMotor;
     public SparkAbsoluteEncoder tiltEncoder;
-
     public AnalogInput extensionSensor;
+
+    public AddressableLED addressableLED;
+    public AddressableLEDBuffer addressableLEDBuffer;
+
 
     public SubMOErineElevator(
         SparkMax elevatorExtensionMotor,
@@ -43,6 +50,13 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
         elevatorPivotMotor.configure(pivotMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         elevatorExtensionMotor.configure(extensionMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
+
+        addressableLED = new AddressableLED(4);// TODO CHANGE PORT
+        addressableLEDBuffer = new AddressableLEDBuffer(63);
+        addressableLED.setLength(addressableLEDBuffer.getLength());
+        addressableLED.setData(addressableLEDBuffer);
+        addressableLED.start();
+
     }
 
     @Override
@@ -84,5 +98,18 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         return Centimeters.of(8);
     }
 
+    @Override
+    public void setLEDColor(Color color) {
+        LEDPattern LEDPatternColor = LEDPattern.solid(color);
+        LEDPatternColor.applyTo(addressableLEDBuffer);
+        addressableLED.setData(addressableLEDBuffer);
+        Logger.recordOutput("LED Color",color.toHexString());
 
+    }
+
+    @Override
+    public void periodic() {
+        super.periodic();
+        setLEDColor(Color.kBlack);
+    }
 }

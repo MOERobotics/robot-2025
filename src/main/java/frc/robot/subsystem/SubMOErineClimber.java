@@ -37,6 +37,7 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
         sensors.motorVelocity = RPM.of(climbMotor.getEncoder().getVelocity());
         sensors.canGoDown = getPosition().gt(minEncoderValue);
         sensors.canGoUp = getPosition().lt(maxEncoderValue);
+        sensors.canClimb = climbMotor.getReverseLimitSwitch().isPressed(); //TODO Check Limit Switch
     }
 
 

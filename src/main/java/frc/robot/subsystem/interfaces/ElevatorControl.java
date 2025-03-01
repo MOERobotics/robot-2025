@@ -1,6 +1,7 @@
 package frc.robot.subsystem.interfaces;
 
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -71,4 +72,6 @@ public interface ElevatorControl extends Subsystem {
     default Distance getHeight() {
         return this.getExtension().times(Math.cos(this.getAngle().in(Radians))).plus(this.getPivotHeight());
     }
+
+    default void setLEDColor(Color color) {}
 }

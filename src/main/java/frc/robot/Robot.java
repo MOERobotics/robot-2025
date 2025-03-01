@@ -32,7 +32,7 @@ public class Robot extends LoggedRobot {
     CommandJoystick functionJoystick = new CommandJoystick(1);
     CommandScheduler scheduler;
 
-    RobotContainer robot = new FortissiMOEContainer();
+    RobotContainer robot = new SubMOErine();
     Command autoCommand = Commands.none();
 
 
@@ -82,7 +82,7 @@ public class Robot extends LoggedRobot {
     public void teleopInit() {
         scheduler.cancelAll();
         new ElevatorTeleopCommand(
-            robot.getElevator(),
+            robot,
             functionJoystick.getHID()
         ).schedule();
         new AlgaeCollectorTeleopCommand(
@@ -90,14 +90,11 @@ public class Robot extends LoggedRobot {
             functionJoystick.getHID()
         ).schedule();
         new CoralHeadTeleopCommand(
-            robot.getCoralHead(),
-            functionJoystick.getHID(),
-            robot.getElevator(),
-            robot.getPdh()
+            robot,
+            functionJoystick.getHID()
         ).schedule();
         new ClimberTeleopCommand(
-            robot.getClimberRear(),
-            robot.getClimberMid(),
+            robot,
             driverJoystick.getHID()
         ).schedule();
         robot.getSwerveDrive().setDefaultCommand(

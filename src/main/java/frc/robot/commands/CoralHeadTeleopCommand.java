@@ -5,9 +5,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.interfaces.CoralHeadControl;
 import frc.robot.subsystem.interfaces.ElevatorControl;
+import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.Centimeters;
 import static edu.wpi.first.units.Units.RPM;
@@ -22,11 +25,11 @@ public class CoralHeadTeleopCommand extends Command {
     boolean stopCoral = false;
 
 
-    public CoralHeadTeleopCommand(CoralHeadControl coralCollector, Joystick joystick, ElevatorControl elevator, PowerDistribution pdh) {
-        this.coralCollector = coralCollector;
+    public CoralHeadTeleopCommand(RobotContainer robot, Joystick joystick) {
+        this.coralCollector = robot.getCoralHead();
         this.joystick = joystick;
-        this.elevator = elevator;
-        this.pdh = pdh;
+        this.elevator = robot.getElevator();
+        this.pdh = robot.getPdh();
         this.addRequirements(coralCollector);
     }
 
@@ -49,8 +52,6 @@ public class CoralHeadTeleopCommand extends Command {
         AngularVelocity coralWheelRVelocity, coralWheelLVelocity;
         //eject the coral
         if (joystick.getRawAxis(3) > 0.5) {
-            hasCoral = false;
-            stopCoral = false;
             // when at L1 we need to eject differently because the coral must be sideways
 
             coralWheelRVelocity = RPM.of(0.80);
@@ -63,13 +64,20 @@ public class CoralHeadTeleopCommand extends Command {
             }
         }
         //intake the coral
-        else if (joystick.getRawAxis(2) > 0.5 && !stopCoral) {
-            coralWheelLVelocity = RPM.of(0.30);
-            coralWheelRVelocity = RPM.of(0.30);
+        else if (joystick.getRawAxis(2) > 0.5) {
+            if (!stopCoral) {
+                coralWheelLVelocity = RPM.of(0.30);
+                coralWheelRVelocity = RPM.of(0.30);
+            } else {
+                coralWheelRVelocity = RPM.zero();
+                coralWheelLVelocity = RPM.zero();
+            }
         } else if (joystick.getRawButton(7)) {
             coralWheelRVelocity = RPM.of(-0.30);
             coralWheelLVelocity = RPM.of(-0.30);
-        } else {
+        }else {
+            hasCoral = false;
+            stopCoral = false;
             coralWheelRVelocity = RPM.zero();
             coralWheelLVelocity = RPM.zero();
         }
@@ -80,9 +88,16 @@ public class CoralHeadTeleopCommand extends Command {
         pdh.setSwitchableChannel(reefLockedOn);
         if (reefLockedOn) {
             joystick.setRumble(GenericHID.RumbleType.kBothRumble, 1);
+            elevator.setLEDColor(Color.kPurple);
         } else {
             joystick.setRumble(GenericHID.RumbleType.kBothRumble, 0);
         }
+        if (!reefLockedOn && stopCoral) {
+            elevator.setLEDColor(Color.kWhite);
+        }
+
+        Logger.recordOutput("CoralHeadTeleop/HasCoral", hasCoral);
+        Logger.recordOutput("CoralHeadTeleop/stopCoral", stopCoral);
     }
 
     @Override
