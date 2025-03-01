@@ -7,6 +7,7 @@ import frc.robot.subsystem.*;
 import static edu.wpi.first.units.Units.RPM;
 
 public class SimulationHelpers {
+    private static SwerveDriveSim swerveDriveSim;
     private static SwerveModuleSim swerveModuleSimFL, swerveModuleSimFR, swerveModuleSimBR, swerveModuleSimBL;
     private static RobotElevatorSim elevatorSim;
     private static AlgaeCollectorSim algaeCollectorSim;
@@ -37,6 +38,7 @@ public class SimulationHelpers {
             || !(robot.getCoralHead() instanceof CoralHead)
             || !(robot.getClimberRear() instanceof SubMOErineClimber)
             || !(robot.getClimberMid() instanceof SubMOErineClimber)) throw new InstantiationError("Robot Container should be SubMOErine but  is actually"+robot.getClass().getSimpleName());
+        swerveDriveSim = new SwerveDriveSim(swerveDrive);
         swerveModuleSimFL = new SwerveModuleSim(swerveDrive.swerveModuleFL.moduleOffset, swerveDrive.swerveModuleFL.driveMotor, swerveDrive.swerveModuleFL.pivotMotor, swerveDrive.swerveModuleFL.pivotEncoder);
         swerveModuleSimFR = new SwerveModuleSim(swerveDrive.swerveModuleFR.moduleOffset, swerveDrive.swerveModuleFR.driveMotor, swerveDrive.swerveModuleFR.pivotMotor, swerveDrive.swerveModuleFR.pivotEncoder);
         swerveModuleSimBR = new SwerveModuleSim(swerveDrive.swerveModuleBR.moduleOffset, swerveDrive.swerveModuleBR.driveMotor, swerveDrive.swerveModuleBR.pivotMotor, swerveDrive.swerveModuleBR.pivotEncoder);
@@ -49,11 +51,12 @@ public class SimulationHelpers {
     }
 
     public static void updateSimState() {
+        swerveDriveSim.updateSimState();
         swerveModuleSimFL.updateSimState();
         swerveModuleSimFR.updateSimState();
         swerveModuleSimBR.updateSimState();
         swerveModuleSimBL.updateSimState();
-        elevatorSim.updteSimState();
+        elevatorSim.updateSimState();
         algaeCollectorSim.updateSimState();
         coralCollectorSim.updateSimState();
         climberMidSim.updateSimState();

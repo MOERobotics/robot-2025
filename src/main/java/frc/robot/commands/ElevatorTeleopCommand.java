@@ -16,7 +16,7 @@ public class ElevatorTeleopCommand extends Command {
     Joystick joystick;
     LinearVelocity verticalVelocity = InchesPerSecond.of(0);
     AngularVelocity angularVelocity;
-    private final PIDController pid = new PIDController(0.2, 0.1 ,0);
+    private final PIDController pid = new PIDController(0.2, 0.05 ,0.0);
     Distance targetHeight;
 
 
@@ -53,13 +53,14 @@ public class ElevatorTeleopCommand extends Command {
             targetHeight = STOW.measure;
         }
         Distance error = elevator.getHeight().minus(targetHeight);
+        Logger.recordOutput("PidError",error);
         double pidOutput = pid.calculate(error.in(Inches));
         pidOutput = MathUtil.clamp(pidOutput, -1, 1);
         if(MathUtil.applyDeadband(joystick.getRawAxis(1),0.5)!=0){
             pidOutput = -joystick.getRawAxis(1);
             targetHeight = elevator.getHeight();
         }
-        verticalVelocity = InchesPerSecond.of(6.0/.5*.8).times(pidOutput);
+        verticalVelocity = FeetPerSecond.of(1.0).times(pidOutput);
         angularVelocity = DegreesPerSecond.of(0.2).times(
                 MathUtil.applyDeadband(joystick.getRawAxis(0), 0.1)
         );

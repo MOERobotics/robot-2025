@@ -10,7 +10,6 @@ package frc.robot;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.pathplanner.lib.util.PathPlannerLogging;
-import com.playingwithfusion.TimeOfFlight;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -35,25 +34,11 @@ public class Robot extends LoggedRobot {
 
     RobotContainer robot = new FortissiMOEContainer();
     Command autoCommand = Commands.none();
-    TimeOfFlight tof_sensor_center = new TimeOfFlight(41);
 
-    Field2d field = new Field2d();
 
-    PowerDistribution pdh = new PowerDistribution(1, PowerDistribution.ModuleType.kRev);
 
     @Override
     public void robotInit() {
-        SmartDashboard.putData(field);
-        tof_sensor_center.setRangeOfInterest(8,8,10,10);
-        PathPlannerLogging.setLogActivePathCallback(path -> {
-            field.getObject("traj").setPoses(path);
-        });
-        PathPlannerLogging.setLogCurrentPoseCallback(path -> {
-            field.getRobotObject().setPose(path);
-        });
-        PathPlannerLogging.setLogTargetPoseCallback(path -> {
-            field.getObject("target").setPose(path);
-        });
 
         if (isSimulation())
             DriverStation.silenceJoystickConnectionWarning(true);
@@ -107,7 +92,8 @@ public class Robot extends LoggedRobot {
         new CoralHeadTeleopCommand(
             robot.getCoralHead(),
             functionJoystick.getHID(),
-            robot.getElevator()
+            robot.getElevator(),
+            robot.getPdh()
         ).schedule();
         new ClimberTeleopCommand(
             robot.getClimberRear(),
@@ -125,18 +111,6 @@ public class Robot extends LoggedRobot {
         if(driverJoystick.getHID().getRawButtonPressed(1)){
             robot.getSwerveDrive().resetPose(new Pose2d());
         }
-        SmartDashboard.putNumber("Distance:", tof_sensor_center.getRange());
-        functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
-        if (tof_sensor_center.getRange() < 609.6){
-            SmartDashboard.putBoolean("DROP", true);
-            pdh.setSwitchableChannel(true);
-            functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble,1);
-        }
-        else {
-            SmartDashboard.putBoolean("DROP", false);
-            pdh.setSwitchableChannel(false);
-            functionJoystick.setRumble(GenericHID.RumbleType.kBothRumble, 0);
-        }
     }
 
     @Override
@@ -147,7 +121,9 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void testPeriodic() {}
+    public void testPeriodic() {
+
+    }
 
     @Override
     public void simulationInit() {

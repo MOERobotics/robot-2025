@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.interfaces.SwerveDriveControl;
 
 public class SwerveControllerCommand extends Command {
@@ -28,11 +27,12 @@ public class SwerveControllerCommand extends Command {
         driveTheta = MathUtil.applyDeadband(driveTheta, 0.2, 1);
         driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
         driveY = MathUtil.applyDeadband(driveY, 0.1, 1);
-        double div = joystick.getRawButton(7)?2.5:1;
+        double speedMultiplier = joystick.getRawButton(7) ? 0.8 : 1;
         swerveDrive.drive(
-                2.75*driveX/div,
-                2.75*driveY/div,
-                1.25*Math.PI*driveTheta/div
+                2.75*driveX*speedMultiplier,
+                2.75*driveY*speedMultiplier,
+                1.25*Math.PI*driveTheta*speedMultiplier,
+                joystick.getRawButton(8)
         );
 
     }

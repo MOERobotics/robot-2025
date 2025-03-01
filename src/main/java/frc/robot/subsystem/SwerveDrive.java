@@ -1,11 +1,14 @@
 package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -27,6 +30,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public @Getter SwerveDriveKinematics kinematics;
     public @Getter SwerveDriveOdometry odometry;
     public Pigeon2 pigeon;
+    public Field2d PathPlannerField = new Field2d();
 
     public SwerveDrive(
             SwerveModule SwerveModuleFL,
@@ -66,6 +70,18 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         getSensors().swerveModuleFR = swerveModuleFR.getSensors();
         getSensors().swerveModuleBR = swerveModuleBR.getSensors();
         getSensors().swerveModuleBL = swerveModuleBL.getSensors();
+
+
+        SmartDashboard.putData(PathPlannerField);
+        PathPlannerLogging.setLogActivePathCallback(path -> {
+            PathPlannerField.getObject("traj").setPoses(path);
+        });
+        PathPlannerLogging.setLogCurrentPoseCallback(path -> {
+            PathPlannerField.getRobotObject().setPose(path);
+        });
+        PathPlannerLogging.setLogTargetPoseCallback(path -> {
+            PathPlannerField.getObject("target").setPose(path);
+        });
     }
 
     @Override
@@ -100,8 +116,12 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     }
 
     @Override
-    public void drive(double xSpeed, double ySpeed, double rotation) {
-        drive(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed,ySpeed,rotation,getPose().getRotation()));
+    public void drive(double xSpeed, double ySpeed, double rotation, boolean robotCentric) {
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeed,ySpeed,rotation);
+        if(!robotCentric){
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds,getPose().getRotation());
+        }
+        drive(chassisSpeeds);
     }
 
     @Override

@@ -9,12 +9,12 @@ import static edu.wpi.first.units.Units.*;
 public interface ElevatorControl extends Subsystem {
 
     public static enum ElevatorHeight {
-        LEVEL1  (Centimeters.of(60)),
-        LEVEL2  (Centimeters.of(81)),
-        LEVEL3  (Centimeters.of(119)),
-        LEVEL4  (Centimeters.of(182)),
-        STOW    (Centimeters.of(42.5)),
-        COLLECT (Centimeters.of(42.5));
+        LEVEL1  (Centimeters.of(64)),
+        LEVEL2  (Centimeters.of(87)),
+        LEVEL3  (Centimeters.of(128)),
+        LEVEL4  (Centimeters.of(184)),
+        STOW    (Centimeters.of(55.5)),
+        COLLECT (Centimeters.of(55.5));
 
         public final Distance measure;
         ElevatorHeight(Distance measure) {
@@ -69,9 +69,6 @@ public interface ElevatorControl extends Subsystem {
     }
 
     default Distance getHeight() {
-        //Logger.recordOutput("aaaaaaaaa",  this.getExtension().times(Math.cos(this.getAngle().in(Radians))));
         return this.getExtension().times(Math.cos(this.getAngle().in(Radians))).plus(this.getPivotHeight());
-
-
     }
 }

@@ -2,9 +2,6 @@ package frc.robot.subsystem.interfaces;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.units.measure.*;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -35,8 +32,12 @@ public interface SwerveDriveControl extends Subsystem {
 
     void drive(ChassisSpeeds speeds);
 
-    default void drive(double xSpeed, double ySpeed, double rotation) {
+    default void drive(double xSpeed, double ySpeed, double rotation, boolean robotCentric) {
         drive(new ChassisSpeeds(xSpeed, ySpeed, rotation));
+    }
+
+    default void drive(double xSpeed, double ySpeed, double rotation) {
+        drive(xSpeed, ySpeed, rotation, false);
     }
 
     default ChassisSpeeds getRobotRelativeSpeeds() {
