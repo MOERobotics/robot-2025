@@ -29,7 +29,7 @@ public class ReefToSource {
     }
     // START 2 AUTOS
     public static Command S2_E2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start2 E", "E Coral Station", LEVEL2);
+        return buildReefToSourceCommand(robot, "Start2 E", "E Coral Station", LEVEL4);
     }
 
 
@@ -90,7 +90,7 @@ public class ReefToSource {
             Commands.runOnce(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingHolonomicPose().get())),
             Commands.deadline(
                 AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
-                new ElevatorAutoCommand(robot.getElevator(), LEVEL2.measure, InchesPerSecond.of(9),true)
+                new ElevatorAutoCommand(robot.getElevator(),  LEVEL2.measure, InchesPerSecond.of(6),true)
             ),
             Commands.deadline(
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),false),
@@ -98,16 +98,20 @@ public class ReefToSource {
 
             ),
             Commands.deadline(
-                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(2),
+                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(1),
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),true)
             ),
-           // new ElevatorAutoCommand(robot.getElevator(),STOW.measure, InchesPerSecond.of(8),false),
-            AutoBuilder.followPath(plannerPath2)
+
+                new ElevatorAutoCommand(robot.getElevator(), STOW.measure, InchesPerSecond.of(10),false).withTimeout(2),
+
+               Commands.parallel(
+                       new ElevatorAutoCommand(robot.getElevator(), STOW.measure, InchesPerSecond.of(10),false),
+                       AutoBuilder.followPath(plannerPath2)
+               )
 
 
         );
     }
-
 
 
 
