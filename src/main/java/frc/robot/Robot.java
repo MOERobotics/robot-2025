@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import frc.robot.autos.Autos;
 import frc.robot.autos.ReefToSource;
+import frc.robot.autos.ReefToSourceToReef;
 import frc.robot.container.*;
 import frc.robot.commands.*;
 import frc.robot.container.RobotContainer;
@@ -47,7 +48,7 @@ public class Robot extends LoggedRobot {
 
         scheduler = CommandScheduler.getInstance();
         Autos.setupAutos(robot);
-        this.autoCommand = ReefToSource.S2_E2_CS(robot);
+        this.autoCommand = ReefToSourceToReef.S2_E2_CS_C2(robot);
     }
 
 
