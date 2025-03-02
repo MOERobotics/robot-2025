@@ -236,6 +236,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
             end,
             config
         );
+        PathPlannerField.getObject("traj").setTrajectory(trajectory);
         SmartDashboard.putNumber("Time", trajectory.getTotalTimeSeconds());
         SmartDashboard.putNumber("trajEndRotation", trajectory.sample(trajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees());
         SmartDashboard.putNumber("desiredEndRot", end.getRotation().getDegrees());
