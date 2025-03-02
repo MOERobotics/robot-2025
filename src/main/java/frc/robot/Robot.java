@@ -42,7 +42,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler scheduler;
 
 
-    RobotContainer robot = new FortissiMOEContainer();
+    RobotContainer robot = new SubMOErine();
     Autos autos;
     Command autoCommand = Commands.none();
 
@@ -189,10 +189,10 @@ public class Robot extends LoggedRobot {
 //        Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive(), DriveToTag.getClosestTarget(robot.getSwerveDrive().getPose()));
 //        SmartDashboard.putData(Drive);
 
-        Command DriveTraj = new driveToPosition2(robot.getSwerveDrive());
+        Command DriveTraj = new driveToPosition(robot.getSwerveDrive(),new Pose2d(4.905,4.176,Rotation2d.fromDegrees(240)));
         SmartDashboard.putData(DriveTraj);
-        Command DriveTraj3 = new driveToPosition3(robot.getSwerveDrive());
-        SmartDashboard.putData(DriveTraj3);
+//        Command DriveTraj3 = new driveToPosition3(robot.getSwerveDrive());
+//        SmartDashboard.putData(DriveTraj3);
 //        ((SwerveDrive)robot.getSwerveDrive()).sysIdRoutinePivotFL.dynamic(SysIdRoutine.Direction.kReverse).schedule();
 
     }
@@ -329,8 +329,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void simulationPeriodic() {
-        return;
-        /*swerveModuleSimFL.updateSimState();
+        swerveModuleSimFL.updateSimState();
         swerveModuleSimFR.updateSimState();
         swerveModuleSimBR.updateSimState();
         swerveModuleSimBL.updateSimState();
@@ -338,6 +337,6 @@ public class Robot extends LoggedRobot {
         algaeCollectorSim.updateSimState();
         coralCollectorSim.updateSimState();
         climberMidSim.updateSimState();
-        climberRearSim.updateSimState();*/
+        climberRearSim.updateSimState();
     }
 }

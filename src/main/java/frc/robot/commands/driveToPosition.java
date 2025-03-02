@@ -55,9 +55,10 @@ public class driveToPosition extends Command {
         Logger.recordOutput("driveToPosition/tag_count", tag_count);
 
         if (chosenPose == null) {
-            long heartbeat = (long)limelightAPI.getEntry("hb").getDouble(0);
+            long heartbeat = (long) limelightAPI.getEntry("hb").getDouble(0);
             if (heartbeat == 0) {
                 chosenPose = swerveDrive.getPose();
+                return;
             } else if (tag_count < 5) {
                 if (heartbeat != last_reading) {
                     double[] limelightReading = limelightAPI.getEntry("botpose").getDoubleArray(fakeLimelightData);
@@ -78,7 +79,7 @@ public class driveToPosition extends Command {
                 // TODO: angle wrapping
                 double bestDistance = Double.MAX_VALUE;
                 for (int i = 0; i < 3; i++) {
-                    for (int j = i+1; j < 4; j++) {
+                    for (int j = i + 1; j < 4; j++) {
                         for (int k = j + 1; k < 5; k++) {
                             Pose2d
                                 pose1 = found_poses[i],
@@ -87,24 +88,25 @@ public class driveToPosition extends Command {
 
                             double
                                 x = (pose1.getX() + pose2.getX() + pose3.getX()) / 3.0,
-                                y=0,//same
-                                zr=0; //same maybe
+                                y = (pose1.getY() + pose2.getY() + pose3.getY()) / 3.0,
+                                zr = (pose1.getRotation().plus(pose2.getRotation()).plus(pose3.getRotation())).div(3.0).getDegrees();
 
-                            Pose2d averagePose = new Pose2d(x, y, new Rotation2d(zr));
+                            Pose2d averagePose = new Pose2d(x, y, Rotation2d.fromDegrees(zr));
 
                             double distance = (
-                                    (pose1.getX() - averagePose.getX()) +
-                                    (pose1.getY() - averagePose.getY()) +
-                                    // ((double)(pose1.getRotation()
-                                    // Math.toDegrees(pose1.getRotation());
+                                Math.sqrt(
+                                    Math.pow((pose1.getX() - averagePose.getX()), 2) +
+                                    Math.pow((pose1.getY() - averagePose.getY()), 2)
+                                ) +
+                                Math.sqrt(
+                                    Math.pow((pose2.getX() - averagePose.getX()), 2) +
+                                    Math.pow((pose2.getY() - averagePose.getY()), 2)
+                                ) +
 
-                                    (pose2.getX() - averagePose.getX()) +
-                                    (pose2.getY() - averagePose.getY()) +
-                                    // (pose2.getX() - averagePose.getX()) +
-
-                                    (pose3.getX() - averagePose.getX()) +
-                                    (pose3.getY() - averagePose.getY()) +
-                                    (pose3.getX() - averagePose.getX())
+                                Math.sqrt(
+                                    Math.pow((pose3.getX() - averagePose.getX()), 2) +
+                                    Math.pow((pose3.getY() - averagePose.getY()), 2)
+                                )
                             );
                             if (distance < bestDistance) {
                                 bestDistance = distance;
@@ -124,9 +126,9 @@ public class driveToPosition extends Command {
                 0,
                 0
             );
-            generateTrajectory.initialize();
+            generateTrajectory.schedule();
         }
-        generateTrajectory.execute();
+//        if (generateTrajectory != null) generateTrajectory.execute();
     }
 
     @Override
@@ -136,6 +138,6 @@ public class driveToPosition extends Command {
 
     @Override
     public boolean isFinished() {
-       return generateTrajectory != null && generateTrajectory.isFinished();
+        return generateTrajectory != null && generateTrajectory.isFinished();
     }
 }

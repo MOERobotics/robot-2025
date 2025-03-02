@@ -43,6 +43,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public PIDController xController = new PIDController(5.0, 0.0, 0.0);
     public PIDController yController = new PIDController(5.0, 0.0, 0.0);
     public ProfiledPIDController thetaController = new ProfiledPIDController(5.0, 0.0, 0e-4,  new TrapezoidProfile.Constraints(0.5, 0.5));
+    private final Field2d field = new Field2d();
 
     public SysIdRoutine sysIdRoutinePivotFL = new SysIdRoutine(
             new SysIdRoutine.Config(
@@ -162,6 +163,8 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         getSensors().swerveModuleFR = swerveModuleFR.readSensors();
         getSensors().swerveModuleBR = swerveModuleBR.readSensors();
         getSensors().swerveModuleBL = swerveModuleBL.readSensors();
+
+        SmartDashboard.putData("OdomField",field);
     }
 
     @Override
@@ -370,6 +373,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
                 end,
                 config
         );
+        field.getObject("Traj").setTrajectory(trajectory);
         SmartDashboard.putNumber("Time", trajectory.getTotalTimeSeconds());
         SmartDashboard.putNumber("trajEndRotation", trajectory.sample(trajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees());
         SmartDashboard.putNumber("desiredEndRot", end.getRotation().getDegrees());
