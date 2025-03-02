@@ -18,57 +18,59 @@ import static frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight.*;
 
 public class ReefToSource {
 // START 1 AUTOS
-    public static Command S1_C2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start1 C", "C Coral Station", LEVEL2);
+    public static Command S1_C4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start1 C", "C Coral Station","Coral Station D", LEVEL4);
     }
-    public static Command S1_B2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start1 B", "B Coral Station 2", LEVEL2);
+    public static Command S1_B4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start1 B", "B Coral Station 2","Coral Station 2 A", LEVEL4);
     }
-    public static Command S1_A2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start1 A", "A Coral Station 2", LEVEL2);
+    public static Command S1_A4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start1 A", "A Coral Station 2","Coral Station 2 B", LEVEL4);
     }
     // START 2 AUTOS
-    public static Command S2_E2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start2 E", "E Coral Station", LEVEL2);
+    public static Command S2_E4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start2 E", "E Coral Station", "Coral Station F", LEVEL4);
     }
-    public static Command S2_F2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start2 F", "F Coral Station", LEVEL2);
+    public static Command S2_F4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start2 F", "F Coral Station","Coral Station E", LEVEL4);
     }
-    public static Command S2_C2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start2 C", "C Coral Station", LEVEL2);
+    public static Command S2_C4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start2 C", "C Coral Station","Coral Station D", LEVEL4);
     }
-    public static Command S2_D2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start2 D", "D Coral Station", LEVEL2);
+    public static Command S2_D4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start2 D", "D Coral Station","Coral Station C", LEVEL4);
     }
     // START 3 AUTOS
-    public static Command S3_G2_PRO(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start3 G", "G Processor", LEVEL2);
+    /*
+    public static Command S3_G4_PRO(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start3 G", "G Processor", LEVEL4);
     }
-    public static Command S3_H2_PRO(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start3 H", "H Processor", LEVEL2);
+    public static Command S3_H4_PRO(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start3 H", "H Processor", LEVEL4);
     }
+     */
     // START 4 AUTOS
-    public static Command S4_I2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start4 I", "I Coral Station", LEVEL2);
+    public static Command S4_I4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start4 I", "I Coral Station","Coral Station J", LEVEL4);
     }
-    public static Command S4_J2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start4 J", "J Coral Station", LEVEL2);
+    public static Command S4_J4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start4 J", "J Coral Station","Coral Station I", LEVEL4);
     }
-    public static Command S4_K2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start4 K", "K Coral Station", LEVEL2);
+    public static Command S4_K4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start4 K", "K Coral Station","Coral Station L", LEVEL4);
     }
-    public static Command S4_L2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start4 L", "L Coral Station", LEVEL2);
+    public static Command S4_L4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start4 L", "L Coral Station","Coral Station K", LEVEL4);
     }
 // START 5 AUTOS
-    public static Command S5_L2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start5 L", "L Coral Station", LEVEL2);
+    public static Command S5_L4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start5 L", "L Coral Station","Coral Station K", LEVEL4);
     }
-    public static Command S5_B2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start5 B", "B Coral Station 1", LEVEL2);
+    public static Command S5_B4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start5 B", "B Coral Station 1","Coral Station 1 A", LEVEL4);
     }
-    public static Command S5_A2_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start5 A", "A Coral Station 1", LEVEL2);
+    public static Command S5_A4_CS(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start5 A", "A Coral Station 1","Coral Station 1 B", LEVEL4);
     }
 
 
@@ -78,39 +80,48 @@ public class ReefToSource {
         RobotContainer robot,
         String path1,
         String path2,
+        String path3,
         ElevatorHeight scoring_level
     ) {
         PathPlannerPath plannerPath1 = PathPlannerPath.fromPathFile(path1);
         PathPlannerPath plannerPath2 = PathPlannerPath.fromPathFile(path2);
-        PathPlannerPath plannerPath3 = PathPlannerPath.fromPathFile("Coral Station To E");
+        PathPlannerPath plannerPath3 = PathPlannerPath.fromPathFile(path3);
 
         return Commands.sequence(
+            // reset pose
             Commands.runOnce(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingHolonomicPose().get())),
+            // Follow path 1 & raise elevator to level 2
             Commands.deadline(
                 AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
                 new ElevatorAutoCommand(robot.getElevator(), LEVEL2.measure, InchesPerSecond.of(9),true)
             ),
+            // Continue to raise elevator to desired level
             Commands.deadline(
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),false),
                 Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
-
             ),
+            // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to bean break system
             Commands.deadline(
-                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(2),
+                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(1),
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),true)
             ),
            // new ElevatorAutoCommand(robot.getElevator(),STOW.measure, InchesPerSecond.of(8),false),
+            // Follow path 2
             AutoBuilder.followPath(plannerPath2),
-            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0)).withTimeout(2),
+            // Intake new coral
+            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0)).withTimeout(1),
+            // Follow path 3 & raise elevator to level 2
             Commands.deadline(
                     AutoBuilder.followPath(plannerPath3).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
                     new ElevatorAutoCommand(robot.getElevator(), LEVEL2.measure, InchesPerSecond.of(9),true)
             ),
+            // Raise coral to desired level & stop
             Commands.deadline(
                     new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),false),
                     Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
 
             ),
+            // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to bean break system
             Commands.deadline(
                     new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(2),
                     new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),true)
