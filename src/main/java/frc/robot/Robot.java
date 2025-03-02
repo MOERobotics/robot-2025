@@ -7,17 +7,16 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import com.pathplanner.lib.util.PathPlannerLogging;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
+import frc.robot.autos.Autos;
+//import frc.robot.autos.ReefToSourceToReef;
 import frc.robot.commands.DriveToTag;
 import frc.robot.commands.driveToPosition;
 import frc.robot.container.*;
@@ -50,7 +49,7 @@ public class Robot extends LoggedRobot {
 
         scheduler = CommandScheduler.getInstance();
         Autos.setupAutos(robot);
-        this.autoCommand = ReefToSourceToReef.S2_E2_CS_C2(robot);
+//        this.autoCommand = ReefToSourceToReef.S2_E2_CS_C2(robot);
     }
 
 
@@ -113,19 +112,26 @@ public class Robot extends LoggedRobot {
         if(driverJoystick.getHID().getRawButtonPressed(1)){
             robot.getSwerveDrive().resetPose(new Pose2d());
         }
+
+        Command Drive = new driveToPosition(robot.getSwerveDrive());
+        driverJoystick.button(2).onTrue(Drive);
+        SmartDashboard.putData(Drive);
+
+
+
     }
 
     @Override
     public void testInit() {
         scheduler.cancelAll();
         robot.getSwerveDrive().setDefaultCommand(new SwerveModuleTestingCommand(robot.getSwerveDrive(), driverJoystick.getHID()));
-        Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive());
+        Command Drive = new driveToPosition(robot.getSwerveDrive());
         SmartDashboard.putData(Drive);
-
     }
 
     @Override
     public void testPeriodic() {
+
 
     }
 

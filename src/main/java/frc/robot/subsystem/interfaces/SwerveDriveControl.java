@@ -1,9 +1,14 @@
 package frc.robot.subsystem.interfaces;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.littletonrobotics.junction.AutoLog;
+
+import java.util.ArrayList;
 
 public interface SwerveDriveControl extends Subsystem {
     @AutoLog
@@ -18,7 +23,7 @@ public interface SwerveDriveControl extends Subsystem {
         public SwerveModuleInputsAutoLogged swerveModuleBR;
         public SwerveModuleInputsAutoLogged swerveModuleBL;
         public ChassisSpeeds robotRelativeSpeeds;
-
+        public Pose2d Pose2dFromLL = new Pose2d();
         public boolean canClimb;
     }
 
@@ -53,6 +58,17 @@ public interface SwerveDriveControl extends Subsystem {
     default boolean canClimb() {
         return this.getSensors().canClimb;
     }
+
+    default Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints) {
+        return generateTrajectory(start, end, internalPoints, 0,0);
+    }
+
+
+    default Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints, double startVelocityMetersPerSecond, double endVelocityMetersPerSecond) {
+        return Commands.none();
+    }
+
+    void driveSingleModule (int index, double xSpeed, double ySpeed, double rotation);
 
 
 }

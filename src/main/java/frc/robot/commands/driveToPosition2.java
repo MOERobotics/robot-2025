@@ -1,17 +1,10 @@
 package frc.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.LimelightHelpers;
-import frc.robot.subsystem.SwerveDrive;
 import edu.wpi.first.math.geometry.*;
-import frc.robot.subsystem.SwerveDriveControl;
+import frc.robot.subsystem.interfaces.SwerveDriveControl;
 
 import java.util.ArrayList;
-
-import static edu.wpi.first.units.Units.Degrees;
-import static edu.wpi.first.units.Units.Meters;
 
 public class driveToPosition2 extends Command {
     // Figures out current location and desired location
@@ -39,7 +32,7 @@ public class driveToPosition2 extends Command {
         chosenPose = null;
         generateTrajectory = null;
         generateTrajectory = swerveDrive.generateTrajectory(
-                swerveDrive.getFieldPose(),
+                swerveDrive.getPose(),
                 targetPose,
                 new ArrayList<Translation2d>(),
                 0,

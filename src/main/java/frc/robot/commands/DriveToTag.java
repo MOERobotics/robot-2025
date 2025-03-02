@@ -3,12 +3,16 @@
 package frc.robot.commands;
 
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.SwerveDrive;
 import edu.wpi.first.math.geometry.*;
 
 
 import java.util.ArrayList;
+
+import static edu.wpi.first.units.Units.Inches;
 
 
 public class DriveToTag extends Command {
@@ -17,69 +21,51 @@ public class DriveToTag extends Command {
 
 
     static ArrayList<Pose2d> poses = new ArrayList<>() {{
-        Rotation2d targetRotation = Rotation2d.fromDegrees(240);
-       // Pose2d targetPose1 = new Pose2d(50, 50, targetRotation);
-        Pose2d tag20 = new Pose2d(4.905, 4.745, targetRotation);
 
-        Pose2d targetPose6 = new Pose2d(1, 4, targetRotation);
-        Pose2d targetPose2 = new Pose2d(1, 7, targetRotation);
-        Pose2d targetPose3 = new Pose2d(1, 11, targetRotation);
-        Pose2d targetPose4 = new Pose2d(2, 1, targetRotation);
-        Pose2d targetPose5 = new Pose2d(6, 1, targetRotation);
-
-        add(tag20);
-        /*
-        add(targetPose2);
-        add(targetPose3);
-        add(targetPose4);
-        add(targetPose5);
-        add(targetPose6);
-        */
-
-        /*
         // ID 17
-        Pose2d targetPose1 = new Pose2d(160.3900, 130.1700, targetRotation);
+        Pose2d targetPose1 = new Pose2d(Units.inchesToMeters(160.3900), Units.inchesToMeters(130.1700), Rotation2d.fromDegrees(240));
         // ID 18
-        Pose2d targetPose2 = new Pose2d(144.0000, 158.5000, targetRotation);
+        Pose2d targetPose2 = new Pose2d(Units.inchesToMeters(144.0000), Units.inchesToMeters(158.5000), Rotation2d.fromDegrees(180));
         // ID 19
-        Pose2d targetPose3 = new Pose2d(160.3900, 186.8300, targetRotation);
+        Pose2d targetPose3 = new Pose2d(Units.inchesToMeters(160.3900), Units.inchesToMeters(186.8300), Rotation2d.fromDegrees(120));
         // ID 20
-        Pose2d targetPose4 = new Pose2d(193.1000, 186.8300, targetRotation);
+        Pose2d targetPose4 = new Pose2d(Units.inchesToMeters(193.1000), Units.inchesToMeters(186.8300), Rotation2d.fromDegrees(60));
         // ID 21
-        Pose2d targetPose5 = new Pose2d(209.4900, 158.5000, targetRotation);
+        Pose2d targetPose5 = new Pose2d(Units.inchesToMeters(209.4900), Units.inchesToMeters(158.5000), Rotation2d.fromDegrees(0));
         // ID 22
-        Pose2d targetPose6 = new Pose2d(193.1000, 130.1700, targetRotation);
+        Pose2d targetPose6 = new Pose2d(Units.inchesToMeters(193.1000), Units.inchesToMeters(130.1700), Rotation2d.fromDegrees(300));
         add(targetPose1);
         add(targetPose2);
         add(targetPose3);
         add(targetPose4);
         add(targetPose5);
         add(targetPose6);
-         */
 
-         /*
+
+
         // ID 11
-        Pose2d targetPose7 = new Pose2d(497.7700, 130.1700, targetRotation);
+        Pose2d targetPose7 = new Pose2d(Units.inchesToMeters(497.7700), Units.inchesToMeters(130.1700), Rotation2d.fromDegrees(240));
         // ID 10
-        Pose2d targetPose8 = new Pose2d(481.3900, 158.5000, targetRotation);
+        Pose2d targetPose8 = new Pose2d(Units.inchesToMeters(481.3900), Units.inchesToMeters(158.5000), Rotation2d.fromDegrees(180));
         // ID 9
-        Pose2d targetPose9 = new Pose2d(497.7700, 186.8300, targetRotation);
+        Pose2d targetPose9 = new Pose2d(Units.inchesToMeters(497.7700), Units.inchesToMeters(186.8300), Rotation2d.fromDegrees(120));
         // ID 8
-        Pose2d targetPose10 = new Pose2d(530.4900, 186.8300, targetRotation);
+        Pose2d targetPose10 = new Pose2d(Units.inchesToMeters(530.4900), Units.inchesToMeters(186.8300), Rotation2d.fromDegrees(60));
         // ID 7
-        Pose2d targetPose11 = new Pose2d(546.8700, 158.5000, targetRotation);
+        Pose2d targetPose11 = new Pose2d(Units.inchesToMeters(546.8700), Units.inchesToMeters(158.5000), Rotation2d.fromDegrees(0));
         // ID 6
-        Pose2d targetPose12 = new Pose2d(530.4900, 130.1700, targetRotation);
+        Pose2d targetPose12 = new Pose2d(Units.inchesToMeters(530.4900), Units.inchesToMeters(130.1700), Rotation2d.fromDegrees(300));
         add(targetPose7);
         add(targetPose8);
         add(targetPose9);
         add(targetPose10);
         add(targetPose11);
         add(targetPose12);
-         */
+
     }};
     public static Pose2d getClosestTarget(Pose2d current) {
-        return poses.get(0);
+        Pose2d nearestTag = current.nearest(poses);
+        return nearestTag.plus(new Transform2d(Inches.of(33.0/2),Inches.zero(),Rotation2d.k180deg));
     }
 
 

@@ -84,7 +84,7 @@ public class ReefToSource {
     ) {
         PathPlannerPath plannerPath1 = PathPlannerPath.fromPathFile(path1);
         PathPlannerPath plannerPath2 = PathPlannerPath.fromPathFile(path2);
-        PathPlannerPath plannerPath3 = PathPlannerPath.fromPathFile("Coral Station To E");
+//        PathPlannerPath plannerPath3 = PathPlannerPath.fromPathFile("Coral Station To E");
 
         return Commands.sequence(
             Commands.runOnce(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingHolonomicPose().get())),

@@ -2,35 +2,25 @@ package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
-import edu.wpi.first.math.MathSharedStore;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.estimator.PoseEstimator;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.LimelightHelpers;
+import frc.robot.utils.LimelightHelpers;
 import frc.robot.MOESubsystem;
 import frc.robot.subsystem.interfaces.SwerveDriveControl;
 import frc.robot.subsystem.interfaces.SwerveDriveInputsAutoLogged;
 import lombok.Getter;
-import org.ejml.equation.Variable;
 import org.littletonrobotics.junction.Logger;
 import java.util.ArrayList;
-
-import static edu.wpi.first.units.Units.*;
 
 public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> implements SwerveDriveControl {
     public SwerveModule swerveModuleFL;
@@ -43,7 +33,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public @Getter SwerveDriveOdometry odometry;
     public Pigeon2 pigeon;
     public Field2d PathPlannerField = new Field2d();
-    public SwerveDrivePoseEstimator swerveDrivePoseEstimator;
     public PIDController xController = new PIDController(5.0, 0.0, 0.0);
     public PIDController yController = new PIDController(5.0, 0.0, 0.0);
     public ProfiledPIDController thetaController = new ProfiledPIDController(5.0, 0.0, 0e-4,  new TrapezoidProfile.Constraints(0.5, 0.5));
@@ -86,20 +75,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         );
 
 
-        this.poseEstimator = new SwerveDrivePoseEstimator(
-                this.kinematics,
-                this.pigeon.getRotation2d(),
-                new SwerveModulePosition[]{
-                        this.swerveModuleFL.getModulePosition(),
-                        this.swerveModuleFR.getModulePosition(),
-                        this.swerveModuleBR.getModulePosition(),
-                        this.swerveModuleBL.getModulePosition(),
-                },
-                new Pose2d(),
-                VecBuilder.fill(0.05, 0.05, 0.05),
-                VecBuilder.fill(0.5, 0.5, 0.5)
-        );
-
 
         getSensors().moduleStates = new SwerveModuleState[4];
         getSensors().modulePositions = new SwerveModulePosition[4];
@@ -120,11 +95,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         PathPlannerLogging.setLogTargetPoseCallback(path -> {
             PathPlannerField.getObject("target").setPose(path);
         });
-    }
-
-    @Override
-    public Pose2d getFieldPose() {
-        return poseEstimator.getEstimatedPosition();
     }
 
 
@@ -165,22 +135,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
         var LimeLightPose = LimelightHelpers.getBotPose3dWithTime("limelight");
 
-        if (!LimeLightPose.pose().toPose2d().equals(Pose2d.kZero)){
-            this.poseEstimator.addVisionMeasurement(LimeLightPose.pose().toPose2d(), MathSharedStore.getTimestamp());
-        }
-
         sensors.Pose2dFromLL = LimeLightPose.pose().toPose2d();
-        sensors.NewPose2dFromLL = this.poseEstimator.getEstimatedPosition();
-        //sensors.NewPose2dFromLL = LimeLightPose.pose().toPose2d();
-
-
-
-    }
-   /*
-   // pose 2d, float seconds,
-   public void addVisionMeasurement(Pose2d visionRobotPoseMeters, double timestampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
-
-
     }
 
 
@@ -220,13 +175,17 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     }
     @Override
     public void resetPose(Pose2d newPose) {
-        SwerveDriveControl.super.resetPose(newPose);
-        this.poseEstimator.resetPose(newPose);
+        odometry.resetPose(newPose);
+    }
+
+    @Override
+    public Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints) {
+        return generateTrajectory(start, end, internalPoints, 0.0, 0.0);
     }
 
     @Override
     public Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints, double startVelocityMetersPerSecond, double endVelocityMetersPerSecond) {
-        TrajectoryConfig config = new TrajectoryConfig(0.1, 0.1);
+        TrajectoryConfig config = new TrajectoryConfig(2, 3);
         config.setEndVelocity(endVelocityMetersPerSecond);
         config.setStartVelocity(startVelocityMetersPerSecond);
 
@@ -236,13 +195,12 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
             end,
             config
         );
-        PathPlannerField.getObject("traj").setTrajectory(trajectory);
         SmartDashboard.putNumber("Time", trajectory.getTotalTimeSeconds());
         SmartDashboard.putNumber("trajEndRotation", trajectory.sample(trajectory.getTotalTimeSeconds()).poseMeters.getRotation().getDegrees());
         SmartDashboard.putNumber("desiredEndRot", end.getRotation().getDegrees());
         SwerveControllerCommand trajCommand = new SwerveControllerCommand(
                 trajectory,
-                this::getFieldPose,
+                this::getPose,
                 kinematics,
                 xController,
                 yController,
@@ -250,8 +208,6 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
                 this::setModuleStates,
                 this
         );
-//        field.getRobotObject().setTrajectory(trajectory);
-//        SmartDashboard.putData("trajectory",field);
         Logger.recordOutput("trajectory/start", start);
         Logger.recordOutput("trajectory/goal", end);
         Logger.recordOutput(("trajectory/traj"), trajectory);
@@ -262,7 +218,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
 
     public void setModuleStates(SwerveModuleState[] moduleStates){
-        SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, 0.2);
+        SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, 4);
         this.getSensors().driveDesiredStates = moduleStates;
         swerveModuleFL.setModuleState(moduleStates[0]);
         swerveModuleFR.setModuleState(moduleStates[1]);

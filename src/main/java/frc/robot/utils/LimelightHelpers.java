@@ -614,7 +614,7 @@ public class LimelightHelpers {
     static boolean profileJSON = false;
 
     static final String sanitizeName(String name) {
-        if (name == "" || name == null) {
+        if ("".equals(name) || name == null) {
             return "limelight";
         }
         return name;
@@ -636,6 +636,22 @@ public class LimelightHelpers {
                 new Translation3d(inData[0], inData[1], inData[2]),
                 new Rotation3d(Units.degreesToRadians(inData[3]), Units.degreesToRadians(inData[4]),
                         Units.degreesToRadians(inData[5])));
+    }
+    public static record pose3dWithTime(Pose3d pose, double latency_ms){
+
+    }
+
+    public static pose3dWithTime toPose3DWithTime(double[] inData){
+        if(inData.length < 6)
+        {
+            //System.err.println("Bad LL 3D Pose Data!");
+            return new pose3dWithTime(new Pose3d(),  0);
+        }
+
+        return new pose3dWithTime(new
+                Pose3d(new Translation3d(inData[0], inData[1], inData[2]),
+                new Rotation3d(Units.degreesToRadians(inData[3]), Units.degreesToRadians(inData[4]), Units.degreesToRadians(inData[5]))),
+                inData[6]);
     }
 
     /**
@@ -971,7 +987,7 @@ public class LimelightHelpers {
 
     /**
      * Gets the target area as a percentage of the image (0-100%).
-     * @param limelightName Name of the Limelight camera ("" for default) 
+     * @param limelightName Name of the Limelight camera ("" for default)
      * @return Target area percentage (0-100)
      */
     public static double getTA(String limelightName) {
@@ -981,7 +997,7 @@ public class LimelightHelpers {
     /**
      * T2D is an array that contains several targeting metrcis
      * @param limelightName Name of the Limelight camera
-     * @return Array containing  [targetValid, targetCount, targetLatency, captureLatency, tx, ty, txnc, tync, ta, tid, targetClassIndexDetector, 
+     * @return Array containing  [targetValid, targetCount, targetLatency, captureLatency, tx, ty, txnc, tync, ta, tid, targetClassIndexDetector,
      * targetClassIndexClassifier, targetLongSidePixels, targetShortSidePixels, targetHorizontalExtentPixels, targetVerticalExtentPixels, targetSkewDegrees]
      */
     public static double[] getT2DArray(String limelightName) {
@@ -1176,6 +1192,12 @@ public class LimelightHelpers {
     public static Pose3d getBotPose3d(String limelightName) {
         double[] poseArray = getLimelightNTDoubleArray(limelightName, "botpose");
         return toPose3D(poseArray);
+    }
+
+    public static pose3dWithTime getBotPose3dWithTime(String limelightName) {
+        double[] poseArray = getLimelightNTDoubleArray(limelightName, "botpose_wpiblue");
+
+        return toPose3DWithTime(poseArray);
     }
 
     /**
@@ -1437,7 +1459,7 @@ public class LimelightHelpers {
      * @param limelightName Name/identifier of the Limelight
      * @param yaw Robot yaw in degrees. 0 = robot facing red alliance wall in FRC
      * @param yawRate (Unnecessary) Angular velocity of robot yaw in degrees per second
-     * @param pitch (Unnecessary) Robot pitch in degrees 
+     * @param pitch (Unnecessary) Robot pitch in degrees
      * @param pitchRate (Unnecessary) Angular velocity of robot pitch in degrees per second
      * @param roll (Unnecessary) Robot roll in degrees
      * @param rollRate (Unnecessary) Angular velocity of robot roll in degrees per second
@@ -1483,7 +1505,7 @@ public class LimelightHelpers {
     }
 
     /**
-     * Sets the 3D point-of-interest offset for the current fiducial pipeline. 
+     * Sets the 3D point-of-interest offset for the current fiducial pipeline.
      * https://docs.limelightvision.io/docs/docs-limelight/pipeline-apriltag/apriltag-3d#point-of-interest-tracking
      *
      * @param limelightName Name/identifier of the Limelight
@@ -1598,7 +1620,7 @@ public class LimelightHelpers {
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            if (snapshotName != null && snapshotName != "") {
+            if (snapshotName != null && !"".equals(snapshotName)) {
                 connection.setRequestProperty("snapname", snapshotName);
             }
 
