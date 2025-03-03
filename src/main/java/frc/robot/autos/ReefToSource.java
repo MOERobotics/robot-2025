@@ -87,16 +87,20 @@ public class ReefToSource {
         PathPlannerPath plannerPath3 = PathPlannerPath.fromPathFile("Coral Station To E");
 
         return Commands.sequence(
+            // reset pose
             Commands.runOnce(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingHolonomicPose().get())),
+            // Follow path 1 & raise elevator to level 2
             Commands.deadline(
                 AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
                 new ElevatorAutoCommand(robot.getElevator(),  LEVEL2.measure, InchesPerSecond.of(6),true)
             ),
+            // Raise coral to desired level & stop
             Commands.deadline(
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),false),
                 Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
 
             ),
+            // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to bean break system
             Commands.deadline(
                 new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(1),
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),true)

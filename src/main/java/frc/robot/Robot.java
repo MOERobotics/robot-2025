@@ -48,7 +48,7 @@ public class Robot extends LoggedRobot {
 
         scheduler = CommandScheduler.getInstance();
         Autos.setupAutos(robot);
-        this.autoCommand = ReefToSource.S2_E2_CS(robot);
+        this.autoCommand = ReefToSource.S2_E4_CS(robot);
     }
 
 

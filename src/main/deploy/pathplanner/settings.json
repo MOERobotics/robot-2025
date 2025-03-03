@@ -3,20 +3,20 @@
   "robotLength": 0.88,
   "holonomicMode": true,
   "pathFolders": [
-    "Test Paths",
-    "Start5",
-    "Start4 ",
-    "Start3",
-    "Start2",
-    "Start1",
+    "Coral Station to Reef",
     "Reef to Coral Station",
-    "Coral Station To Reef"
+    "Start1",
+    "Start2",
+    "Start3",
+    "Start4 ",
+    "Start5",
+    "Test Paths"
   ],
   "autoFolders": [
     "TestAutos"
   ],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxVel": 2.0,
+  "defaultMaxAccel": 1.5,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
@@ -29,8 +29,8 @@
   "driveMotorType": "NEO",
   "driveCurrentLimit": 40.0,
   "wheelCOF": 1.2,
-  "flModuleX": 0.3556,
-  "flModuleY": 0.3556,
+  "flModuleX": 0.356,
+  "flModuleY": 0.356,
   "frModuleX": 0.356,
   "frModuleY": -0.356,
   "blModuleX": -0.356,
@@ -40,6 +40,6 @@
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
   "robotFeatures": [
-    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.3,\"y\":0.2},\"size\":{\"width\":0.25,\"length\":0.25},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.241,\"y\":0.2},\"size\":{\"width\":0.25,\"length\":0.25},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
   ]
 }
