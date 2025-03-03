@@ -17,7 +17,7 @@ public class ElevatorTeleopCommand extends Command {
     Joystick joystick;
     LinearVelocity verticalVelocity = InchesPerSecond.of(0);
     AngularVelocity angularVelocity;
-    private final PIDController pid = new PIDController(0.3, 0.1 ,0.05);
+    private final PIDController pid = new PIDController(0.4, 0.15 ,0.05);
     Distance targetHeight;
 
 

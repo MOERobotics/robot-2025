@@ -12,16 +12,16 @@
         "y": 6.11685450819672
       },
       "isLocked": false,
-      "linkedName": "Coral Station 1"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.1882500000000005,
-        "y": 3.9762499999999994
+        "x": 3.164754098360655,
+        "y": 3.9470799180327862
       },
       "prevControl": {
-        "x": 2.241700819672131,
-        "y": 4.498514344262294
+        "x": 2.2182049180327854,
+        "y": 4.469344262295081
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "Coral Station to Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -54.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }
