@@ -113,7 +113,7 @@ public class ReefToSourceToReef {
                         new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(1),
                         new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),true)
                 ),
-                //  start to move  to collect position
+                 //  start to move  to collect position
                 new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false).withTimeout(2),
                 // move to elevator to collect position while moving to source
                 Commands.parallel(
