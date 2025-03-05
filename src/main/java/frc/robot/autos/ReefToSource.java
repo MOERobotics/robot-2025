@@ -89,11 +89,10 @@ public class ReefToSource {
             // reset pose
             Commands.runOnce(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingHolonomicPose().get())),
             // Follow path 1 & raise elevator to level 2
-            Commands.parallel(
+            Commands.deadline(
                 AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
-                new ElevatorAutoCommand(robot.getElevator(),  LEVEL4.measure, InchesPerSecond.of(6),true)
+                new ElevatorAutoCommand(robot.getElevator(),  LEVEL2.measure, InchesPerSecond.of(6),true)
             ),
-            Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
             // Raise coral to desired level & stop
             Commands.deadline(
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),false),
@@ -111,7 +110,7 @@ public class ReefToSource {
                        new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false),
                        AutoBuilder.followPath(plannerPath2)
                ),
-                Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
+                Commands.runOnce(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
 
 
         );
