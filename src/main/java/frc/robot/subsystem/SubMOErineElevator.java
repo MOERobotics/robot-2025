@@ -85,7 +85,10 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public void moveVertically(LinearVelocity speed) {
-        if((canGoUP()&&speed.gt(FeetPerSecond.zero()))||(canGoDown()&&speed.lt(FeetPerSecond.zero()))){
+        if (
+            ( canGoUP()   && speed.gt(FeetPerSecond.zero()) ) ||
+            ( canGoDown() && speed.lt(FeetPerSecond.zero()) )
+        ) {
             elevatorExtensionMotor.set(speed.in(FeetPerSecond));
         }else{
             elevatorExtensionMotor.set(0);
@@ -94,7 +97,14 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public void moveHorizontally(AngularVelocity speed) {
-        elevatorPivotMotor.set(speed.in(DegreesPerSecond));
+        if (
+            ( canGoRight() && speed.gt(DegreesPerSecond.zero()) ) ||
+            ( canGoLeft()  && speed.lt(DegreesPerSecond.zero()) )
+        ) {
+            elevatorPivotMotor.set(speed.in(DegreesPerSecond));
+        } else {
+            elevatorPivotMotor.set(0);
+        }
     }
 
     @Override

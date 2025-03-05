@@ -62,11 +62,14 @@ public class ElevatorTeleopCommand extends Command {
             targetHeight = elevator.getHeight();
         }
         verticalVelocity = FeetPerSecond.of(0.7).times(pidOutput);
-        angularVelocity = DegreesPerSecond.of(0.2).times(
-                MathUtil.applyDeadband(joystick.getRawAxis(0), 0.1)
-        );
         elevator.moveVertically(verticalVelocity);
+
+        angularVelocity = DegreesPerSecond.of(0.2).times(
+            MathUtil.applyDeadband(joystick.getRawAxis(0), 0.1)
+        );
         elevator.moveHorizontally(angularVelocity);
+
+
         Logger.recordOutput("verticalspeed", verticalVelocity.in(InchesPerSecond));
         Logger.recordOutput("targetheight", targetHeight.in(Inches));
         Logger.recordOutput("pidoutput", pidOutput);
