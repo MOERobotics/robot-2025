@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.88,
-  "robotLength": 0.88,
+  "robotWidth": 0.8382,
+  "robotLength": 0.8382,
   "holonomicMode": true,
   "pathFolders": [
     "Coral Station to Reef",
@@ -20,26 +20,26 @@
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
-  "robotMass": 45.3592,
-  "robotMOI": 3.824,
+  "robotMass": 50.9837824,
+  "robotMOI": 5.967,
   "robotTrackwidth": 0.546,
   "driveWheelRadius": 0.051,
   "driveGearing": 6.75,
-  "maxDriveSpeed": 4.60248,
+  "maxDriveSpeed": 4.0,
   "driveMotorType": "NEO",
   "driveCurrentLimit": 40.0,
   "wheelCOF": 1.2,
-  "flModuleX": 0.356,
-  "flModuleY": 0.356,
-  "frModuleX": 0.356,
-  "frModuleY": -0.356,
-  "blModuleX": -0.356,
-  "blModuleY": 0.356,
-  "brModuleX": -0.356,
-  "brModuleY": -0.356,
+  "flModuleX": 0.3000375,
+  "flModuleY": 0.3000375,
+  "frModuleX": 0.3000375,
+  "frModuleY": -0.3000375,
+  "blModuleX": -0.3000375,
+  "blModuleY": 0.3000375,
+  "brModuleX": -0.3000375,
+  "brModuleY": -0.3000375,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
   "robotFeatures": [
-    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.241,\"y\":0.2},\"size\":{\"width\":0.25,\"length\":0.25},\"borderRadius\":0.05,\"strokeWidth\":0.02,\"filled\":false}}"
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.2032,\"y\":0.241},\"size\":{\"width\":0.117,\"length\":0.3302},\"borderRadius\":0.005,\"strokeWidth\":0.015,\"filled\":false}}"
   ]
 }

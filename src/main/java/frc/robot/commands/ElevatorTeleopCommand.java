@@ -51,7 +51,7 @@ public class ElevatorTeleopCommand extends Command {
             targetHeight = LEVEL4.measure;
         }
         if(joystick.getRawButton(8)){
-            targetHeight = STOW.measure;
+            targetHeight = COLLECT.measure;
         }
         Distance error = elevator.getHeight().minus(targetHeight);
         Logger.recordOutput("PidError",error);

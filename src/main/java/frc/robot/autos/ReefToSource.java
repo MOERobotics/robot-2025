@@ -43,10 +43,10 @@ public class ReefToSource {
         return buildReefToSourceCommand(robot, "Start2 D", "D Coral Station", LEVEL4);
     }
     // START 3 AUTOS
-    public static Command S3_G2_PRO(RobotContainer robot) {
+    public static Command S3_G4_PRO(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start3 G", "G Processor", LEVEL4);
     }
-    public static Command S3_H2_PRO(RobotContainer robot) {
+    public static Command S3_H4_PRO(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start3 H", "H Processor", LEVEL4);
     }
     // START 4 AUTOS
@@ -89,11 +89,10 @@ public class ReefToSource {
             // reset pose
             Commands.runOnce(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingHolonomicPose().get())),
             // Follow path 1 & raise elevator to level 2
-            Commands.parallel(
+            Commands.deadline(
                 AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
                 new ElevatorAutoCommand(robot.getElevator(),  LEVEL4.measure, InchesPerSecond.of(6),true)
             ),
-            Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
             // Raise coral to desired level & stop
             Commands.deadline(
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),false),
