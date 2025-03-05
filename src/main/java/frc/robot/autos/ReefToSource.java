@@ -43,10 +43,10 @@ public class ReefToSource {
         return buildReefToSourceCommand(robot, "Start2 D", "D Coral Station", LEVEL4);
     }
     // START 3 AUTOS
-    public static Command S3_G2_PRO(RobotContainer robot) {
+    public static Command S3_G4_PRO(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start3 G", "G Processor", LEVEL4);
     }
-    public static Command S3_H2_PRO(RobotContainer robot) {
+    public static Command S3_H4_PRO(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start3 H", "H Processor", LEVEL4);
     }
     // START 4 AUTOS

@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -23,8 +26,11 @@ import frc.robot.container.*;
 import frc.robot.commands.*;
 import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.simulations.*;
+import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.LoggedRobot;
 import frc.robot.commands.junk.SwerveModuleTestingCommand;
+
+import java.io.IOException;
 
 
 public class Robot extends LoggedRobot {
@@ -120,7 +126,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testPeriodic() {
-
+        scheduler.run();
     }
 
     @Override

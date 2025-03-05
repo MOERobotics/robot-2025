@@ -57,7 +57,7 @@ public class RobotElevatorSim {//TODO: Fix constants
         elevatorHeightSystem.update(0.02);
         elevatorPivotSystem.update(0.02);
 
-        elevatorLimitSim.setPressed(elevatorHeightSystem.getPositionMeters() > ElevatorControl.ElevatorHeight.STOW.measure.in(Meters)-0.09);
+        elevatorLimitSim.setPressed(elevatorHeightSystem.getPositionMeters() > ElevatorControl.ElevatorHeight.STOW.measure.in(Meters)-0.08);
 
         elevatorHeightSim.iterate(getHeightMotorVelocity().in(RPM), 12, 0.02);
         elevatorPivotSim.iterate(elevatorPivotSystem.getAngularVelocityRPM() * pivotGearing, 12, 0.02);

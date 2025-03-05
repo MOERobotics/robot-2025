@@ -76,15 +76,15 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         getSensors().swerveModuleBL = swerveModuleBL.getSensors();
 
 
-        SmartDashboard.putData(PathPlannerField);
+        SmartDashboard.putData("PPField",PathPlannerField);
         PathPlannerLogging.setLogActivePathCallback(path -> {
             PathPlannerField.getObject("traj").setPoses(path);
         });
-        PathPlannerLogging.setLogCurrentPoseCallback(path -> {
-            PathPlannerField.getRobotObject().setPose(path);
+        PathPlannerLogging.setLogCurrentPoseCallback(pose -> {
+            PathPlannerField.getRobotObject().setPose(pose);
         });
-        PathPlannerLogging.setLogTargetPoseCallback(path -> {
-            PathPlannerField.getObject("target").setPose(path);
+        PathPlannerLogging.setLogTargetPoseCallback(target -> {
+            PathPlannerField.getObject("target").setPose(target);
         });
     }
 
