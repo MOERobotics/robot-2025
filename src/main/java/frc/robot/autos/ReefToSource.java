@@ -91,7 +91,7 @@ public class ReefToSource {
             // Follow path 1 & raise elevator to level 2
             Commands.deadline(
                 AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
-                new ElevatorAutoCommand(robot.getElevator(),  LEVEL4.measure, InchesPerSecond.of(6),true)
+                new ElevatorAutoCommand(robot.getElevator(),  LEVEL2.measure, InchesPerSecond.of(6),true)
             ),
             // Raise coral to desired level & stop
             Commands.deadline(

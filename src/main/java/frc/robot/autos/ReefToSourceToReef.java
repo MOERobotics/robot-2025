@@ -58,7 +58,7 @@ public class ReefToSourceToReef {
      */
     // START 4 AUTOS
     public static Command S4_I4_CS_J(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start4 I", "I Coral Station","Coral Station J", LEVEL4);
+        return buildReefToSourceToReefCommand(robot, "Start4 I", "I Coral Station","Coral Station J", LEVEL1);
     }
     public static Command S4_J4_CS_I(RobotContainer robot) {
         return buildReefToSourceToReefCommand(robot, "Start4 J", "J Coral Station","Coral Station I", LEVEL4);
