@@ -104,14 +104,14 @@ public class ReefToSource {
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),true)
             ),
 
-            new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false).withTimeout(1.5),
+            new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false).withTimeout(1.0),
 
             Commands.deadline(
-                new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),true),
-                AutoBuilder.followPath(plannerPath2)
+                AutoBuilder.followPath(plannerPath2),
+                new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),true)
             ),
             Commands.runOnce(()-> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
-            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0)).withTimeout(4)
+            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0)).withTimeout(3)
 
         );
     }

@@ -116,20 +116,20 @@ public class ReefToSourceToReef {
                  //  start to move  to collect position
                 new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false).withTimeout(2),
                 // move to elevator to collect position while moving to source
-                Commands.parallel(
-                        new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false),
-                        AutoBuilder.followPath(plannerPath2)
+                Commands.deadline(
+                    AutoBuilder.followPath(plannerPath2),
+                    new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false)
                 ),
-                Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
+                Commands.runOnce(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
                 // run coral head to collect coral
-                new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0)).withTimeout(1),
+                new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0)).withTimeout(3),
 
                 // move back to reef and move elevator to L2
                 Commands.deadline(
                         AutoBuilder.followPath(plannerPath3).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
                         new ElevatorAutoCommand(robot.getElevator(), LEVEL2.measure, InchesPerSecond.of(9),true)
                 ),
-                Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
+                Commands.runOnce(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
                 // hold in L2
                 Commands.deadline(
                         new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),false),
