@@ -78,8 +78,8 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         sensors.extensionMotorPosition = Rotations.of(elevatorExtensionMotor.getEncoder().getPosition());
         Logger.recordOutput("ElevatorAngleDegrees", sensors.angle.in(Degrees));
 
-        SmartDashboard.putBoolean("ElevatorCanGoUp", canGoUP());
-        SmartDashboard.putBoolean("ElevatorCanGoDown", canGoDown());
+        SmartDashboard.putBoolean("ElevatorCanGoUp",canGoUP());
+        SmartDashboard.putBoolean("ElevatorCanGoDown",canGoDown());
 
         SmartDashboard.putNumber("Elevator Extension", sensors.extension.in(Centimeters));
         SmartDashboard.putNumber("Elevator Angle", sensors.angle.in(Degrees));
@@ -87,7 +87,10 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public void moveVertically(LinearVelocity speed) {
-        if ((canGoUP() && speed.gt(FeetPerSecond.zero())) || (canGoDown() && speed.lt(FeetPerSecond.zero()))) {
+        if (
+            ( canGoUP()   && speed.gt(FeetPerSecond.zero()) ) ||
+            ( canGoDown() && speed.lt(FeetPerSecond.zero()) )
+        ) {
             elevatorExtensionMotor.set(speed.in(FeetPerSecond));
         } else {
             elevatorExtensionMotor.set(0);
@@ -96,7 +99,14 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public void moveHorizontally(AngularVelocity speed) {
-        elevatorPivotMotor.set(speed.in(DegreesPerSecond));
+        if (
+            ( canGoRight() && speed.gt(DegreesPerSecond.zero()) ) ||
+            ( canGoLeft()  && speed.lt(DegreesPerSecond.zero()) )
+        ) {
+            elevatorPivotMotor.set(speed.in(DegreesPerSecond));
+        } else {
+            elevatorPivotMotor.set(0);
+        }
     }
 
     @Override
