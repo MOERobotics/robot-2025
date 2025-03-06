@@ -121,7 +121,15 @@ public class Robot extends LoggedRobot {
     public void testInit() {
         scheduler.cancelAll();
         robot.getSwerveDrive().setDefaultCommand(new SwerveModuleTestingCommand(robot.getSwerveDrive(), driverJoystick.getHID()));
-
+        Command testCommand;
+        try {
+            testCommand = AutoBuilder.followPath(PathPlannerPath.fromPathFile("Test Forward 6 m"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        driverJoystick.button(2).whileTrue(testCommand);
     }
 
     @Override

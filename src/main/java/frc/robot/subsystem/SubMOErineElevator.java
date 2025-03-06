@@ -5,13 +5,14 @@ import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.units.measure.*;
-import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.MOESubsystem;
 import frc.robot.subsystem.interfaces.ElevatorControl;
@@ -52,8 +53,9 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         elevatorPivotMotor.configure(pivotMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         elevatorExtensionMotor.configure(extensionMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
-        addressableLED = new AddressableLED(1);// TODO CHANGE PORT
-        addressableLEDBuffer = new AddressableLEDBuffer(2);
+        addressableLED = new AddressableLED(7);// TODO CHANGE PORT
+        addressableLED.setBitTiming(320, 700, 700, 320);
+        addressableLEDBuffer = new AddressableLEDBuffer(300);
         addressableLED.setLength(addressableLEDBuffer.getLength());
         addressableLED.setData(addressableLEDBuffer);
         addressableLED.start();
@@ -68,7 +70,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         sensors.extensionSpeed = InchesPerSecond.of(elevatorExtensionMotor.getEncoder().getVelocity());
         sensors.elevatorVoltage = Volts.of(extensionSensor.getVoltage());
         sensors.elevatorVoltageFromADC = String.format("%04x", extensionSensor.getValue());
-        sensors.extension = Centimeters.of((getSensors().elevatorVoltage.in(Volts)*36.46529)+27.36326);
+        sensors.extension = Centimeters.of((getSensors().elevatorVoltage.in(Volts) * 36.46529) + 27.36326);
         sensors.canGoDown = elevatorExtensionMotor.getReverseLimitSwitch().isPressed();
         sensors.canGoUp = sensors.elevatorVoltage.lt(Volts.of(4.248));
         sensors.canGoRight = sensors.angle.gt(Degrees.of(9.55));
@@ -76,18 +78,18 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         sensors.extensionMotorPosition = Rotations.of(elevatorExtensionMotor.getEncoder().getPosition());
         Logger.recordOutput("ElevatorAngleDegrees", sensors.angle.in(Degrees));
 
-        SmartDashboard.putBoolean("ElevatorCanGoUp",canGoUP());
-        SmartDashboard.putBoolean("ElevatorCanGoDown",canGoDown());
+        SmartDashboard.putBoolean("ElevatorCanGoUp", canGoUP());
+        SmartDashboard.putBoolean("ElevatorCanGoDown", canGoDown());
 
         SmartDashboard.putNumber("Elevator Extension", sensors.extension.in(Centimeters));
-       SmartDashboard.putNumber("Elevator Angle", sensors.angle.in(Degrees));
+        SmartDashboard.putNumber("Elevator Angle", sensors.angle.in(Degrees));
     }
 
     @Override
     public void moveVertically(LinearVelocity speed) {
-        if((canGoUP()&&speed.gt(FeetPerSecond.zero()))||(canGoDown()&&speed.lt(FeetPerSecond.zero()))){
+        if ((canGoUP() && speed.gt(FeetPerSecond.zero())) || (canGoDown() && speed.lt(FeetPerSecond.zero()))) {
             elevatorExtensionMotor.set(speed.in(FeetPerSecond));
-        }else{
+        } else {
             elevatorExtensionMotor.set(0);
         }
     }
@@ -107,7 +109,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         LEDPattern LEDPatternColor = LEDPattern.solid(color);
         LEDPatternColor.applyTo(addressableLEDBuffer);
         addressableLED.setData(addressableLEDBuffer);
-        Logger.recordOutput("LED Color",color.toHexString());
+        Logger.recordOutput("LED Color", color.toHexString());
 
     }
 

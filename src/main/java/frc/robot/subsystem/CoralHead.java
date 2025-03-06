@@ -9,6 +9,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.MOESubsystem;
 import frc.robot.subsystem.interfaces.CoralHeadControl;
 import frc.robot.subsystem.interfaces.CoralHeadInputsAutoLogged;
+import org.littletonrobotics.junction.Logger;
 
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
@@ -17,7 +18,7 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
 
     public SparkMax leftMotor;
     public SparkMax rightMotor;
-    public TimeOfFlight tofCenter;
+    public TimeOfFlight tofCenter, tofLeft, tofRight;
 
 
     public CoralHead(SparkMax leftMotor, SparkMax rightMotor) {
@@ -34,7 +35,9 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         leftMotor.configure(leftMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         rightMotor.configure(rightMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         this.tofCenter = new TimeOfFlight(41);
-        this.tofCenter.setRangeOfInterest(8,8,10,10);
+        this.tofLeft = new TimeOfFlight(40);
+        this.tofRight = new TimeOfFlight(42);
+        this.tofCenter.setRangeOfInterest(8, 8, 10, 10);
         getSensors().hasCoral = false;
         getSensors().inFrontReef = false;
         getSensors().velocityRight = RPM.zero();
@@ -45,7 +48,7 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
     @Override
     public void readSensors(CoralHeadInputsAutoLogged sensors) {
         sensors.hasCoral = leftMotor.getForwardLimitSwitch().isPressed();
-        sensors.inFrontReef = tofCenter.isRangeValid()&&tofCenter.getRange()<709.6;
+        sensors.inFrontReef = tofCenter.isRangeValid() && tofCenter.getRange() < 709.6;
         sensors.reefDistance = tofCenter.getRange();
         sensors.leftPower = leftMotor.get();
         sensors.rightPower = rightMotor.get();
@@ -53,6 +56,10 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         sensors.velocityRight = RPM.of(rightMotor.getEncoder().getVelocity());
         sensors.leftAppliedVolts = Volts.of(leftMotor.getAppliedOutput() * leftMotor.getBusVoltage());
         sensors.rightAppliedVolts = Volts.of(rightMotor.getAppliedOutput() * rightMotor.getBusVoltage());
+        Logger.recordOutput("LeftLidarRangeValid", tofLeft.isRangeValid());
+        Logger.recordOutput("RightLidarRangeValid", tofRight.isRangeValid());
+        Logger.recordOutput("LeftLidarRange", tofLeft.getRange());
+        Logger.recordOutput("RightLidarRange", tofRight.getRange());
     }
 
 

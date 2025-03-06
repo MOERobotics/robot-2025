@@ -16,7 +16,7 @@ import static edu.wpi.first.units.Units.*;
 
 public class SubMOErine extends RobotContainer {
     public SubMOErine() {
-        double pivotkP = 0.20;
+        double pivotkP = 0.50;
         double pivotkI = 0.001;
         double pivotkD = 0.003;
         double pivotkIMax = 1;
