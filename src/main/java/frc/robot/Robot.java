@@ -34,7 +34,7 @@ public class Robot extends LoggedRobot {
     CommandJoystick functionJoystick = new CommandJoystick(1);
     CommandScheduler scheduler;
 
-    RobotContainer robot = new SubMOErine();
+    RobotContainer robot = new FortissiMOEContainer();
     Command autoCommand = Commands.none();
 
 
@@ -104,6 +104,7 @@ public class Robot extends LoggedRobot {
         );
         Command Drive = new driveToPosition((SwerveDrive) robot.getSwerveDrive());
         SmartDashboard.putData(Drive);
+        driverJoystick.button(2).onTrue(Drive);
     }
 
     @Override
@@ -112,10 +113,6 @@ public class Robot extends LoggedRobot {
         if(driverJoystick.getHID().getRawButtonPressed(1)){
             robot.getSwerveDrive().resetPose(new Pose2d());
         }
-
-        Command Drive = new driveToPosition(robot.getSwerveDrive());
-        driverJoystick.button(2).onTrue(Drive);
-        SmartDashboard.putData(Drive);
 
 
 

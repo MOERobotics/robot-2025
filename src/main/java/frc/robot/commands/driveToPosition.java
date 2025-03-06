@@ -2,10 +2,12 @@ package frc.robot.commands;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.geometry.*;
+import frc.robot.subsystem.SwerveDrive;
 import frc.robot.subsystem.interfaces.SwerveDriveControl;
 import org.littletonrobotics.junction.Logger;
 
@@ -53,7 +55,7 @@ public class driveToPosition extends Command {
         Logger.recordOutput("driveToPosition/last_reading", last_reading);
         Logger.recordOutput("driveToPosition/tag_count", tag_count);
 
-        if (chosenPose == null) {
+        if (chosenPose == null||chosenPose == Pose2d.kZero) {
             long heartbeat = (long) limelightAPI.getEntry("hb").getDouble(0);
             if (heartbeat == 0) {
                 chosenPose = swerveDrive.getPose();
@@ -110,10 +112,12 @@ public class driveToPosition extends Command {
                             if (distance < bestDistance) {
                                 bestDistance = distance;
                                 chosenPose = averagePose;
+
                             }
                         }
                     }
                 }
+                swerveDrive.resetPose(chosenPose);
             }
         }
 

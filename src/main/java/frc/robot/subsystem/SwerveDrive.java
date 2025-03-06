@@ -33,8 +33,8 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public @Getter SwerveDriveOdometry odometry;
     public Pigeon2 pigeon;
     public Field2d PathPlannerField = new Field2d();
-    public PIDController xController = new PIDController(5.0, 0.0, 0.0);
-    public PIDController yController = new PIDController(5.0, 0.0, 0.0);
+    public PIDController xController = new PIDController(3.0, 0.0, 0.0);
+    public PIDController yController = new PIDController(3.0, 0.0, 0.0);
     public ProfiledPIDController thetaController = new ProfiledPIDController(5.0, 0.0, 0e-4,  new TrapezoidProfile.Constraints(0.5, 0.5));
 
 
@@ -185,7 +185,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
     @Override
     public Command generateTrajectory(Pose2d start, Pose2d end, ArrayList<Translation2d> internalPoints, double startVelocityMetersPerSecond, double endVelocityMetersPerSecond) {
-        TrajectoryConfig config = new TrajectoryConfig(2, 3);
+        TrajectoryConfig config = new TrajectoryConfig(1, 1);
         config.setEndVelocity(endVelocityMetersPerSecond);
         config.setStartVelocity(startVelocityMetersPerSecond);
 

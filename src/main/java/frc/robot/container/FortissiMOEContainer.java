@@ -4,6 +4,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.spark.SparkLowLevel;
 import com.revrobotics.spark.SparkMax;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import frc.robot.subsystem.fakes.FakeAlgaeCollector;
 import frc.robot.subsystem.fakes.FakeClimber;
 import frc.robot.subsystem.fakes.FakeCoralHead;
@@ -98,6 +99,7 @@ public class FortissiMOEContainer extends RobotContainer {
         this.setClimberMid(new FakeClimber());
         this.setClimberRear(new FakeClimber());
         this.setCoralHead(new FakeCoralHead());
+        this.setPdh(new PowerDistribution(1, PowerDistribution.ModuleType.kRev));
 
     }
 

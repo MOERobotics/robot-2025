@@ -34,12 +34,12 @@ public class DriveToTag extends Command {
         Pose2d targetPose5 = new Pose2d(Units.inchesToMeters(209.4900), Units.inchesToMeters(158.5000), Rotation2d.fromDegrees(0));
         // ID 22
         Pose2d targetPose6 = new Pose2d(Units.inchesToMeters(193.1000), Units.inchesToMeters(130.1700), Rotation2d.fromDegrees(300));
-        add(targetPose1);
-        add(targetPose2);
-        add(targetPose3);
+        //add(targetPose1);
+        //add(targetPose2);
+        //add(targetPose3);
         add(targetPose4);
-        add(targetPose5);
-        add(targetPose6);
+        //add(targetPose5);
+        //add(targetPose6);
 
 
 
@@ -55,12 +55,12 @@ public class DriveToTag extends Command {
         Pose2d targetPose11 = new Pose2d(Units.inchesToMeters(546.8700), Units.inchesToMeters(158.5000), Rotation2d.fromDegrees(0));
         // ID 6
         Pose2d targetPose12 = new Pose2d(Units.inchesToMeters(530.4900), Units.inchesToMeters(130.1700), Rotation2d.fromDegrees(300));
-        add(targetPose7);
-        add(targetPose8);
-        add(targetPose9);
-        add(targetPose10);
-        add(targetPose11);
-        add(targetPose12);
+        //add(targetPose7);
+        //add(targetPose8);
+        //add(targetPose9);
+        //add(targetPose10);
+        //add(targetPose11);
+        //add(targetPose12);
 
     }};
     public static Pose2d getClosestTarget(Pose2d current) {

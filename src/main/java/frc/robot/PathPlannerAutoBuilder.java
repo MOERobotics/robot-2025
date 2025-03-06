@@ -20,7 +20,7 @@ public class PathPlannerAutoBuilder {
         }
 
         AutoBuilder.configure(
-                drive::getFieldPose,
+                drive::getPose,
                 drive::resetPose,
                 drive::getRobotRelativeSpeeds,
                 (speeds, feedforwards) -> drive.drive(speeds),
