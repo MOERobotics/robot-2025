@@ -5,6 +5,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.subsystem.SwerveDrive;
@@ -61,6 +62,7 @@ public class driveToPosition extends Command {
                 chosenPose = swerveDrive.getPose();
                 return;
             } else if (tag_count < 5) {
+
                 if (heartbeat != last_reading) {
                     double[] limelightReading = limelightAPI.getEntry("botpose_wpiblue").getDoubleArray(fakeLimelightData);
                     Pose2d limelightPose = new Pose2d(
@@ -71,6 +73,7 @@ public class driveToPosition extends Command {
                     found_poses[tag_count] = limelightPose;
                     tag_count += 1;
                     last_reading = heartbeat;
+                    //swerveDrive.resetPose(limelightPose);
                 } else {
                     // TODO: Panic if we still don't have an answer after like 3sec
                     System.out.println("Heartbeat unchanged, waiting");

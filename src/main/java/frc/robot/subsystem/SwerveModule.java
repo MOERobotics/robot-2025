@@ -125,7 +125,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     @Override
     public SwerveModuleState getModuleState() {
         return new SwerveModuleState(
-                InchesPerSecond.of(driveMotor.getEncoder().getVelocity() * (4*Math.PI/6.75) / 60).in(MetersPerSecond),
+                InchesPerSecond.of(driveMotor.getEncoder().getVelocity() * (3.75*Math.PI/6.75) / 60).in(MetersPerSecond),
                 new Rotation2d(getHeading())
         );
     }
@@ -133,7 +133,7 @@ public class SwerveModule extends MOESubsystem<SwerveModuleInputsAutoLogged> imp
     @Override
     public SwerveModulePosition getModulePosition() {
         SwerveModulePosition position = new SwerveModulePosition(
-            Inches.of(driveMotor.getEncoder().getPosition() * (4 * Math.PI / 6.75)).in(Meters),
+            Inches.of(driveMotor.getEncoder().getPosition() * (3.75 * Math.PI / 6.75)).in(Meters),
             new Rotation2d(getHeading())
         );
         return position;

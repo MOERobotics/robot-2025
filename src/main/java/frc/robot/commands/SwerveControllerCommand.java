@@ -23,7 +23,7 @@ public class SwerveControllerCommand extends Command {
     public void execute(){
         double driveX =  -joystick.getRawAxis(1);
         double driveY = -joystick.getRawAxis(0);
-        double driveTheta = -joystick.getRawAxis(2);
+        double driveTheta = -joystick.getRawAxis(4);
         driveTheta = MathUtil.applyDeadband(driveTheta, 0.2, 1);
         driveX = MathUtil.applyDeadband(driveX, 0.1, 1);
         driveY = MathUtil.applyDeadband(driveY, 0.1, 1);

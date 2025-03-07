@@ -6,6 +6,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystem.SwerveDrive;
 import edu.wpi.first.math.geometry.*;
 
@@ -24,6 +25,8 @@ public class DriveToTag extends Command {
 
         // ID 17
         Pose2d targetPose1 = new Pose2d(Units.inchesToMeters(160.3900), Units.inchesToMeters(130.1700), Rotation2d.fromDegrees(240));
+        Pose2d targetPose1Transformed = new Pose2d(Units.inchesToMeters(160.3900), Units.inchesToMeters(130.1700), Rotation2d.fromDegrees(240));
+
         // ID 18
         Pose2d targetPose2 = new Pose2d(Units.inchesToMeters(144.0000), Units.inchesToMeters(158.5000), Rotation2d.fromDegrees(180));
         // ID 19
@@ -34,12 +37,13 @@ public class DriveToTag extends Command {
         Pose2d targetPose5 = new Pose2d(Units.inchesToMeters(209.4900), Units.inchesToMeters(158.5000), Rotation2d.fromDegrees(0));
         // ID 22
         Pose2d targetPose6 = new Pose2d(Units.inchesToMeters(193.1000), Units.inchesToMeters(130.1700), Rotation2d.fromDegrees(300));
-        //add(targetPose1);
+        add(targetPose1Transformed);
         //add(targetPose2);
         //add(targetPose3);
-        add(targetPose4);
+        //add(targetPose4);
         //add(targetPose5);
         //add(targetPose6);
+       //add(LimelightHelpers.getTargetPose3d_RobotSpace("").toPose2d());
 
 
 
@@ -65,7 +69,8 @@ public class DriveToTag extends Command {
     }};
     public static Pose2d getClosestTarget(Pose2d current) {
         Pose2d nearestTag = current.nearest(poses);
-        return nearestTag.plus(new Transform2d(Inches.of(33.0/2),Inches.zero(),Rotation2d.k180deg));
+        return nearestTag.plus(new Transform2d(Inches.of(15),Inches.of(0),Rotation2d.k180deg));
+        //return nearestTag;
     }
 
 
