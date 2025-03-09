@@ -10,6 +10,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import com.pathplanner.lib.util.PathPlannerLogging;
@@ -116,7 +117,7 @@ public class Robot extends LoggedRobot {
     public void teleopPeriodic() {
         scheduler.run();
         if(driverJoystick.getHID().getRawButtonPressed(1)){
-            robot.getSwerveDrive().resetPose(new Pose2d());
+            robot.getSwerveDrive().resetPose(new Pose2d(robot.getSwerveDrive().getPose().getTranslation(), DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Blue ? Rotation2d.kZero:Rotation2d.kPi));
         }
     }
 
