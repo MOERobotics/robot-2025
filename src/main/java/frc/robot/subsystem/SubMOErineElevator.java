@@ -30,6 +30,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     public AddressableLED addressableLED;
     public AddressableLEDBuffer addressableLEDBuffer;
+    private Color color = Color.kGreen;
 
 
     public SubMOErineElevator(
@@ -67,6 +68,10 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     public void readSensors(ElevatorInputsAutoLogged sensors) {
         sensors.height = getHeight();
         sensors.angle = Degrees.of(elevatorPivotMotor.getAbsoluteEncoder().getPosition() * -0.173 + 5.78).minus(Radians.of(0.1));
+        sensors.extensionMotorPower = elevatorExtensionMotor.get();
+        sensors.extensionMotorVolts = Volts.of(elevatorExtensionMotor.getAppliedOutput() * elevatorExtensionMotor.getBusVoltage());
+        sensors.pivotMotorPower = elevatorPivotMotor.get();
+        sensors.pivotMotorVolts = Volts.of(elevatorPivotMotor.getAppliedOutput() * elevatorPivotMotor.getBusVoltage());
         sensors.horizontalSpeed = RPM.of(elevatorPivotMotor.getEncoder().getVelocity());
         sensors.extensionSpeed = InchesPerSecond.of(elevatorExtensionMotor.getEncoder().getVelocity());
         sensors.elevatorVoltage = Volts.of(extensionSensor.getVoltage());
@@ -84,6 +89,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
         SmartDashboard.putNumber("Elevator Extension", sensors.extension.in(Centimeters));
         SmartDashboard.putNumber("Elevator Angle", sensors.angle.in(Degrees));
+        Logger.recordOutput("LED Color", color.toHexString());
     }
 
     @Override
@@ -117,16 +123,15 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     @Override
     public void setLEDColor(Color color) {
-        LEDPattern LEDPatternColor = LEDPattern.solid(color);
-        LEDPatternColor.applyTo(addressableLEDBuffer);
-        addressableLED.setData(addressableLEDBuffer);
-        Logger.recordOutput("LED Color", color.toHexString());
-
+        this.color = color;
     }
 
     @Override
     public void periodic() {
         super.periodic();
-        setLEDColor(Color.kGreen);
+        LEDPattern LEDPatternColor = LEDPattern.solid(color);
+        LEDPatternColor.applyTo(addressableLEDBuffer);
+        addressableLED.setData(addressableLEDBuffer);
+        color = Color.kGreen;
     }
 }

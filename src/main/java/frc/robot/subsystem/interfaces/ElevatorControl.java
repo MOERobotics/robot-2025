@@ -32,6 +32,9 @@ public interface ElevatorControl extends Subsystem {
         public LinearVelocity extensionSpeed = InchesPerSecond.zero();
         public Angle extensionMotorPosition = Rotations.zero();
         public Voltage elevatorVoltage = Volts.zero();
+        public Voltage extensionMotorVolts = Volts.zero();
+        public Voltage pivotMotorVolts = Volts.zero();
+        public double extensionMotorPower, pivotMotorPower;
         public String elevatorVoltageFromADC;
         public boolean canGoDown, canGoUp, canGoLeft, canGoRight;
         

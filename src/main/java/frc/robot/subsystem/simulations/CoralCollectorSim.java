@@ -27,7 +27,7 @@ public class CoralCollectorSim {
         this.rightMotor = coralCollector.rightMotor;
         this.leftMotorSim = new SparkMaxSim(leftMotor, DCMotor.getNeo550(1));
         this.rightMotorSim = new SparkMaxSim(rightMotor, DCMotor.getNeo550(1));
-        this.coralLimitSim = new SparkLimitSwitchSim(leftMotor, false);
+        this.coralLimitSim = new SparkLimitSwitchSim(leftMotor, true);
         timer.start();
     }
 
