@@ -53,10 +53,13 @@ public class Robot extends LoggedRobot {
         MOELogger.setupLogging(this);
 
         scheduler = CommandScheduler.getInstance();
-        Autos.setupAutos(robot);
-        this.autoCommand = ReefToSource.S2_E4_CS(robot);
     }
 
+
+    @Override
+    public void driverStationConnected() {
+        Autos.setupAutos(robot);
+    }
 
     @Override
     public void robotPeriodic() {
@@ -146,4 +149,6 @@ public class Robot extends LoggedRobot {
     public void simulationPeriodic() {
         SimulationHelpers.updateSimState();
     }
+
+
 }

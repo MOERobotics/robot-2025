@@ -2,6 +2,9 @@ package frc.robot.autos;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FlippingUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.CoralHeadAutoCommand;
@@ -94,9 +97,18 @@ public class ReefToSourceToReef {
         PathPlannerPath plannerPath1 = PathPlannerPath.fromPathFile(path1);
         PathPlannerPath plannerPath2 = PathPlannerPath.fromPathFile(path2);
         PathPlannerPath plannerPath3 = PathPlannerPath.fromPathFile(path3);
+
+        //Flip Pose if needed
+        Pose2d startingPoseBlue = plannerPath1.getStartingHolonomicPose().get();
+        final Pose2d startingPose;
+        if (DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red) {
+            startingPose = FlippingUtil.flipFieldPose(startingPoseBlue);
+        } else {
+            startingPose = startingPoseBlue;
+        }
         return Commands.sequence(
                 // reset pose
-                Commands.runOnce(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingHolonomicPose().get())),
+                Commands.runOnce(()->robot.getSwerveDrive().resetPose(startingPose)),
                 // Follow path 1 & raise elevator to level 2
                 Commands.deadline(
                         AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),

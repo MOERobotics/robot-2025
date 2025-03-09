@@ -2,6 +2,9 @@ package frc.robot.autos;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FlippingUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.CoralHeadAutoCommand;
@@ -85,26 +88,35 @@ public class ReefToSourceL1 {
         PathPlannerPath plannerPath1 = PathPlannerPath.fromPathFile(path1);
         PathPlannerPath plannerPath2 = PathPlannerPath.fromPathFile(path2);
 
+        //Flip Pose if needed
+        Pose2d startingPoseBlue = plannerPath1.getStartingHolonomicPose().get();
+        final Pose2d startingPose;
+        if (DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red) {
+            startingPose = FlippingUtil.flipFieldPose(startingPoseBlue);
+        } else {
+            startingPose = startingPoseBlue;
+        }
         return Commands.sequence(
                 // reset pose
-                Commands.runOnce(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingHolonomicPose().get())),
+                Commands.runOnce(()->robot.getSwerveDrive().resetPose(startingPose)),
                 // Follow path 1 & raise elevator to level 2
-                Commands.deadline(
-                    AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
-                    new ElevatorAutoCommand(robot.getElevator(), LEVEL1.measure, InchesPerSecond.of(6), true)
-                ),
-                // Raise coral to desired level & stop
-                Commands.deadline(
-                    new ElevatorAutoCommand(robot.getElevator(), LEVEL1.measure, InchesPerSecond.of(9),false),
-                    Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
-                ),
-                // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to bean break system
-                Commands.deadline(
-                    new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(1),
-                    new ElevatorAutoCommand(robot.getElevator(), LEVEL1.measure, InchesPerSecond.of(9),true)
-                ),
+//                Commands.deadline(
+                    AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0))//,
+//                    new ElevatorAutoCommand(robot.getElevator(), LEVEL1.measure, InchesPerSecond.of(6), true)
+//                ),
 
-                new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false).withTimeout(2)//,
+                // Raise coral to desired level & stop
+//                Commands.deadline(
+//                    new ElevatorAutoCommand(robot.getElevator(), LEVEL1.measure, InchesPerSecond.of(9),false),
+//                    Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
+//                ),
+                // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to bean break system
+//                Commands.deadline(
+//                    new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(1)//,
+//                    new ElevatorAutoCommand(robot.getElevator(), LEVEL1.measure, InchesPerSecond.of(9),true)
+//                ),
+
+//                new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false).withTimeout(2)//,
 
 //                Commands.deadline(
 //                    AutoBuilder.followPath(plannerPath2),

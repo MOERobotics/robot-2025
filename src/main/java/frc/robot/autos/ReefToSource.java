@@ -1,7 +1,11 @@
 package frc.robot.autos;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FlippingUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.CoralHeadAutoCommand;
@@ -42,13 +46,6 @@ public class ReefToSource {
     public static Command S2_D4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start2 D", "D Coral Station", LEVEL4);
     }
-    // START 3 AUTOS
-    public static Command S3_G4_PRO(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start3 G", "G Processor", LEVEL4);
-    }
-    public static Command S3_H4_PRO(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start3 H", "H Processor", LEVEL4);
-    }
     // START 4 AUTOS
     public static Command S4_I4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start4 I", "I Coral Station", LEVEL4);
@@ -85,9 +82,17 @@ public class ReefToSource {
         PathPlannerPath plannerPath1 = PathPlannerPath.fromPathFile(path1);
         PathPlannerPath plannerPath2 = PathPlannerPath.fromPathFile(path2);
 
+        //Flip Pose if needed
+        Pose2d startingPoseBlue = plannerPath1.getStartingHolonomicPose().get();
+        final Pose2d startingPose;
+        if (DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red) {
+            startingPose = FlippingUtil.flipFieldPose(startingPoseBlue);
+        } else {
+            startingPose = startingPoseBlue;
+        }
         return Commands.sequence(
             // reset pose
-            Commands.runOnce(()->robot.getSwerveDrive().resetPose(plannerPath1.getStartingHolonomicPose().get())),
+            Commands.runOnce(()->robot.getSwerveDrive().resetPose(startingPose)),
             // Follow path 1 & raise elevator to level 2
             Commands.deadline(
                 AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),

@@ -53,9 +53,10 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         elevatorPivotMotor.configure(pivotMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
         elevatorExtensionMotor.configure(extensionMotorConfig, SparkBase.ResetMode.kNoResetSafeParameters, SparkBase.PersistMode.kNoPersistParameters);
 
-        addressableLED = new AddressableLED(7);// TODO CHANGE PORT
-        addressableLED.setBitTiming(320, 700, 700, 320);
-        addressableLEDBuffer = new AddressableLEDBuffer(300);
+        addressableLED = new AddressableLED(7);
+//        addressableLED.setBitTiming(320, 700, 700, 320);
+//        addressableLED.setSyncTime(500);
+        addressableLEDBuffer = new AddressableLEDBuffer(100);
         addressableLED.setLength(addressableLEDBuffer.getLength());
         addressableLED.setData(addressableLEDBuffer);
         addressableLED.start();

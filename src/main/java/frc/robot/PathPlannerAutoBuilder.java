@@ -6,6 +6,7 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.subsystem.interfaces.SwerveDriveControl;
+import org.littletonrobotics.junction.Logger;
 
 public class PathPlannerAutoBuilder {
     public static void configure(SwerveDriveControl drive) {
@@ -31,6 +32,8 @@ public class PathPlannerAutoBuilder {
                 config,
                 () -> {
                     var alliance = DriverStation.getAlliance();
+
+                    Logger.recordOutput("PPalliance",alliance.orElse(DriverStation.Alliance.Blue));
                     if (alliance.isPresent()) {
                         return alliance.get() == DriverStation.Alliance.Red;
                     }
