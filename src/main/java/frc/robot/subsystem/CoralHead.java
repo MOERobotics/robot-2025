@@ -37,7 +37,8 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         this.tofCenter = new TimeOfFlight(41);
         this.tofLeft = new TimeOfFlight(40);
         this.tofRight = new TimeOfFlight(42);
-        this.tofCenter.setRangeOfInterest(8, 8, 10, 10);
+        this.tofCenter.setRangeOfInterest(8, 8, 9, 9);
+        this.tofCenter.setRangingMode(TimeOfFlight.RangingMode.Short,24);
         getSensors().hasCoral = false;
         getSensors().inFrontReef = false;
         getSensors().velocityRight = RPM.zero();
