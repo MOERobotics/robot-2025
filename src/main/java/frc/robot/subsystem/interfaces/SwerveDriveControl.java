@@ -1,5 +1,6 @@
 package frc.robot.subsystem.interfaces;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -48,7 +49,7 @@ public interface SwerveDriveControl extends Subsystem {
 
     SwerveDriveKinematics getKinematics();
 
-    SwerveDriveOdometry getOdometry();
+    SwerveDrivePoseEstimator getOdometry();
 
     default boolean canClimb() {
         return this.getSensors().canClimb;

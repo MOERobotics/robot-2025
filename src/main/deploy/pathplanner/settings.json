@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.8382,
-  "robotLength": 0.8382,
+  "robotWidth": 0.9144,
+  "robotLength": 0.9144,
   "holonomicMode": true,
   "pathFolders": [
     "Coral Station to Reef",
@@ -15,8 +15,8 @@
   "autoFolders": [
     "TestAutos"
   ],
-  "defaultMaxVel": 3.0,
-  "defaultMaxAccel": 2.0,
+  "defaultMaxVel": 1.0,
+  "defaultMaxAccel": 0.5,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
@@ -40,6 +40,6 @@
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
   "robotFeatures": [
-    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.2032,\"y\":0.238},\"size\":{\"width\":0.117,\"length\":0.3302},\"borderRadius\":0.005,\"strokeWidth\":0.015,\"filled\":false}}"
+    "{\"name\":\"Rectangle\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.203,\"y\":0.254},\"size\":{\"width\":0.117,\"length\":0.33},\"borderRadius\":0.005,\"strokeWidth\":0.015,\"filled\":false}}"
   ]
 }

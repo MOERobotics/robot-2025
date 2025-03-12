@@ -2,20 +2,18 @@ package frc.robot.subsystem;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.MOESubsystem;
 import frc.robot.subsystem.interfaces.SwerveDriveControl;
 import frc.robot.subsystem.interfaces.SwerveDriveInputsAutoLogged;
+import frc.robot.utils.LimelightHelpers;
 import lombok.Getter;
 import org.littletonrobotics.junction.Logger;
 
@@ -29,7 +27,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
     public SwerveModule[] swerveModules;
 
     public @Getter SwerveDriveKinematics kinematics;
-    public @Getter SwerveDriveOdometry odometry;
+    public @Getter SwerveDrivePoseEstimator odometry;
     public Pigeon2 pigeon;
     public Field2d PathPlannerField = new Field2d();
 
@@ -57,7 +55,7 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
                 new Translation2d(SwerveModuleBR.xPos, SwerveModuleBR.yPos),
                 new Translation2d(SwerveModuleBL.xPos, SwerveModuleBL.yPos)
         );
-        this.odometry = new SwerveDriveOdometry(
+        this.odometry = new SwerveDrivePoseEstimator(
                 this.kinematics,
                 this.pigeon.getRotation2d(),
                 new SwerveModulePosition[]{
@@ -65,7 +63,8 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
                         this.swerveModuleFR.getModulePosition(),
                         this.swerveModuleBR.getModulePosition(),
                         this.swerveModuleBL.getModulePosition(),
-                }
+                },
+                new Pose2d()
         );
         getSensors().moduleStates = new SwerveModuleState[4];
         getSensors().modulePositions = new SwerveModulePosition[4];
@@ -90,7 +89,24 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
 
     @Override
     public void readSensors(SwerveDriveInputsAutoLogged sensors) {
-        sensors.currentRotationRadians = this.pigeon.getRotation2d().getRadians();
+        sensors.currentRotationRadians = this.odometry.getEstimatedPosition().getRotation().getRadians();
+
+        LimelightHelpers.SetRobotOrientation("limelight",odometry.getEstimatedPosition().getRotation().getDegrees(), 0,0,0,0,0);
+        LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+        boolean rejectUpdate = false;
+        if (pigeon.getAngularVelocityZWorld().getValue().abs(DegreesPerSecond)>=360){
+            rejectUpdate = true;
+        }
+        if (limelightMeasurement.tagCount == 0){
+            rejectUpdate = true;
+        }
+        if(!rejectUpdate){
+            this.odometry.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,999999));
+            this.odometry.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
+        }
+        Logger.recordOutput("Vision Update", rejectUpdate);
+        Logger.recordOutput("LLPose", limelightMeasurement.pose);
+
         sensors.pose = this.odometry.update(
             this.pigeon.getRotation2d(),
             new SwerveModulePosition[]{
