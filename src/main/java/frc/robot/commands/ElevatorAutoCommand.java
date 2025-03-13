@@ -16,7 +16,7 @@ import static edu.wpi.first.units.Units.InchesPerSecond;
 public class ElevatorAutoCommand extends Command {
     private final ElevatorControl elevator;
     private final LinearVelocity maxExtensionSpeed;
-    private final PIDController pid = new PIDController(0.2, 0.1 ,0);
+    private final PIDController pid = new PIDController(0.2, 0.06 ,0.03);
     private final boolean isHold;
     private final Distance targetheight;
 

@@ -94,18 +94,21 @@ public class SwerveDrive extends MOESubsystem<SwerveDriveInputsAutoLogged> imple
         LimelightHelpers.SetRobotOrientation("limelight",odometry.getEstimatedPosition().getRotation().getDegrees(), 0,0,0,0,0);
         LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
         boolean rejectUpdate = false;
+        if(limelightMeasurement==null) {
+            rejectUpdate = true;
+        }
         if (pigeon.getAngularVelocityZWorld().getValue().abs(DegreesPerSecond)>=360){
             rejectUpdate = true;
         }
-        if (limelightMeasurement.tagCount == 0){
+        if (!LimelightHelpers.validPoseEstimate(limelightMeasurement)){
             rejectUpdate = true;
         }
         if(!rejectUpdate){
             this.odometry.setVisionMeasurementStdDevs(VecBuilder.fill(0.7,0.7,999999));
             this.odometry.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
+            Logger.recordOutput("LLPose", limelightMeasurement.pose);
         }
         Logger.recordOutput("Vision Update", rejectUpdate);
-        Logger.recordOutput("LLPose", limelightMeasurement.pose);
 
         sensors.pose = this.odometry.update(
             this.pigeon.getRotation2d(),
