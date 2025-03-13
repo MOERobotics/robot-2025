@@ -105,7 +105,10 @@ public class Robot extends LoggedRobot {
         robot.getSwerveDrive().setDefaultCommand(
             new SwerveControllerCommand(robot.getSwerveDrive(), driverJoystick.getHID())
         );
-        driverJoystick.button(2).whileTrue(new DriveToPosition(robot.getSwerveDrive()));
+        driverJoystick.button(6).whileTrue(new DriveToPosition(robot.getSwerveDrive(), true));
+        driverJoystick.button(5).whileTrue(new DriveToPosition(robot.getSwerveDrive(), false));
+
+
     }
 
     @Override

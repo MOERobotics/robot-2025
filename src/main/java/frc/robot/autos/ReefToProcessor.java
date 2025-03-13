@@ -13,8 +13,7 @@ import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.interfaces.ElevatorControl;
 import lombok.SneakyThrows;
 
-import static edu.wpi.first.units.Units.InchesPerSecond;
-import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight.*;
 import static frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight.LEVEL4;
 
@@ -51,20 +50,20 @@ public class ReefToProcessor {
             // Follow path 1 & raise elevator to level 2
             Commands.deadline(
                 AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
-                new ElevatorAutoCommand(robot.getElevator(),  LEVEL2.measure, InchesPerSecond.of(6),true)
+                new ElevatorAutoCommand(robot.getElevator(),  LEVEL2.measure, FeetPerSecond.of(0.25),true)
             ),
             // Raise coral to desired level & stop
             Commands.deadline(
-                new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),false),
+                new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),false),
                 Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
             ),
             // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to bean break system
             Commands.deadline(
                 new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(1),
-                new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),true)
+                new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),true)
             ),
 
-            new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false).withTimeout(1.0)//,
+            new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1),false)//,
 
 //            Commands.deadline(
 //                AutoBuilder.followPath(plannerPath2),

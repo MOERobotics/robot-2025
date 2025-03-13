@@ -66,6 +66,13 @@ public class DriveToTag {
     }
 
     public static Pose2d getClosestTarget(Pose2d currentPose) {
-        return getClosestTarget(currentPose, new Transform2d(Inches.of(15), Inches.of(0), Rotation2d.k180deg));
+        return getClosestTarget(currentPose, new Transform2d(Inches.of(15), Inches.zero(), Rotation2d.k180deg));
     }
+    public static Pose2d moveToRight(Pose2d currentPose) {
+        return getClosestTarget(currentPose, new Transform2d(Inches.of(15), Inches.of(15.5), Rotation2d.k180deg));
+    }
+    public static Pose2d moveToLeft(Pose2d currentPose) {
+        return getClosestTarget(currentPose, new Transform2d(Inches.of(15), Inches.of(1.5), Rotation2d.k180deg));
+    }
+
 }

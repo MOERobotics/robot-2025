@@ -1,7 +1,6 @@
 package frc.robot.autos;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -11,10 +10,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.CoralHeadAutoCommand;
 import frc.robot.commands.ElevatorAutoCommand;
 import frc.robot.container.RobotContainer;
-import frc.robot.subsystem.interfaces.ElevatorControl;
 import frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight;
 import lombok.SneakyThrows;
-import lombok.val;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight.*;
@@ -114,7 +111,7 @@ public class ReefToSource {
                 new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1),true)
             ),
             Commands.runOnce(()-> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
-            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0))
+            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(0.7))
 
         );
     }
