@@ -8,39 +8,42 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.interfaces.ElevatorControl;
 import org.littletonrobotics.junction.Logger;
 
-import java.util.ArrayList;
-
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.InchesPerSecond;
+import static edu.wpi.first.units.Units.*;
 
 public class ElevatorAutoCommand extends Command {
     private final ElevatorControl elevator;
     private final LinearVelocity maxExtensionSpeed;
-    private final PIDController pid = new PIDController(0.2, 0.06 ,0.03);
+    private final PIDController pid = new PIDController(0.3, 0.1 ,0.02);
     private final boolean isHold;
-    private final Distance targetheight;
+    private final Distance targetHeight;
 
 
 
     public ElevatorAutoCommand(
         ElevatorControl elevator,
-        Distance targetheight,
+        Distance targetHeight,
         LinearVelocity maxExtensionSpeed,
         boolean isHold
     ){
         this.elevator = elevator;
-        this.targetheight = targetheight;
+        this.targetHeight = targetHeight;
         this.maxExtensionSpeed = maxExtensionSpeed;
         this.isHold = isHold;
         addRequirements(elevator);
     }
 
     @Override
+    public void initialize() {
+        pid.setIntegratorRange(-0.2, 0.3);
+        pid.setIZone(1.5);
+    }
+
+    @Override
     public void execute() {
-        Distance error = targetheight.minus(elevator.getHeight());
+        Distance error = elevator.getHeight().minus(targetHeight);
         double pidOutput = pid.calculate(error.in(Inches));
         pidOutput = MathUtil.clamp(pidOutput, -1, 1);
-        LinearVelocity pidSpeed = maxExtensionSpeed.times(-pidOutput);
+        LinearVelocity pidSpeed = maxExtensionSpeed.times(pidOutput);
         elevator.moveVertically(pidSpeed);
         Logger.recordOutput("height", elevator.getHeight().in(Inches));
         Logger.recordOutput("speed", pidSpeed.in(InchesPerSecond));
@@ -52,12 +55,7 @@ public class ElevatorAutoCommand extends Command {
         if(isHold){
             return false;
         }
-        if (targetheight.minus(elevator.getHeight()).abs(Inches) < 2) {
-            if(Math.abs(elevator.getSensors().extensionSpeed.in(InchesPerSecond)) < 2) {
-                return true;
-            }
-        }
-        return false;
+        return targetHeight.minus(elevator.getHeight()).abs(Inches) < 0.5 /*&& Math.abs(elevator.getSensors().extensionSpeed.in(InchesPerSecond)) < 30*/;
     }
 
     @Override

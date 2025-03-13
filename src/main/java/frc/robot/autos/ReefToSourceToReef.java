@@ -13,8 +13,7 @@ import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight;
 import lombok.SneakyThrows;
 
-import static edu.wpi.first.units.Units.InchesPerSecond;
-import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight.*;
 
 public class ReefToSourceToReef {
@@ -31,15 +30,15 @@ public class ReefToSourceToReef {
     }
     // START 2 AUTOS
     public static Command S2_E4_CS_F(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start2 E", "E Coral Station", "Coral Station F", LEVEL4);
+        return buildReefToSourceToReefCommand(robot, "Start2 E", "E Coral Station","Coral Station F", LEVEL4);
     }
 
     public static Command S2_E4_CS_C(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start2 E", "E Coral Station", "Coral Station C", LEVEL4);
+        return buildReefToSourceToReefCommand(robot, "Start2 E", "E Coral Station","Coral Station C", LEVEL4);
     }
 
-    public static Command S2_F4_CS_E(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start2 F", "F Coral Station","Coral Station E", LEVEL4);
+    public static Command S2_F4_CS_C(RobotContainer robot) {
+        return buildReefToSourceToReefCommand(robot, "Start2 F", "F Coral Station","Coral Station C", LEVEL4);
     }
     public static Command S2_C4_CS_D(RobotContainer robot) {
         return buildReefToSourceToReefCommand(robot, "Start2 C", "C Coral Station","Coral Station D", LEVEL4);
@@ -111,53 +110,48 @@ public class ReefToSourceToReef {
                 Commands.runOnce(()->robot.getSwerveDrive().resetPose(startingPose)),
                 // Follow path 1 & raise elevator to level 2
                 Commands.deadline(
-                        AutoBuilder.followPath(plannerPath1).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
-                        new ElevatorAutoCommand(robot.getElevator(),  LEVEL2.measure, InchesPerSecond.of(6),true)
+                        AutoBuilder.followPath(plannerPath1),
+                        new ElevatorAutoCommand(robot.getElevator(),  LEVEL2.measure, FeetPerSecond.of(0.25),true)
                 ),
                 // Raise coral to desired level & stop
                 Commands.deadline(
-                        new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),false),
+                        new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),false),
                         Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
-
                 ),
-                // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to bean break system
+                // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to beam break system
                 Commands.deadline(
-                        new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(1),
-                        new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),true)
+                        new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(0.5),
+                        new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),true)
                 ),
                  //  start to move  to collect position
-                new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false).withTimeout(2),
-                // move to elevator to collect position while moving to source
+//                new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1),false).withTimeout(1),
+                // move elevator to collect position while moving to source
                 Commands.deadline(
                     AutoBuilder.followPath(plannerPath2),
-                    new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false)
+                    new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1),false)
                 ),
                 Commands.runOnce(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
                 // run coral head to collect coral
-                new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0)).withTimeout(3),
+                new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0)),
 
                 // move back to reef and move elevator to L2
                 Commands.deadline(
                         AutoBuilder.followPath(plannerPath3).finallyDo(() -> robot.getSwerveDrive().drive(0,0,0)),
-                        new ElevatorAutoCommand(robot.getElevator(), LEVEL2.measure, InchesPerSecond.of(9),true)
+                        new ElevatorAutoCommand(robot.getElevator(), LEVEL2.measure, FeetPerSecond.of(0.25),true)
                 ),
                 Commands.runOnce(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
                 // hold in L4
                 Commands.deadline(
-                        new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),false),
+                        new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),false),
                         Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
 
                 ),
                 // score in L4
                 Commands.deadline(
-                        new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(1),
-                        new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, InchesPerSecond.of(9),true)
-                )
-
-
-
-
-
+                        new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(0.5),
+                        new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),true)
+                ),
+                new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1),false)
 
         );
 
