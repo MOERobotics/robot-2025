@@ -13,6 +13,9 @@ public class Autos {
         autoChooser.setDefaultOption("Auto1: S2_E4_CS ",  ReefToSource.S2_E4_CS(robot));
         autoChooser.addOption("Auto2: S2_E4_CS_C2 ",  ReefToSourceToReef.S2_E4_CS_C(robot));
         autoChooser.addOption("Auto3: S3_G4_PRO", ReefToSource.S3_G2_PRO(robot));
+        autoChooser.addOption("Auto4: test_25ft", ReefToSource.test_25ft(robot));
+        autoChooser.addOption("Auto5: test_25ft_Curved", ReefToSource.test_25ft_Curved(robot));
+
         SmartDashboard.putData("Autos Chooser",autoChooser);
 
     }

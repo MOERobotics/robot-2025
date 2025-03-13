@@ -17,6 +17,13 @@ import static edu.wpi.first.units.Units.RPM;
 import static frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight.*;
 
 public class ReefToSource {
+    // Test Autos
+    public static Command test_25ft(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "FortissiMOE 25 feet test", null, LEVEL4);
+    }
+        public static Command test_25ft_Curved(RobotContainer robot) {
+            return buildReefToSourceCommand(robot, "FortissiMOE 25 feet curved test", null, LEVEL4);
+    }
 // START 1 AUTOS
     public static Command S1_C4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start1 C", "C Coral Station", LEVEL4);
@@ -31,8 +38,6 @@ public class ReefToSource {
     public static Command S2_E4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start2 E", "E Coral Station", LEVEL4);
     }
-
-
     public static Command S2_F4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start2 F", "F Coral Station", LEVEL4);
     }
