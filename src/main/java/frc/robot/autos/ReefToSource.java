@@ -111,7 +111,7 @@ public class ReefToSource {
                 new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1),true)
             ),
             Commands.runOnce(()-> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
-            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(0.7))
+            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(0.4))
 
         );
     }

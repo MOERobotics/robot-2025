@@ -134,7 +134,7 @@ public class ReefToSourceToReefToSource {
                 ),
                 Commands.runOnce(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
                 // run coral head to collect coral
-                new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(0.7)),
+                new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(0.4)),
 
                 // move back to reef and move elevator to L2
                 Commands.deadline(
@@ -159,7 +159,7 @@ public class ReefToSourceToReefToSource {
                     new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1),false)
                 ),
                 Commands.runOnce(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
-                new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(0.7))
+                new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(0.4))
 
         );
 

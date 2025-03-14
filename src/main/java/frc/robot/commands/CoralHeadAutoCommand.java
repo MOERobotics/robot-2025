@@ -10,14 +10,20 @@ public class CoralHeadAutoCommand extends Command {
     CoralHeadControl coralCollector;
     boolean scoring;
     boolean hasCoral;
-    AngularVelocity rotatespeed = RPM.of(0);
+    AngularVelocity rotateSpeed = RPM.of(0);
 
-    public CoralHeadAutoCommand(CoralHeadControl coralcollector, boolean scoring, AngularVelocity rotatespeed){
-        this.coralCollector = coralcollector;
+    public CoralHeadAutoCommand(CoralHeadControl coralCollector, boolean scoring, AngularVelocity rotateSpeed){
+        this.coralCollector = coralCollector;
         this.scoring = scoring;
-        this.rotatespeed = rotatespeed;
+        this.rotateSpeed = rotateSpeed;
 
-        addRequirements(coralcollector);
+        addRequirements(coralCollector);
+    }
+    
+    @Override
+    public void initialize() {
+        coralCollector.setCoralVelocity(RPM.zero(),RPM.zero());
+        hasCoral = false;
     }
 
     @Override
@@ -25,7 +31,7 @@ public class CoralHeadAutoCommand extends Command {
         if (coralCollector.hasCoral()) {
             hasCoral = true;
         }
-        coralCollector.setCoralVelocity(rotatespeed, rotatespeed);
+        coralCollector.setCoralVelocity(rotateSpeed, rotateSpeed);
     }
 
     @Override

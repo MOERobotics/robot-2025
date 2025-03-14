@@ -26,6 +26,7 @@ public class DriveToPosition extends Command {
         this.swerveDrive = swerveDrive;
         generateTrajectory = null;
         this.goRight = goRight;
+        addRequirements(swerveDrive);
     }
 
     @Override
@@ -40,10 +41,10 @@ public class DriveToPosition extends Command {
         }
 
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(swerveDrive.getPose(), target);
-        PathPlannerPath trajectory = new PathPlannerPath(waypoints, new PathConstraints(1, 1, Units.degreesToRadians(180), Units.degreesToRadians(360)), null, new GoalEndState(0.0, DriveToTag.getClosestTarget(swerveDrive.getPose()).getRotation()));
+        PathPlannerPath trajectory = new PathPlannerPath(waypoints, new PathConstraints(1.5, 1.25, Units.degreesToRadians(180), Units.degreesToRadians(360)), null, new GoalEndState(0.0, DriveToTag.getClosestTarget(swerveDrive.getPose()).getRotation()));
         trajectory.preventFlipping = true;
         generateTrajectory = AutoBuilder.followPath(trajectory);
-        generateTrajectory.schedule();
+        generateTrajectory.handleInterrupt(()->swerveDrive.drive(0,0,0)).withTimeout(5).schedule();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class DriveToPosition extends Command {
         if (generateTrajectory != null) {
             generateTrajectory.end(true);
         }
-        Commands.runOnce(()->swerveDrive.drive(0,0,0));
+        swerveDrive.drive(0,0,0);
     }
 
     @Override

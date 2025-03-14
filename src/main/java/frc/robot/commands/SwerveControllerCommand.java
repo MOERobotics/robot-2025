@@ -30,9 +30,9 @@ public class SwerveControllerCommand extends Command {
         driveY = MathUtil.applyDeadband(driveY, 0.1, 1) * ((DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Blue || joystick.getRawButton(8)) ? 1 : -1);
         double speedMultiplier = joystick.getRawButton(7) ? 0.8 : 1;
         swerveDrive.drive(
-                2.75*driveX*speedMultiplier,
-                2.75*driveY*speedMultiplier,
-                1.25*Math.PI*driveTheta*speedMultiplier,
+                3*driveX*speedMultiplier,
+                3*driveY*speedMultiplier,
+                1.5*Math.PI*driveTheta*speedMultiplier,
                 joystick.getRawButton(8)
         );
 
