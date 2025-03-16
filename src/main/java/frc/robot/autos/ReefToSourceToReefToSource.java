@@ -20,34 +20,34 @@ public class ReefToSourceToReefToSource {
 
     // START 1 AUTOS
     public static Command S1_C4_CS_D4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start1 C", "C Coral Station","Coral Station D", "D Coral Station", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start1 C", "C Coral Station","Coral Station D", "D Coral Station", LEVEL4);
     }
     public static Command S1_B4_CS_A4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start1 B", "B Coral Station 2","Coral Station 2 A", "A Coral Station 2", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start1 B", "B Coral Station 2","Coral Station 2 A", "A Coral Station 2", LEVEL4);
     }
     public static Command S1_A4_CS_B4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start1 A", "A Coral Station 2","Coral Station 2 B", "B Coral Station 2", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start1 A", "A Coral Station 2","Coral Station 2 B", "B Coral Station 2", LEVEL4);
     }
     // START 2 AUTOS
     public static Command S2_E4_CS_F4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start2 E", "E Coral Station","Coral Station F", "F Coral Station", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start2 E", "E Coral Station","Coral Station F", "F Coral Station", LEVEL4);
     }
 
     public static Command S2_E4_CS_C4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start2 E", "E Coral Station","Coral Station C", "C Coral Station", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start2 E", "E Coral Station","Coral Station C", "C Coral Station", LEVEL4);
     }
 
     public static Command S2_F4_CS_C4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start2 F", "F Coral Station","Coral Station C", "C Coral Station", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start2 F", "F Coral Station","Coral Station C", "C Coral Station", LEVEL4);
     }
     public static Command S2_C4_CS_D4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start2 C", "C Coral Station","Coral Station D", "D Coral Station", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start2 C", "C Coral Station","Coral Station D", "D Coral Station", LEVEL4);
     }
 
 
 
     public static Command S2_D4_CS_C4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start2 D", "D Coral Station","Coral Station C", "C Coral Station", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start2 D", "D Coral Station","Coral Station C", "C Coral Station", LEVEL4);
     }
     // START 3 AUTOS
     /*
@@ -59,34 +59,34 @@ public class ReefToSourceToReefToSource {
     }
      */
     // START 4 AUTOS
-    public static Command S4_I4_CS_J4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start4 I", "I Coral Station","Coral Station J", "J Coral Station", LEVEL1);
+    public static Command S4_I4_CS_K4_CS(RobotContainer robot) {
+        return buildReefToSourceToReefToSourceCommand(robot, "Start4 I", "I Coral Station","Coral Station K", "K Coral Station", LEVEL4);
     }
     public static Command S4_J4_CS_I4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start4 J", "J Coral Station","Coral Station I", "I Coral Station", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start4 J", "J Coral Station","Coral Station I", "I Coral Station", LEVEL4);
     }
     public static Command S4_K4_CS_L4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start4 K", "K Coral Station","Coral Station L", "L Coral Station", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start4 K", "K Coral Station","Coral Station L", "L Coral Station", LEVEL4);
     }
     public static Command S4_L4_CS_K4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start4 L", "L Coral Station","Coral Station K", "K Coral Station", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start4 L", "L Coral Station","Coral Station K", "K Coral Station", LEVEL4);
     }
     // START 5 AUTOS
     public static Command S5_L4_CS_K4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start5 L", "L Coral Station","Coral Station K", "K Coral Station", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start5 L", "L Coral Station","Coral Station K", "K Coral Station", LEVEL4);
     }
     public static Command S5_B4_CS_A4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start5 B", "B Coral Station 1","Coral Station 1 A", "A Coral Station 1", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start5 B", "B Coral Station 1","Coral Station 1 A", "A Coral Station 1", LEVEL4);
     }
     public static Command S5_A4_CS_B4_CS(RobotContainer robot) {
-        return buildReefToSourceToReefCommand(robot, "Start5 A", "A Coral Station 1","Coral Station 1 B", "B Coral Station 1", LEVEL4);
+        return buildReefToSourceToReefToSourceCommand(robot, "Start5 A", "A Coral Station 1","Coral Station 1 B", "B Coral Station 1", LEVEL4);
     }
 
 
 
 
     @SneakyThrows
-    public static Command buildReefToSourceToReefCommand(
+    public static Command buildReefToSourceToReefToSourceCommand(
             RobotContainer robot,
             String path1,
             String path2,
