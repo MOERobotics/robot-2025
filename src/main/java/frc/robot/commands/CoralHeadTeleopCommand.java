@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,7 +20,6 @@ public class CoralHeadTeleopCommand extends Command {
     CoralHeadControl coralCollector;
     Joystick joystick;
     ElevatorControl elevator;
-    PowerDistribution pdh;
     boolean hasCoral;
     boolean stopCoral = false;
 
@@ -29,14 +28,12 @@ public class CoralHeadTeleopCommand extends Command {
         this.coralCollector = robot.getCoralHead();
         this.joystick = joystick;
         this.elevator = robot.getElevator();
-        this.pdh = robot.getPdh();
         this.addRequirements(coralCollector);
     }
 
     @Override
     public void initialize() {
         SmartDashboard.putBoolean("DROP",false);
-        pdh.setSwitchableChannel(false);
         joystick.setRumble(GenericHID.RumbleType.kBothRumble,0);
     }
 
@@ -83,18 +80,26 @@ public class CoralHeadTeleopCommand extends Command {
         }
 
         coralCollector.setCoralVelocity(coralWheelLVelocity, coralWheelRVelocity);
-        boolean reefLockedOn = coralCollector.inFrontReef() && elevator.getHeight().gt(LEVEL1.measure);
-        SmartDashboard.putBoolean("DROP", reefLockedOn);
-        pdh.setSwitchableChannel(reefLockedOn);
-        if (reefLockedOn) {
-            joystick.setRumble(GenericHID.RumbleType.kBothRumble, 1);
-            elevator.setLEDColor(Color.kPurple);
-        } else {
-            joystick.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+//        boolean reefLockedOn = coralCollector.inFrontReef() && elevator.getHeight().gt(LEVEL1.measure);
+//        SmartDashboard.putBoolean("DROP", reefLockedOn);
+        joystick.setRumble(GenericHID.RumbleType.kBothRumble, 0);
+        if (elevator.getHeight().gt(LEVEL1.measure)) {
+            if (coralCollector.getLeftLidar()){
+                joystick.setRumble(GenericHID.RumbleType.kLeftRumble,0.5);
+                elevator.setLEDPattern(LEDPattern.solid(Color.kBlue));
+            }else if (coralCollector.getRightLidar()) {
+                joystick.setRumble(GenericHID.RumbleType.kRightRumble,0.5);
+                elevator.setLEDPattern(LEDPattern.solid(Color.kRed));
+            }else if(coralCollector.getCenterLidar()){
+                joystick.setRumble(GenericHID.RumbleType.kBothRumble, 1);
+                elevator.setLEDPattern(LEDPattern.solid(Color.kPurple));
+                SmartDashboard.putBoolean("DROP", true);
+            }
         }
-        if (!reefLockedOn && stopCoral) {
-            elevator.setLEDColor(Color.kWhite);
+        if (stopCoral&&!coralCollector.inFrontReef()) {
+            elevator.setLEDPattern(LEDPattern.solid(Color.kWhite));
         }
+
 
         Logger.recordOutput("CoralHeadTeleop/HasCoral", hasCoral);
         Logger.recordOutput("CoralHeadTeleop/stopCoral", stopCoral);
@@ -102,7 +107,6 @@ public class CoralHeadTeleopCommand extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        pdh.setSwitchableChannel(false);
         joystick.setRumble(GenericHID.RumbleType.kBothRumble, 0);
         SmartDashboard.putBoolean("DROP", false);
     }

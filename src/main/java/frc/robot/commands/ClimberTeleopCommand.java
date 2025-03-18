@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.container.RobotContainer;
@@ -22,7 +23,7 @@ public class ClimberTeleopCommand extends Command {
 
     Joystick joystick;
     public ClimberTeleopCommand(RobotContainer robot, Joystick joystick) {
-        this.climberRear =robot.getClimberRear();
+        this.climberRear = robot.getClimberRear();
         this.climberMid = robot.getClimberMid();
         this.joystick = joystick;
         swerveDriveControl = robot.getSwerveDrive();
@@ -48,16 +49,12 @@ public class ClimberTeleopCommand extends Command {
             climberPow = 0.3;
         }
 
-
         climberMid.setClimberVelocity(RPM.of(climberPow));
         climberRear.setClimberVelocity(RPM.of(climberPow));
 
         if(swerveDriveControl.canClimb()){
-            elevatorControl.setLEDColor(Color.kAqua);
+            elevatorControl.setLEDPattern(LEDPattern.solid(Color.kOrangeRed));
         }
-
-
-
 
     }
 

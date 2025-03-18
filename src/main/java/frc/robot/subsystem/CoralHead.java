@@ -38,7 +38,11 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         this.tofLeft = new TimeOfFlight(40);
         this.tofRight = new TimeOfFlight(42);
         this.tofCenter.setRangeOfInterest(8, 8, 9, 9);
+        this.tofLeft.setRangeOfInterest(0, 0, 15, 7);
+        this.tofRight.setRangeOfInterest(0, 0, 15, 7);
         this.tofCenter.setRangingMode(TimeOfFlight.RangingMode.Short,24);
+        this.tofLeft.setRangingMode(TimeOfFlight.RangingMode.Short, 24);
+        this.tofRight.setRangingMode(TimeOfFlight.RangingMode.Short, 24);
         getSensors().hasCoral = false;
         getSensors().inFrontReef = false;
         getSensors().velocityRight = RPM.zero();
@@ -49,7 +53,10 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
     @Override
     public void readSensors(CoralHeadInputsAutoLogged sensors) {
         sensors.hasCoral = leftMotor.getForwardLimitSwitch().isPressed();
-        sensors.inFrontReef = tofCenter.isRangeValid() && tofCenter.getRange() < 709.6;
+        sensors.centerLidarOn = isLidarValid(tofCenter) && tofCenter.getRange() < 500;//609.6;
+//        sensors.leftLidarOn = isLidarValid(tofLeft) && tofLeft.getRange() < 500;//609.6;
+//        sensors.rightLidarOn = isLidarValid(tofRight) && tofRight.getRange() < 500;//609.6;
+        sensors.inFrontReef = sensors.centerLidarOn&&!sensors.leftLidarOn&&!sensors.rightLidarOn;
         sensors.reefDistance = tofCenter.getRange();
         sensors.leftPower = leftMotor.get();
         sensors.rightPower = rightMotor.get();
@@ -57,9 +64,14 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         sensors.velocityRight = RPM.of(rightMotor.getEncoder().getVelocity());
         sensors.leftAppliedVolts = Volts.of(leftMotor.getAppliedOutput() * leftMotor.getBusVoltage());
         sensors.rightAppliedVolts = Volts.of(rightMotor.getAppliedOutput() * rightMotor.getBusVoltage());
-        Logger.recordOutput("LeftLidarRangeValid", tofLeft.isRangeValid());
-        Logger.recordOutput("RightLidarRangeValid", tofRight.isRangeValid());
+        Logger.recordOutput("LeftLidarStatus", tofLeft.getStatus());
+        Logger.recordOutput("CenterLidarStatus", tofCenter.getStatus());
+        Logger.recordOutput("RightLidarStatus", tofRight.getStatus());
+        Logger.recordOutput("LeftLidarRangeValid", isLidarValid(tofLeft));
+        Logger.recordOutput("CenterLidarRangeValid", isLidarValid(tofCenter));
+        Logger.recordOutput("RightLidarRangeValid", isLidarValid(tofRight));
         Logger.recordOutput("LeftLidarRange", tofLeft.getRange());
+        Logger.recordOutput("CenterLidarRange", tofCenter.getRange());
         Logger.recordOutput("RightLidarRange", tofRight.getRange());
     }
 
@@ -78,6 +90,10 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
     @Override
     public AngularVelocity getRightVelocity() {
         return RPM.of(leftMotor.get());
+    }
+
+    private boolean isLidarValid(TimeOfFlight tof) {
+        return tof.getRangeSigma()<2.5;
     }
 
 

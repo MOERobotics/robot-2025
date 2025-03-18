@@ -12,6 +12,7 @@ public interface CoralHeadControl extends Subsystem {
     class CoralHeadInputs {
         public boolean hasCoral;
         public boolean inFrontReef;
+        public boolean leftLidarOn, rightLidarOn, centerLidarOn;
         public double reefDistance;
         public double leftPower;
         public double rightPower;
@@ -29,6 +30,16 @@ public interface CoralHeadControl extends Subsystem {
 
     default boolean inFrontReef(){
         return this.getSensors().inFrontReef;
+    }
+
+    default boolean getLeftLidar() {
+        return this.getSensors().leftLidarOn;
+    }
+    default boolean getCenterLidar() {
+        return this.getSensors().centerLidarOn;
+    }
+    default boolean getRightLidar() {
+        return this.getSensors().rightLidarOn;
     }
 
     void setCoralVelocity(AngularVelocity leftAngularVelocity, AngularVelocity rightAngularVelocity);

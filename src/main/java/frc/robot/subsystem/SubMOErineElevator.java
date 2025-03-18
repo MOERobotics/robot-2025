@@ -30,7 +30,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
     public AddressableLED addressableLED;
     public AddressableLEDBuffer addressableLEDBuffer;
-    private Color color = Color.kGreen;
+    private LEDPattern ledPattern = LEDPattern.solid(Color.kGreen);
 
 
     public SubMOErineElevator(
@@ -89,7 +89,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
 
         SmartDashboard.putNumber("Elevator Extension", sensors.extension.in(Centimeters));
         SmartDashboard.putNumber("Elevator Angle", sensors.angle.in(Degrees));
-        Logger.recordOutput("LED Color", color.toHexString());
+//        Logger.recordOutput("LED Color", color.toHexString());
     }
 
     @Override
@@ -122,16 +122,15 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
     }
 
     @Override
-    public void setLEDColor(Color color) {
-        this.color = color;
+    public void setLEDPattern(LEDPattern ledPattern) {
+        this.ledPattern = ledPattern;
     }
 
     @Override
     public void periodic() {
         super.periodic();
-        LEDPattern LEDPatternColor = LEDPattern.solid(color);
-        LEDPatternColor.applyTo(addressableLEDBuffer);
+        ledPattern.applyTo(addressableLEDBuffer);
         addressableLED.setData(addressableLEDBuffer);
-        color = Color.kGreen;
+        ledPattern = LEDPattern.solid(Color.kGreen);
     }
 }
