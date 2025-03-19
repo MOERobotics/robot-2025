@@ -54,8 +54,8 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
     public void readSensors(CoralHeadInputsAutoLogged sensors) {
         sensors.hasCoral = leftMotor.getForwardLimitSwitch().isPressed();
         sensors.centerLidarOn = isLidarValid(tofCenter) && tofCenter.getRange() < 500;//609.6;
-//        sensors.leftLidarOn = isLidarValid(tofLeft) && tofLeft.getRange() < 500;//609.6;
-//        sensors.rightLidarOn = isLidarValid(tofRight) && tofRight.getRange() < 500;//609.6;
+        sensors.leftLidarOn = isLidarValid(tofLeft) && tofLeft.getRange() < 500;//609.6;
+        sensors.rightLidarOn = isLidarValid(tofRight) && tofRight.getRange() < 500;//609.6;
         sensors.inFrontReef = sensors.centerLidarOn&&!sensors.leftLidarOn&&!sensors.rightLidarOn;
         sensors.reefDistance = tofCenter.getRange();
         sensors.leftPower = leftMotor.get();

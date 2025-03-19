@@ -92,7 +92,7 @@ public class CoralHeadTeleopCommand extends Command {
                 elevator.setLEDPattern(LEDPattern.solid(Color.kRed));
             }else if(coralCollector.getCenterLidar()){
                 joystick.setRumble(GenericHID.RumbleType.kBothRumble, 1);
-                elevator.setLEDPattern(LEDPattern.solid(Color.kPurple));
+                elevator.setLEDPattern(LEDPattern.solid(Color.kWhite));
                 SmartDashboard.putBoolean("DROP", true);
             }
         }
