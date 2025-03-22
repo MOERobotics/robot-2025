@@ -18,6 +18,7 @@ public class ClimberTeleopCommand extends Command {
 
     ElevatorControl elevatorControl;
     SwerveDriveControl swerveDriveControl;
+    Long pressTime;
 
 
 
@@ -34,15 +35,21 @@ public class ClimberTeleopCommand extends Command {
     @Override
     public void initialize() {
         super.initialize();
+        pressTime = 0L;
     }
 
     @Override
     public void execute() {
         double climberPow = 0;
-        // TODO: button values are temporary
         // Lower Climber arms to climb
+        if(joystick.getRawButtonPressed(4)){
+            pressTime = System.currentTimeMillis();
+        }
         if(joystick.getRawButton(4)){
             climberPow = -Double.MAX_VALUE;
+            if(System.currentTimeMillis()-pressTime<2000){
+                climberPow=-0.4;
+            }
         }
         // Raise climber arms into the air
         if(joystick.getRawButton(3)){

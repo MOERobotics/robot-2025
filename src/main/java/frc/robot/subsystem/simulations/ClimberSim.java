@@ -17,7 +17,7 @@ public class ClimberSim {
     SparkMax climbMotor;
     SparkMaxSim climbMotorSim;
     SparkAbsoluteEncoderSim climbEncoderSim;
-    private final DCMotorSim climberSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 20, climberGearing), DCMotor.getNEO(1));
+    private final DCMotorSim climberSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 5, climberGearing), DCMotor.getNEO(1));
     public ClimberSim(SubMOErineClimber climber){
         this.climbMotor = climber.climbMotor;
         this.climbMotorSim = new SparkMaxSim(climbMotor, DCMotor.getNEO(1));
@@ -25,7 +25,7 @@ public class ClimberSim {
     }
 
     public void updateSimState(){
-        climberSystem.setInputVoltage(climbMotor.getBusVoltage()*climbMotor.getAppliedOutput() * -1);
+        climberSystem.setInputVoltage(climbMotor.getBusVoltage()*climbMotor.getAppliedOutput());
         climberSystem.setAngularVelocity(decelerate(climberSystem.getAngularVelocity(),decelerationCoef).in(RadiansPerSecond));
         climberSystem.update(0.02);
 
