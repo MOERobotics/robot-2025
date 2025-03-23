@@ -13,7 +13,7 @@ public interface ElevatorControl extends Subsystem {
         LEVEL1  (Centimeters.of(64)),
         LEVEL2  (Centimeters.of(87)),
         LEVEL3  (Centimeters.of(128)),
-        LEVEL4  (Centimeters.of(188)),//TODO: determine actual L4 set point
+        LEVEL4  (Centimeters.of(187)),//TODO: determine actual L4 set point
         STOW    (Centimeters.of(41.0)),
         COLLECT (Centimeters.of(41.5));
 

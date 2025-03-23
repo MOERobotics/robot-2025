@@ -35,7 +35,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler scheduler;
 
     RobotContainer robot = new SubMOErine();
-    Command autoCommand = Commands.none();
+    Autos.CommandAndPose autoCommand = new Autos.CommandAndPose(Commands.none(),new Pose2d());
 
 
 
@@ -74,7 +74,7 @@ public class Robot extends LoggedRobot {
     public void autonomousInit() {
         scheduler.cancelAll();
         autoCommand = Autos.getSelectedAuto();
-        autoCommand.schedule();
+        autoCommand.command().schedule();
         robot.getSwerveDrive().setDefaultCommand(Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()));
     }
 

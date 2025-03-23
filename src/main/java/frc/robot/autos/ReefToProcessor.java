@@ -5,7 +5,6 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.CoralHeadAutoCommand;
 import frc.robot.commands.ElevatorAutoCommand;
@@ -19,16 +18,16 @@ import static frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight.LEVE
 
 public class ReefToProcessor {
     // START 3 AUTOS
-    public static Command S3_G4_PRO(RobotContainer robot) {
+    public static Autos.CommandAndPose S3_G4_PRO(RobotContainer robot) {
         return buildReefToProcessorCommands(robot, "Start3 G", "G Processor", LEVEL4);
     }
-    public static Command S3_H4_PRO(RobotContainer robot) {
+    public static Autos.CommandAndPose S3_H4_PRO(RobotContainer robot) {
         return buildReefToProcessorCommands(robot, "Start3 H", "H Processor", LEVEL4);
     }
 
 
     @SneakyThrows
-    public static Command buildReefToProcessorCommands(
+    public static Autos.CommandAndPose buildReefToProcessorCommands(
         RobotContainer robot,
         String path1,
         String path2,
@@ -44,7 +43,7 @@ public class ReefToProcessor {
         } else {
             startingPose = startingPoseBlue;
         }
-        return Commands.sequence(
+        return new Autos.CommandAndPose(Commands.sequence(
             // reset pose
             Commands.runOnce(()->robot.getSwerveDrive().resetPose(startingPose)),
             // Follow path 1 & raise elevator to level 2
@@ -72,6 +71,6 @@ public class ReefToProcessor {
 //            Commands.runOnce(()-> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
 //            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0)).withTimeout(3)
 
-        );
+        ),startingPose);
     }
 }

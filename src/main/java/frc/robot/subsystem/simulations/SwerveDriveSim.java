@@ -26,7 +26,7 @@ public class SwerveDriveSim {
         currentModulePositions = swerveDrive.getSensors().modulePositions.clone();
         Twist2d twist = swerveDrive.getKinematics().toTwist2d(oldModulePositions,currentModulePositions);
         Logger.recordOutput("Twist", twist);
-        swerveDrive.odometry.resetPose(swerveDrive.getPose().exp(twist));
+//        swerveDrive.odometry.resetPose(swerveDrive.getPose().exp(twist));
         pigeon2Sim.setRawYaw(swerveDrive.getPose().getRotation().getRadians());
         oldModulePositions = swerveDrive.getSensors().modulePositions.clone();
     }
