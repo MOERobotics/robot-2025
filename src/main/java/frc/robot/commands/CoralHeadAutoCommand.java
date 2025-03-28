@@ -9,7 +9,7 @@ import static edu.wpi.first.units.Units.*;
 public class CoralHeadAutoCommand extends Command {
     CoralHeadControl coralCollector;
     boolean scoring;
-    boolean hasCoral;
+    boolean outCoral;
     AngularVelocity rotateSpeed = RPM.of(0);
 
     public CoralHeadAutoCommand(CoralHeadControl coralCollector, boolean scoring, AngularVelocity rotateSpeed){
@@ -23,22 +23,24 @@ public class CoralHeadAutoCommand extends Command {
     @Override
     public void initialize() {
         coralCollector.setCoralVelocity(RPM.zero(),RPM.zero());
-        hasCoral = false;
+        outCoral = false;
     }
 
     @Override
     public void execute() {
-        if (coralCollector.hasCoral()) {
-            hasCoral = true;
+        if (coralCollector.backBeam()){
+            outCoral = true;
         }
         coralCollector.setCoralVelocity(rotateSpeed, rotateSpeed);
     }
 
     @Override
     public boolean isFinished() {
-        if(!scoring)  return hasCoral&&!coralCollector.hasCoral();
-        else return false;
+        if(!scoring)  return coralCollector.frontBeam()&&coralCollector.backBeam();
+        if(scoring) return outCoral&&!coralCollector.backBeam();
+        return false;
     }
+
 
     @Override
     public void end(boolean interrupted) {

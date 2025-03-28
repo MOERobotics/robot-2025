@@ -12,7 +12,7 @@ public class FakeCoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> imple
     public FakeCoralHead() {
         super(new CoralHeadInputsAutoLogged());
         this.getSensors().inFrontReef = false;
-        this.getSensors().hasCoral = false;
+        this.getSensors().frontBeam = false;
         this.getSensors().velocityLeft = RPM.zero();
         this.getSensors().velocityRight = RPM.zero();
     }
