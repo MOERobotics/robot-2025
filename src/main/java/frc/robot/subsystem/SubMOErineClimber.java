@@ -21,7 +21,7 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
     public SparkAbsoluteEncoder climbEncoder;
 
     public final Angle maxEncoderValue = Degrees.of(80);
-    public final Angle minEncoderValue = Degrees.of(-7);
+    public final Angle minEncoderValue = Degrees.of(-4);
 
 
     public SubMOErineClimber(

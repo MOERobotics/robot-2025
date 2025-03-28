@@ -27,7 +27,7 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         this.rightMotor = rightMotor;
         SparkMaxConfig leftMotorConfig = new SparkMaxConfig();
         leftMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40).inverted(true);
-        leftMotorConfig.limitSwitch.forwardLimitSwitchEnabled(false);
+        leftMotorConfig.limitSwitch.forwardLimitSwitchEnabled(false).reverseLimitSwitchEnabled(false);
 
         SparkMaxConfig rightMotorConfig = new SparkMaxConfig();
         rightMotorConfig.idleMode(SparkBaseConfig.IdleMode.kBrake).smartCurrentLimit(40).inverted(false);
@@ -64,6 +64,8 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         sensors.velocityRight = RPM.of(rightMotor.getEncoder().getVelocity());
         sensors.leftAppliedVolts = Volts.of(leftMotor.getAppliedOutput() * leftMotor.getBusVoltage());
         sensors.rightAppliedVolts = Volts.of(rightMotor.getAppliedOutput() * rightMotor.getBusVoltage());
+        Logger.recordOutput("FunnelBeam", leftMotor.getForwardLimitSwitch().isPressed());
+        Logger.recordOutput("ExitBeam", leftMotor.getReverseLimitSwitch().isPressed());
         Logger.recordOutput("LeftLidarStatus", tofLeft.getStatus());
         Logger.recordOutput("CenterLidarStatus", tofCenter.getStatus());
         Logger.recordOutput("RightLidarStatus", tofRight.getStatus());
