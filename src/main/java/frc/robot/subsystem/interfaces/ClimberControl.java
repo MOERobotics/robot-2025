@@ -16,6 +16,8 @@ public interface ClimberControl extends Subsystem {
         public AngularVelocity motorVelocity = RPM.zero();
         public Voltage motorAppliedVolts = Volts.zero();
         public Angle position = Degrees.zero();
+        public double appliedOutput;
+        public double current;
     }
 
     ClimberInputsAutoLogged getSensors();
