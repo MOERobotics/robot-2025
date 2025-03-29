@@ -69,6 +69,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         sensors.height = getHeight();
         sensors.angle = Degrees.of(elevatorPivotMotor.getAbsoluteEncoder().getPosition() * -0.173 + 5.78).minus(Radians.of(0.1));
         sensors.extensionMotorPower = elevatorExtensionMotor.get();
+        elevatorExtensionMotor.getAppliedOutput();
         sensors.extensionMotorVolts = Volts.of(elevatorExtensionMotor.getAppliedOutput() * elevatorExtensionMotor.getBusVoltage());
         sensors.pivotMotorPower = elevatorPivotMotor.get();
         sensors.pivotMotorVolts = Volts.of(elevatorPivotMotor.getAppliedOutput() * elevatorPivotMotor.getBusVoltage());
@@ -78,7 +79,7 @@ public class SubMOErineElevator extends MOESubsystem<ElevatorInputsAutoLogged> i
         sensors.elevatorVoltageFromADC = String.format("%04x", extensionSensor.getValue());
         sensors.extension = Centimeters.of((getSensors().elevatorVoltage.in(Volts) * 35.17649) + 23.80649);
         sensors.canGoDown = elevatorExtensionMotor.getReverseLimitSwitch().isPressed();
-        sensors.canGoUp = sensors.elevatorVoltage.lt(Volts.of(4.348));
+        sensors.canGoUp = sensors.extension.lt(Meters.of(1.81));
         sensors.canGoRight = sensors.angle.gt(Degrees.of(9.55));
         sensors.canGoLeft = sensors.angle.lt(Degrees.of(52.42));
         sensors.extensionMotorPosition = Rotations.of(elevatorExtensionMotor.getEncoder().getPosition());

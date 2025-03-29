@@ -11,8 +11,8 @@ public interface ElevatorControl extends Subsystem {
 
     public static enum ElevatorHeight {
         LEVEL1  (Centimeters.of(64)),
-        LEVEL2  (Centimeters.of(87)),
-        LEVEL3  (Centimeters.of(128)),
+        LEVEL2  (Centimeters.of(89)),
+        LEVEL3  (Centimeters.of(130)),
         LEVEL4  (Centimeters.of(187)),//TODO: determine actual L4 set point
         STOW    (Centimeters.of(41.0)),
         COLLECT (Centimeters.of(41.5));
