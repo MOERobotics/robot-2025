@@ -19,6 +19,7 @@ public class CoralHeadTeleopCommand extends Command {
     CoralHeadControl coralCollector;
     Joystick joystick;
     ElevatorControl elevator;
+    boolean stopCoral;
 
 
     public CoralHeadTeleopCommand(RobotContainer robot, Joystick joystick) {
@@ -37,6 +38,9 @@ public class CoralHeadTeleopCommand extends Command {
 
     @Override
     public void execute() {
+        if (coralCollector.backBeam()){
+            stopCoral = true;
+        }
         AngularVelocity coralWheelRVelocity, coralWheelLVelocity;
         //eject the coral
         if (joystick.getRawAxis(3) > 0.5) {
@@ -53,7 +57,7 @@ public class CoralHeadTeleopCommand extends Command {
         }
         //intake the coral
         else if (joystick.getRawAxis(2) > 0.5) {
-            if (!coralCollector.frontBeam()&&coralCollector.backBeam()) {
+            if (!stopCoral&&!coralCollector.frontBeam()) {
                 coralWheelLVelocity = RPM.of(0.30);
                 coralWheelRVelocity = RPM.of(0.30);
             } else {
@@ -64,6 +68,7 @@ public class CoralHeadTeleopCommand extends Command {
             coralWheelRVelocity = RPM.of(-0.30);
             coralWheelLVelocity = RPM.of(-0.30);
         }else {
+            stopCoral = false;
             coralWheelRVelocity = RPM.zero();
             coralWheelLVelocity = RPM.zero();
         }
@@ -85,7 +90,7 @@ public class CoralHeadTeleopCommand extends Command {
                 SmartDashboard.putBoolean("DROP", true);
             }
         }
-        if (coralCollector.backBeam()&&!coralCollector.inFrontReef()) {
+        if (coralCollector.frontBeam()&&coralCollector.inFrontReef()) {
             elevator.setLEDPattern(LEDPattern.solid(Color.kWhite));
         }
     }
