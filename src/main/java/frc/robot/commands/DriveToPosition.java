@@ -33,6 +33,7 @@ public class DriveToPosition extends Command {
     public void initialize() {
         Pose2d target = DriveToTag.getClosestTarget(swerveDrive.getPose());
 
+
         if (goRight){
             target = DriveToTag.moveToRight(swerveDrive.getPose());
         }
@@ -45,6 +46,7 @@ public class DriveToPosition extends Command {
         trajectory.preventFlipping = true;
         generateTrajectory = AutoBuilder.followPath(trajectory);
         generateTrajectory.handleInterrupt(()->swerveDrive.drive(0,0,0)).withTimeout(5).schedule();
+
     }
 
     @Override

@@ -46,7 +46,7 @@ public class CoralHeadTeleopCommand extends Command {
             coralWheelLVelocity = RPM.of(0.80);
 
 
-            if (elevator.getHeight().lt(Centimeters.of(90))) {
+            if (elevator.getHeight().lt(Centimeters.of(83))) {
                 coralWheelRVelocity = RPM.of(0.90);
                 coralWheelLVelocity = RPM.of(0.20);
             }
