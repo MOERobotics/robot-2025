@@ -43,7 +43,8 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         this.tofCenter.setRangingMode(TimeOfFlight.RangingMode.Short,24);
         this.tofLeft.setRangingMode(TimeOfFlight.RangingMode.Short, 24);
         this.tofRight.setRangingMode(TimeOfFlight.RangingMode.Short, 24);
-        getSensors().hasCoral = false;
+        getSensors().frontBeam = false;
+        getSensors().backBeam = false;
         getSensors().inFrontReef = false;
         getSensors().velocityRight = RPM.zero();
         getSensors().velocityLeft = RPM.zero();
@@ -52,7 +53,8 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
 
     @Override
     public void readSensors(CoralHeadInputsAutoLogged sensors) {
-        sensors.hasCoral = leftMotor.getForwardLimitSwitch().isPressed();
+        sensors.frontBeam = leftMotor.getReverseLimitSwitch().isPressed();
+        sensors.backBeam = leftMotor.getForwardLimitSwitch().isPressed();
         sensors.centerLidarOn = isLidarValid(tofCenter) && tofCenter.getRange() < 500;//609.6;
         sensors.leftLidarOn = isLidarValid(tofLeft) && tofLeft.getRange() < 500;//609.6;
         sensors.rightLidarOn = isLidarValid(tofRight) && tofRight.getRange() < 500;//609.6;

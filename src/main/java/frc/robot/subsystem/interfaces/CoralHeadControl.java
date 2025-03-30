@@ -10,7 +10,8 @@ public interface CoralHeadControl extends Subsystem {
 
     @AutoLog
     class CoralHeadInputs {
-        public boolean hasCoral;
+        public boolean frontBeam;
+        public boolean backBeam;
         public boolean inFrontReef;
         public boolean leftLidarOn, rightLidarOn, centerLidarOn;
         public double reefDistance;
@@ -24,9 +25,10 @@ public interface CoralHeadControl extends Subsystem {
     }
     CoralHeadInputsAutoLogged getSensors();
 
-    default boolean hasCoral(){
-        return this.getSensors().hasCoral;
+    default boolean frontBeam(){
+        return this.getSensors().frontBeam;
     }
+    default boolean backBeam(){return this.getSensors().backBeam;}
 
     default boolean inFrontReef(){
         return this.getSensors().inFrontReef;

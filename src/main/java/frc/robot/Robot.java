@@ -27,6 +27,8 @@ import frc.robot.commands.junk.SwerveModuleTestingCommand;
 
 import java.io.IOException;
 
+import static edu.wpi.first.units.Units.RPM;
+
 
 public class Robot extends LoggedRobot {
 
@@ -36,7 +38,6 @@ public class Robot extends LoggedRobot {
 
     RobotContainer robot = new SubMOErine();
     Autos.CommandAndPose autoCommand = new Autos.CommandAndPose(Commands.none(),new Pose2d());
-
 
 
     @Override
@@ -73,9 +74,12 @@ public class Robot extends LoggedRobot {
     @Override
     public void autonomousInit() {
         scheduler.cancelAll();
-        autoCommand = Autos.getSelectedAuto();
+        /*autoCommand = Autos.getSelectedAuto();
         autoCommand.command().schedule();
         robot.getSwerveDrive().setDefaultCommand(Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()));
+         */
+        //new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(0.3)).schedule();
+        new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(0.8)).schedule();
     }
 
     @Override
