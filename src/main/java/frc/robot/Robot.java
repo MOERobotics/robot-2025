@@ -35,7 +35,7 @@ public class Robot extends LoggedRobot {
     CommandScheduler scheduler;
 
     RobotContainer robot = new SubMOErine();
-    Command autoCommand = Commands.none();
+    Autos.CommandAndPose autoCommand = new Autos.CommandAndPose(Commands.none(),new Pose2d());
 
 
 
@@ -75,7 +75,7 @@ public class Robot extends LoggedRobot {
     public void autonomousInit() {
         scheduler.cancelAll();
         autoCommand = Autos.getSelectedAuto();
-        autoCommand.schedule();
+        autoCommand.command().schedule();
         robot.getSwerveDrive().setDefaultCommand(Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()));
     }
 
@@ -106,7 +106,10 @@ public class Robot extends LoggedRobot {
         robot.getSwerveDrive().setDefaultCommand(
             new SwerveControllerCommand(robot.getSwerveDrive(), driverJoystick.getHID())
         );
-        driverJoystick.button(2).whileTrue(new DriveToPosition(robot.getSwerveDrive()));
+        driverJoystick.button(6).whileTrue(new DriveToPosition(robot.getSwerveDrive(), true));
+        driverJoystick.button(5).whileTrue(new DriveToPosition(robot.getSwerveDrive(), false));
+
+
     }
 
     @Override

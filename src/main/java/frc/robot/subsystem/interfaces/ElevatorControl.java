@@ -1,7 +1,7 @@
 package frc.robot.subsystem.interfaces;
 
 import edu.wpi.first.units.measure.*;
-import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.littletonrobotics.junction.AutoLog;
 
@@ -13,7 +13,7 @@ public interface ElevatorControl extends Subsystem {
         LEVEL1  (Centimeters.of(64)),
         LEVEL2  (Centimeters.of(87)),
         LEVEL3  (Centimeters.of(128)),
-        LEVEL4  (Centimeters.of(188)),//TODO: determine actual L4 set point
+        LEVEL4  (Centimeters.of(187)),//TODO: determine actual L4 set point
         STOW    (Centimeters.of(41.0)),
         COLLECT (Centimeters.of(41.5));
 
@@ -76,5 +76,5 @@ public interface ElevatorControl extends Subsystem {
         return this.getExtension().times(Math.cos(this.getAngle().in(Radians))).plus(this.getPivotHeight());
     }
 
-    default void setLEDColor(Color color) {}
+    default void setLEDPattern(LEDPattern ledPattern) {}
 }

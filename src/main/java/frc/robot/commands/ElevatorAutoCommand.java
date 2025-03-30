@@ -55,7 +55,7 @@ public class ElevatorAutoCommand extends Command {
         if(isHold){
             return false;
         }
-        return targetHeight.minus(elevator.getHeight()).abs(Inches) < 0.5 /*&& Math.abs(elevator.getSensors().extensionSpeed.in(InchesPerSecond)) < 30*/;
+        return targetHeight.minus(elevator.getHeight()).abs(Inches) < 1.0 /*&& Math.abs(elevator.getSensors().extensionSpeed.in(InchesPerSecond)) < 30*/;
     }
 
     @Override

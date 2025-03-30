@@ -1,78 +1,74 @@
 package frc.robot.autos;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.CoralHeadAutoCommand;
 import frc.robot.commands.ElevatorAutoCommand;
 import frc.robot.container.RobotContainer;
-import frc.robot.subsystem.interfaces.ElevatorControl;
 import frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight;
 import lombok.SneakyThrows;
-import lombok.val;
 
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight.*;
 
 public class ReefToSource {
 // START 1 AUTOS
-    public static Command S1_C4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S1_C4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start1 C", "C Coral Station", LEVEL4);
     }
-    public static Command S1_B4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S1_B4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start1 B", "B Coral Station 2", LEVEL4);
     }
-    public static Command S1_A4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S1_A4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start1 A", "A Coral Station 2", LEVEL4);
     }
     // START 2 AUTOS
-    public static Command S2_E4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S2_E4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start2 E", "E Coral Station", LEVEL4);
     }
 
 
-    public static Command S2_F4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S2_F4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start2 F", "F Coral Station", LEVEL4);
     }
-    public static Command S2_C4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S2_C4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start2 C", "C Coral Station", LEVEL4);
     }
-    public static Command S2_D4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S2_D4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start2 D", "D Coral Station", LEVEL4);
     }
     // START 4 AUTOS
-    public static Command S4_I4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S4_I4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start4 I", "I Coral Station", LEVEL4);
     }
-    public static Command S4_J4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S4_J4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start4 J", "J Coral Station", LEVEL4);
     }
-    public static Command S4_K4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S4_K4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start4 K", "K Coral Station", LEVEL4);
     }
-    public static Command S4_L4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S4_L4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start4 L", "L Coral Station", LEVEL4);
     }
 // START 5 AUTOS
-    public static Command S5_L4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S5_L4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start5 L", "L Coral Station", LEVEL4);
     }
-    public static Command S5_B4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S5_B4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start5 B", "B Coral Station 1", LEVEL4);
     }
-    public static Command S5_A4_CS(RobotContainer robot) {
+    public static Autos.CommandAndPose S5_A4_CS(RobotContainer robot) {
         return buildReefToSourceCommand(robot, "Start5 A", "A Coral Station 1", LEVEL4);
     }
 
 
 
     @SneakyThrows
-    public static Command buildReefToSourceCommand(
+    public static Autos.CommandAndPose buildReefToSourceCommand(
         RobotContainer robot,
         String path1,
         String path2,
@@ -89,7 +85,7 @@ public class ReefToSource {
         } else {
             startingPose = startingPoseBlue;
         }
-        return Commands.sequence(
+        return new Autos.CommandAndPose(Commands.sequence(
             // reset pose
             Commands.runOnce(()->robot.getSwerveDrive().resetPose(startingPose)),
             // Follow path 1 & raise elevator to level 2
@@ -114,9 +110,9 @@ public class ReefToSource {
                 new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1),true)
             ),
             Commands.runOnce(()-> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive()),
-            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(1.0))
+            new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(0.4))
 
-        );
+        ),startingPose);
     }
 
 
