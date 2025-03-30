@@ -21,7 +21,7 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
     public SparkAbsoluteEncoder climbEncoder;
 
     public final Angle maxEncoderValue = Degrees.of(80);
-    public final Angle minEncoderValue = Degrees.of(-4);
+    public final Angle minEncoderValue = Degrees.of(-5);
 
 
     public SubMOErineClimber(
@@ -42,6 +42,8 @@ public class SubMOErineClimber extends MOESubsystem<ClimberInputsAutoLogged> imp
     public void readSensors(ClimberInputsAutoLogged sensors) {
         sensors.motorPower = climbMotor.get();
         sensors.motorAppliedVolts = Volts.of(climbMotor.getAppliedOutput()*climbMotor.getBusVoltage());
+        sensors.appliedOutput = climbMotor.getAppliedOutput();
+        sensors.current = climbMotor.getOutputCurrent();
         sensors.position = Rotations.of(MathUtil.inputModulus(climbEncoder.getPosition(),-0.5,0.5));
         sensors.motorVelocity = RPM.of(climbMotor.getEncoder().getVelocity());
         sensors.canGoDown = getPosition().gt(minEncoderValue);

@@ -46,9 +46,9 @@ public class ClimberTeleopCommand extends Command {
             pressTime = System.currentTimeMillis();
         }
         if(joystick.getRawButton(4)){
-            climberPow = -Double.MAX_VALUE;
+            climberPow = -0.45;
             if(System.currentTimeMillis()-pressTime<2000){
-                climberPow=-0.4;
+                climberPow=-0.35;
             }
         }
         // Raise climber arms into the air
