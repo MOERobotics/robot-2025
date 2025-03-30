@@ -28,7 +28,7 @@ public class CoralHeadAutoCommand extends Command {
 
     @Override
     public void execute() {
-        if (coralCollector.backBeam()){
+        if (coralCollector.frontBeam()){
             outCoral = true;
         }
         coralCollector.setCoralVelocity(rotateSpeed, rotateSpeed);
@@ -37,7 +37,7 @@ public class CoralHeadAutoCommand extends Command {
     @Override
     public boolean isFinished() {
         if(!scoring)  return coralCollector.frontBeam()&&coralCollector.backBeam();
-        if(scoring) return outCoral&&!coralCollector.backBeam();
+        if(scoring) return outCoral&&!coralCollector.frontBeam();
         return false;
     }
 

@@ -46,14 +46,14 @@ public class CoralHeadTeleopCommand extends Command {
             coralWheelLVelocity = RPM.of(0.80);
 
 
-            if (elevator.getHeight().lt(Centimeters.of(70))) {
-                coralWheelRVelocity = RPM.of(1.00);
-                coralWheelLVelocity = RPM.of(0.30);
+            if (elevator.getHeight().lt(Centimeters.of(90))) {
+                coralWheelRVelocity = RPM.of(0.90);
+                coralWheelLVelocity = RPM.of(0.20);
             }
         }
         //intake the coral
         else if (joystick.getRawAxis(2) > 0.5) {
-            if (!coralCollector.backBeam()&&!coralCollector.frontBeam()) {
+            if (!coralCollector.backBeam()&&!coralCollector.frontBeam() || coralCollector.backBeam()&&!coralCollector.frontBeam()) {
                 coralWheelLVelocity = RPM.of(0.30);
                 coralWheelRVelocity = RPM.of(0.30);
             } else {
