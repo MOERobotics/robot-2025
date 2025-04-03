@@ -63,7 +63,10 @@ public class RobotElevatorSim {//TODO: Fix constants
         elevatorPivotSim.iterate(elevatorPivotSystem.getAngularVelocityRPM() * pivotGearing, 12, 0.02);
         tiltEncoderSim.setPosition(elevatorPivotSystem.getAngularPosition().in(Rotations));
         tiltEncoderSim.setVelocity(elevatorPivotSystem.getAngularVelocity().in(RPM));
-        extensionSensorSim.setVoltage((elevatorHeightSystem.getPositionMeters()*100-32.49861)/35.5227);
+
+        extensionSensorSim.setVoltage(
+            Meters.of(elevatorHeightSystem.getPositionMeters()).plus(Inches.of(8)).minus(Centimeters.of(23.80649)).in(Centimeters)/35.17649
+        );
     }
 
     public AngularVelocity getHeightMotorVelocity() {

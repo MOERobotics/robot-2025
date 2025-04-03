@@ -45,9 +45,11 @@ public class ElevatorAutoCommand extends Command {
         pidOutput = MathUtil.clamp(pidOutput, -1, 1);
         LinearVelocity pidSpeed = maxExtensionSpeed.times(pidOutput);
         elevator.moveVertically(pidSpeed);
-        Logger.recordOutput("height", elevator.getHeight().in(Inches));
-        Logger.recordOutput("speed", pidSpeed.in(InchesPerSecond));
-        Logger.recordOutput("pid", pidOutput);
+        Logger.recordOutput("verticalspeed", pidSpeed.in(InchesPerSecond));
+        Logger.recordOutput("targetheight", targetHeight.in(Inches));
+        Logger.recordOutput("pidoutput", pidOutput);
+        Logger.recordOutput("heightininches", elevator.getHeight().in(Inches));
+        Logger.recordOutput("elevInt", pid.getAccumulatedError()*pid.getI());
     }
 
     @Override
