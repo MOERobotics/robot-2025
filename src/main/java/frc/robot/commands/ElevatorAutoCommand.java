@@ -13,7 +13,7 @@ import static edu.wpi.first.units.Units.*;
 public class ElevatorAutoCommand extends Command {
     private final ElevatorControl elevator;
     private final LinearVelocity maxExtensionSpeed;
-    private final PIDController pid = new PIDController(0.3, 0.1 ,0.02);
+    private final PIDController pid = new PIDController(0.4, 0.1 ,0.02);
     private final boolean isHold;
     private final Distance targetHeight;
 
@@ -34,20 +34,25 @@ public class ElevatorAutoCommand extends Command {
 
     @Override
     public void initialize() {
-        pid.setIntegratorRange(-0.2, 0.3);
-        pid.setIZone(1.5);
+        pid.setIntegratorRange(-0.1, 0.1);
+        pid.setIZone(2);
     }
 
     @Override
     public void execute() {
         Distance error = elevator.getHeight().minus(targetHeight);
         double pidOutput = pid.calculate(error.in(Inches));
+        pidOutput += 0.01;
         pidOutput = MathUtil.clamp(pidOutput, -1, 1);
-        LinearVelocity pidSpeed = maxExtensionSpeed.times(pidOutput);
-        elevator.moveVertically(pidSpeed);
-        Logger.recordOutput("height", elevator.getHeight().in(Inches));
-        Logger.recordOutput("speed", pidSpeed.in(InchesPerSecond));
-        Logger.recordOutput("pid", pidOutput);
+        LinearVelocity verticalVelocity = maxExtensionSpeed.times(pidOutput);
+        elevator.moveVertically(verticalVelocity);
+
+        Logger.recordOutput("pidError", error);
+        Logger.recordOutput("verticalSpeed", verticalVelocity.in(InchesPerSecond));
+        Logger.recordOutput("targetHeight", targetHeight.in(Inches));
+        Logger.recordOutput("pidOutput", pidOutput);
+        Logger.recordOutput("heightInInches", elevator.getHeight().in(Inches));
+        Logger.recordOutput("elevInt", pid.getAccumulatedError()*pid.getI());
     }
 
     @Override
@@ -55,7 +60,7 @@ public class ElevatorAutoCommand extends Command {
         if(isHold){
             return false;
         }
-        return targetHeight.minus(elevator.getHeight()).abs(Inches) < 1.0 /*&& Math.abs(elevator.getSensors().extensionSpeed.in(InchesPerSecond)) < 30*/;
+        return targetHeight.minus(elevator.getHeight()).abs(Inches) < 0.5 /*&& Math.abs(elevator.getSensors().extensionSpeed.in(InchesPerSecond)) < 30*/;
     }
 
     @Override

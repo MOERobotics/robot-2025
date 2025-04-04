@@ -54,7 +54,6 @@ public class ElevatorTeleopCommand extends Command {
             targetHeight = COLLECT.measure;
         }
         Distance error = elevator.getHeight().minus(targetHeight);
-        Logger.recordOutput("PidError",error);
         double pidOutput = pid.calculate(error.in(Inches));
         pidOutput += 0.01;
         pidOutput = MathUtil.clamp(pidOutput, -1, 1);
@@ -70,11 +69,11 @@ public class ElevatorTeleopCommand extends Command {
         );
         elevator.moveHorizontally(angularVelocity);
 
-
-        Logger.recordOutput("verticalspeed", verticalVelocity.in(InchesPerSecond));
-        Logger.recordOutput("targetheight", targetHeight.in(Inches));
-        Logger.recordOutput("pidoutput", pidOutput);
-        Logger.recordOutput("heightininches", elevator.getHeight().in(Inches));
+        Logger.recordOutput("pidError", error);
+        Logger.recordOutput("verticalSpeed", verticalVelocity.in(InchesPerSecond));
+        Logger.recordOutput("targetHeight", targetHeight.in(Inches));
+        Logger.recordOutput("pidOutput", pidOutput);
+        Logger.recordOutput("heightInInches", elevator.getHeight().in(Inches));
         Logger.recordOutput("elevInt", pid.getAccumulatedError()*pid.getI());
     }
 
