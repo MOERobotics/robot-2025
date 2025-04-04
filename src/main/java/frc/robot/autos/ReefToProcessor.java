@@ -56,9 +56,9 @@ public class ReefToProcessor {
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),false),
                 Commands.run(() -> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
             ),
-            // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to bean break system
+            // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to beam break system
             Commands.deadline(
-                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(1),
+                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(0.95)).withTimeout(0.3),
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),true)
             ),
 

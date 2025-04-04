@@ -100,7 +100,7 @@ public class ReefToSource {
             ),
             // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to beam break system
             Commands.deadline(
-                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(0.5),
+                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(0.95)).withTimeout(0.3),
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),true)
             ),
 //            new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, InchesPerSecond.of(10),false).withTimeout(1.0),

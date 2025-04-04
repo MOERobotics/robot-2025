@@ -97,7 +97,7 @@ public class ReefToSourceToReefToSourceToReef {
             ),
             // Dispense coral & hold at desired level TODO: Update from scoring for a time limit to beam break system
             Commands.deadline(
-                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(0.3),
+                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(0.95)).withTimeout(0.3),
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),true)
             ),
             //  start to move  to collect position
@@ -125,7 +125,7 @@ public class ReefToSourceToReefToSourceToReef {
             ),
             // score in L4
             Commands.deadline(
-                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(0.3),
+                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(0.95)).withTimeout(0.3),
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),true)
             ),
             // move elevator to collect position while moving to source
@@ -150,7 +150,7 @@ public class ReefToSourceToReefToSourceToReef {
             ),
             // score in L4
             Commands.deadline(
-                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(1.0)).withTimeout(0.3),
+                new CoralHeadAutoCommand(robot.getCoralHead(), true, RPM.of(0.95)).withTimeout(0.3),
                 new ElevatorAutoCommand(robot.getElevator(), scoring_level.measure, FeetPerSecond.of(1),true)
             ),
             new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1), false)
