@@ -9,6 +9,8 @@ import frc.robot.container.RobotContainer;
 import frc.robot.subsystem.interfaces.ElevatorControl;
 import org.littletonrobotics.junction.Logger;
 
+import java.util.function.DoubleSupplier;
+
 import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystem.interfaces.ElevatorControl.ElevatorHeight.*;
 
@@ -64,6 +66,8 @@ public class ElevatorTeleopCommand extends Command {
         }
         verticalVelocity = FeetPerSecond.of(1.0).times(pidOutput);
         elevator.moveVertically(verticalVelocity);
+
+
 
         angularVelocity = DegreesPerSecond.of(0.2).times(
             MathUtil.applyDeadband(joystick.getRawAxis(0), 0.1)

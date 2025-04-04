@@ -6,6 +6,7 @@ import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.units.UnitBuilder;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.simulation.AnalogInputSim;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
@@ -23,6 +24,7 @@ public class RobotElevatorSim {//TODO: Fix constants
     private final double heightGearing = 49;
     private final double drumRadius = 0.0221488;
     private final double carriageMassKg = 1;
+    private final ElevatorControl elevator;
     private final SparkMaxSim elevatorHeightSim, elevatorPivotSim;
     private final SparkLimitSwitchSim elevatorLimitSim;
     private final SparkMax elevatorHeightMotor, elevatorPivotMotor;
@@ -32,6 +34,7 @@ public class RobotElevatorSim {//TODO: Fix constants
     private final ElevatorSim elevatorHeightSystem = new ElevatorSim(DCMotor.getNEO(1), heightGearing, carriageMassKg, drumRadius, 0.40, 1.6, true, 0.5);
 
     public RobotElevatorSim(SubMOErineElevator elevator) {
+        this.elevator = elevator;
         this.elevatorHeightMotor = elevator.elevatorExtensionMotor;
         this.elevatorPivotMotor = elevator.elevatorPivotMotor;
         this.elevatorHeightSim = new SparkMaxSim(elevatorHeightMotor, DCMotor.getNEO(1));
