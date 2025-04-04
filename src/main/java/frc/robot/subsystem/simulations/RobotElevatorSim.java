@@ -29,7 +29,7 @@ public class RobotElevatorSim {//TODO: Fix constants
     private final SparkAbsoluteEncoderSim tiltEncoderSim;
     private final AnalogInputSim extensionSensorSim;
     private final DCMotorSim elevatorPivotSystem = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNeo550(1), 20, pivotGearing), DCMotor.getNeo550(1));
-    private final ElevatorSim elevatorHeightSystem = new ElevatorSim(DCMotor.getNEO(1), heightGearing, carriageMassKg, drumRadius, 0.44, 1.81, true, 0.5);
+    private final ElevatorSim elevatorHeightSystem = new ElevatorSim(DCMotor.getNEO(1), heightGearing, carriageMassKg, drumRadius, 0.44, 1.90, true, 0.5);
 
     public RobotElevatorSim(SubMOErineElevator elevator) {
         this.elevatorHeightMotor = elevator.elevatorExtensionMotor;
@@ -63,7 +63,10 @@ public class RobotElevatorSim {//TODO: Fix constants
         elevatorPivotSim.iterate(elevatorPivotSystem.getAngularVelocityRPM() * pivotGearing, 12, 0.02);
         tiltEncoderSim.setPosition(elevatorPivotSystem.getAngularPosition().in(Rotations));
         tiltEncoderSim.setVelocity(elevatorPivotSystem.getAngularVelocity().in(RPM));
-        extensionSensorSim.setVoltage((elevatorHeightSystem.getPositionMeters()*100-21.80649)/35.17649);
+
+        extensionSensorSim.setVoltage(
+            Meters.of(elevatorHeightSystem.getPositionMeters()).minus(Centimeters.of(8)).minus(Centimeters.of(21.80649)).in(Centimeters)/35.17649
+        );
     }
 
     public AngularVelocity getHeightMotorVelocity() {

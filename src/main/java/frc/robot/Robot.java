@@ -24,6 +24,7 @@ import frc.robot.subsystem.simulations.*;
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.LoggedRobot;
 import frc.robot.commands.junk.SwerveModuleTestingCommand;
+import org.littletonrobotics.junction.Logger;
 
 import java.io.IOException;
 
