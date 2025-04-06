@@ -4,8 +4,10 @@ package frc.robot.subsystem.simulations;
 import com.ctre.phoenix6.sim.Pigeon2SimState;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.util.Units;
 import frc.robot.subsystem.SwerveDrive;
-import org.littletonrobotics.junction.Logger;
+
+
 public class SwerveDriveSim {
     private final SwerveDrive swerveDrive;
     private final Pigeon2SimState pigeon2Sim;
@@ -25,9 +27,8 @@ public class SwerveDriveSim {
     public void updateSimState() {
         currentModulePositions = swerveDrive.getSensors().modulePositions.clone();
         Twist2d twist = swerveDrive.getKinematics().toTwist2d(oldModulePositions,currentModulePositions);
-        Logger.recordOutput("Twist", twist);
+        pigeon2Sim.addYaw(Units.radiansToDegrees(twist.dtheta));
 //        swerveDrive.odometry.resetPose(swerveDrive.getPose().exp(twist));
-        pigeon2Sim.setRawYaw(swerveDrive.getPose().getRotation().getRadians());
         oldModulePositions = swerveDrive.getSensors().modulePositions.clone();
     }
 }

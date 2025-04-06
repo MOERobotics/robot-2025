@@ -18,9 +18,9 @@ import static frc.robot.subsystem.simulations.SimulationHelpers.*;
 
 public class RobotElevatorSim {//TODO: Fix constants
     private final double decelerationCoefPivot = 30;
-    private final double decelerationCoefHeight = 50;
+    private final double decelerationCoefHeight = 10;
     private final double pivotGearing = 2000.0;
-    private final double heightGearing = 49;
+    private final double heightGearing = 20.0/2;
     private final double drumRadius = 0.0221488;
     private final double carriageMassKg = 1;
     private final SparkMaxSim elevatorHeightSim, elevatorPivotSim;

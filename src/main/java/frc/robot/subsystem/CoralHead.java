@@ -66,8 +66,6 @@ public class CoralHead extends MOESubsystem<CoralHeadInputsAutoLogged> implement
         sensors.velocityRight = RPM.of(rightMotor.getEncoder().getVelocity());
         sensors.leftAppliedVolts = Volts.of(leftMotor.getAppliedOutput() * leftMotor.getBusVoltage());
         sensors.rightAppliedVolts = Volts.of(rightMotor.getAppliedOutput() * rightMotor.getBusVoltage());
-        Logger.recordOutput("FunnelBeam", leftMotor.getForwardLimitSwitch().isPressed());
-        Logger.recordOutput("ExitBeam", leftMotor.getReverseLimitSwitch().isPressed());
         Logger.recordOutput("LeftLidarStatus", tofLeft.getStatus());
         Logger.recordOutput("CenterLidarStatus", tofCenter.getStatus());
         Logger.recordOutput("RightLidarStatus", tofRight.getStatus());
