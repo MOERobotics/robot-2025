@@ -40,16 +40,16 @@ public class ElevatorTeleopCommand extends Command {
 
     @Override
     public void execute() {//TODO update magic numbers for velocities
-        if(joystick.getPOV(0) == 0){
+        if(joystick.getPOV(0) == 0||joystick.getRawButton(4)){
             targetHeight = LEVEL1.measure;
         }
-        if(joystick.getPOV(0) == 90){
+        if(joystick.getPOV(0) == 90||joystick.getRawButton(2)){
             targetHeight = LEVEL2.measure;
         }
-        if(joystick.getPOV(0) == 180){
+        if(joystick.getPOV(0) == 180||joystick.getRawButton(1)){
             targetHeight = LEVEL3.measure;
         }
-        if(joystick.getPOV(0) == 270){
+        if(joystick.getPOV(0) == 270||joystick.getRawButton(3)){
             targetHeight = LEVEL4.measure;
         }
         if(joystick.getRawButton(8)){

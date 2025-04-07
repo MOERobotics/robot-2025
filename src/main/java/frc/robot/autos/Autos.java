@@ -19,7 +19,8 @@ public class Autos {
         autoChooser.addOption("Auto4: S2_E4_CS_C4_CS_D4", ReefToSourceToReefToSourceToReef.S2_E4_CS_C4_CS_D4(robot));
         autoChooser.addOption("Auto5: S4_I4_CS_K4_CS_L4", ReefToSourceToReefToSourceToReef.S4_I4_CS_K4_CS_L4(robot));
         autoChooser.addOption("Auto6: L3 S2_E4_CS_C4_CS_D4", ReefToSourceToReefToSourceToReef.S2_E4_CS_C4_CS_D4_L3(robot));
-        autoChooser.addOption("Auto7: S3_G4_CS", ReefToSource.S3_G4_CS(robot));
+        autoChooser.addOption("Auto7: S3_G4_CSL", ReefToSource.S3_G4_CSL(robot));
+        autoChooser.addOption("Auto8: S3_G4_CSR", ReefToSource.S3_G4_CSR(robot));
 
         Consumer<CommandAndPose> onAutoUpdate = (commandandPose) -> robot.getSwerveDrive().resetPose(autoChooser.getSelected().pose());
         autoChooser.onChange(onAutoUpdate);

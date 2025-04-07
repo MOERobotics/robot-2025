@@ -43,8 +43,11 @@ public class ReefToSource {
     }
 
     // START 3 AUTOS
-    public static Autos.CommandAndPose S3_G4_CS(RobotContainer robot) {
-        return buildReefToSourceCommand(robot, "Start3 G", "GToSource", LEVEL4);
+    public static Autos.CommandAndPose S3_G4_CSL(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start3 G", "GToSource1", LEVEL4);
+    }
+    public static Autos.CommandAndPose S3_G4_CSR(RobotContainer robot) {
+        return buildReefToSourceCommand(robot, "Start3 G", "GToSource2", LEVEL4);
     }
 
 
@@ -116,11 +119,11 @@ public class ReefToSource {
                 AutoBuilder.followPath(plannerPath2),
                 new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1),true)
             ),
-            Commands.deadline(
-                new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(0.4)),
-                new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1), true),
-                Commands.run(()-> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
-            ),
+//            Commands.deadline(
+//                new CoralHeadAutoCommand(robot.getCoralHead(), false, RPM.of(0.4)),
+//                new ElevatorAutoCommand(robot.getElevator(), COLLECT.measure, FeetPerSecond.of(1), true),
+//                Commands.run(()-> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
+//            ),
             Commands.runOnce(()-> robot.getSwerveDrive().drive(0,0,0), robot.getSwerveDrive())
         ),startingPose);
 
